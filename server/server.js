@@ -5,6 +5,7 @@ import sequelize from "./config/db.js";
 import authRouter from "./routes/accountRoutes.js";
 import categoryRouter from "./routes/categoryRoutes.js";
 import ProductRouter from "./routes/productRoutes.js";
+import cartRouter from "./routes/cartRoutes.js"
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 app.use("/api/auth", authRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/product", ProductRouter);
+app.use("/api/cart", cartRouter)
 
 const PORT = 5000;
 

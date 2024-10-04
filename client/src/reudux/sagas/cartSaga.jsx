@@ -1,0 +1,71 @@
+import axios from "axios";
+import { call, put, takeLatest } from "redux-saga/effects";
+import {
+  addCartError,
+  addCartStart,
+  addCartSuccess,
+  deleteCartError,
+  deleteCartStart,
+  deleteCartSucess,
+  fetchCartByAccountidError,
+  fetchCartByAccountidStart,
+  fetchCartByAccountidSuccess,
+  updateQuantityError,
+  updateQuantityStart,
+  updateQuantitySuccess,
+} from "../slices/cartSlice";
+
+function* addCartSaga(action) {
+  try {
+    const response = yield call(
+      axios.post,
+      "http://localhost:5000/api/cart/addCart",
+      action.payload
+    );
+    yield put(addCartSuccess(response.data));
+  } catch (error) {
+    yield put(addCartError(error.message));
+  }
+}
+
+function* fetchCartByAccountidSaga(action) {
+  try {
+    const response = yield call(
+      axios.get,
+      `http://localhost:5000/api/cart/${action.payload}`
+    );
+    yield put(fetchCartByAccountidSuccess(response.data));
+  } catch (error) {
+    yield put(fetchCartByAccountidError(error.message));
+  }
+}
+
+function* updateQuantitySaga(action) {
+  try {
+    yield call(
+      axios.put,
+      `http://localhost:5000/api/cart/updateQuantity/${action.payload.id}`,
+      action.payload
+    );
+    yield put(updateQuantitySuccess(action.payload));
+  } catch (error) {
+    yield put(updateQuantityError(error.message))
+  }
+}
+
+function* deleteCartSaga(action) {
+  try {
+    yield call(axios.delete, `http://localhost:5000/api/cart/deleteCart/${action.payload}`);
+    yield put(deleteCartSucess());
+    yield put(deleteCartStart());
+  } catch (error) {
+    yield put(deleteCartError(error.message));
+  }
+}
+
+export default function* cartSaga() {
+  yield takeLatest(addCartStart, addCartSaga);
+  yield takeLatest(fetchCartByAccountidStart, fetchCartByAccountidSaga);
+  yield takeLatest(updateQuantityStart, updateQuantitySaga);
+  yield takeLatest(deleteCartStart, deleteCartSaga);
+}

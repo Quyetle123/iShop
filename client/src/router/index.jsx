@@ -13,6 +13,7 @@ import UpdateProduct from "../components/admin/updateProduct.jsx";
 import Home from "../components/main/Home";
 import Detail from "../components/main/Detail/index.jsx";
 import HomeAdmin from "../components/admin/Home/index.jsx";
+import Cart from "../components/main/Cart/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -33,6 +34,10 @@ export default createBrowserRouter([
           {
             element: <Detail />,
             path: '/detail/:id'
+          },
+          {
+            element: <Cart />,
+            path: '/cart'
           }
         ],
       },
