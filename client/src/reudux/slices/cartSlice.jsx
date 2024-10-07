@@ -38,10 +38,8 @@ const cartSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    updateQuantitySuccess(state, action) {
+    updateQuantitySuccess(state) {
       state.loading = false;
-      const index = state.carts.filter((cart) => (cart.id = action.payload.id));
-      state.carts[index] = action.payload;
     },
     updateQuantityError(state, action) {
       state.loading = false;

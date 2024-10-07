@@ -1,4 +1,4 @@
-import { Button, Checkbox, InputNumber, Table } from "antd";
+import { Button, Checkbox, Input, InputNumber, Modal, Table } from "antd";
 import { IoClose } from "react-icons/io5";
 import { NumericFormat } from "react-number-format";
 import * as S from "./style";
@@ -48,13 +48,17 @@ const Cart = () => {
     }
   };
 
-  console.log(totalArr);
 
   const dataSource = cartList.map((cart) => ({
     key: cart.id,
     checkbox: (
       <Checkbox
-        onChange={(e) => handleChecked(e, cart.Product.price * cart.quantity)}
+        onChange={(e) =>
+          handleChecked(
+            e,
+            cart.Product.price * cart.quantity
+          )
+        }
       />
     ),
     productName: cart.Product.productname,
@@ -80,14 +84,34 @@ const Cart = () => {
     ),
     delete: (
       <div>
-        <IoClose onClick={() => {
-          if(window.confirm("Bạn muốn xóa sản phẩm này?")) {
-            dispatch(deleteCartStart(cart.id))
-          }
-        }} style={{ cursor: "pointer" }} />
+        <IoClose
+          onClick={() => {
+            if (window.confirm("Bạn muốn xóa sản phẩm này?")) {
+              dispatch(deleteCartStart(cart.id));
+            }
+          }}
+          style={{ cursor: "pointer" }}
+        />
       </div>
     ),
   }));
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [changeAdress, setChangerAdress] = useState();
+  const [changeCity, setChangeCity] = useState();
+  const [address, setAddress] = useState();
+  const [city, setCity] = useState();
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setAddress(changeAdress);
+    setCity(changeCity);
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const columns = [
     {
@@ -144,8 +168,20 @@ const Cart = () => {
       value: (
         <>
           <S.PriceText>Giao hàng miễn phí</S.PriceText>
-          <S.PriceText>{token.address}</S.PriceText>
-          <S.PriceText>{token.city}</S.PriceText>
+          <S.PriceText>{address?address:token.address}</S.PriceText>
+          <S.PriceText>{city?city:token.city}</S.PriceText>
+          <span className="cursor-pointer underline" onClick={showModal}>
+            Thay đổi địa chỉ
+          </span>
+          <Modal
+            title="Thay đổi địa chỉ"
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          >
+            <Input onChange={(e) => setChangerAdress(e.target.value)} className="mt-2" placeholder="Tên đường(Số nhà, thôn, xóm)" />
+            <Input onChange={(e) => setChangeCity(e.target.value)} className="mt-2" placeholder="Tỉnh/thành phố" />
+          </Modal>
         </>
       ),
     },

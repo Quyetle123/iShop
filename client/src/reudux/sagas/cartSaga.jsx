@@ -14,6 +14,9 @@ import {
   updateQuantityStart,
   updateQuantitySuccess,
 } from "../slices/cartSlice";
+import { getToken } from "../../utils/token";
+
+const token = getToken();
 
 function* addCartSaga(action) {
   try {
@@ -47,17 +50,21 @@ function* updateQuantitySaga(action) {
       `http://localhost:5000/api/cart/updateQuantity/${action.payload.id}`,
       action.payload
     );
-    yield put(updateQuantitySuccess(action.payload));
+    yield put(updateQuantitySuccess());
+    yield put(fetchCartByAccountidStart(token.id));
   } catch (error) {
-    yield put(updateQuantityError(error.message))
+    yield put(updateQuantityError(error.message));
   }
 }
 
 function* deleteCartSaga(action) {
   try {
-    yield call(axios.delete, `http://localhost:5000/api/cart/deleteCart/${action.payload}`);
+    yield call(
+      axios.delete,
+      `http://localhost:5000/api/cart/deleteCart/${action.payload}`
+    );
     yield put(deleteCartSucess());
-    yield put(deleteCartStart());
+    yield put(fetchCartByAccountidStart(token.id));
   } catch (error) {
     yield put(deleteCartError(error.message));
   }
