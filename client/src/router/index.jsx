@@ -14,6 +14,8 @@ import Home from "../components/main/Home";
 import Detail from "../components/main/Detail/index.jsx";
 import HomeAdmin from "../components/admin/Home/index.jsx";
 import Cart from "../components/main/Cart/index.jsx";
+import MyOrder from "../components/main/MyOrder/index.jsx";
+import AllOrder from "../components/admin/AllOrder/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -38,6 +40,10 @@ export default createBrowserRouter([
           {
             element: <Cart />,
             path: '/cart'
+          },
+          {
+            element: <MyOrder />,
+            path: "/myOrder"
           }
         ],
       },
@@ -73,6 +79,10 @@ export default createBrowserRouter([
             element: <UpdateProduct />,
             path: "/admin/updateProduct/:id",
           },
+          {
+            element: <AllOrder />,
+            path: "/admin/allOrder"
+          }
         ],
       },
       {

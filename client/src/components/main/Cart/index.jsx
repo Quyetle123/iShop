@@ -10,6 +10,9 @@ import {
   updateQuantityStart,
 } from "../../../reudux/slices/cartSlice";
 import { getToken } from "../../../utils/token";
+import {addOrderStart} from "../../../reudux/slices/orderSlice";
+import {addOrderDetailStart} from "../../../reudux/slices/orderDetailSlice";
+import { v4 as uuidv4 } from 'uuid';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -99,8 +102,8 @@ const Cart = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [changeAdress, setChangerAdress] = useState();
   const [changeCity, setChangeCity] = useState();
-  const [address, setAddress] = useState();
-  const [city, setCity] = useState();
+  const [address, setAddress] = useState(token.address);
+  const [city, setCity] = useState(token.city);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -112,6 +115,25 @@ const Cart = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  
+  
+  const handleConfirm = () => {
+    const total = totalArr.reduce((acc, curr) => acc + curr, 0);
+    const status = 'Đang đóng gói';
+    const accountid = token.id;
+    const id = uuidv4();
+    dispatch(addOrderStart({ id, total, address, city, status, accountid }));
+    cartList.forEach(cart => {
+      const quantity = cart.quantity;
+      const price = cart.Product.price;
+      const productid = cart.Product.id;
+      const imageUrl = cart.Product.imageUrl;
+      const productname = cart.Product.productname
+      
+      dispatch(addOrderDetailStart({productname, quantity, price, productid, orderid: id, imageUrl}))
+    });
+  }
 
   const columns = [
     {
@@ -168,8 +190,8 @@ const Cart = () => {
       value: (
         <>
           <S.PriceText>Giao hàng miễn phí</S.PriceText>
-          <S.PriceText>{address?address:token.address}</S.PriceText>
-          <S.PriceText>{city?city:token.city}</S.PriceText>
+          <S.PriceText>{address}</S.PriceText>
+          <S.PriceText>{city}</S.PriceText>
           <span className="cursor-pointer underline" onClick={showModal}>
             Thay đổi địa chỉ
           </span>
@@ -221,8 +243,8 @@ const Cart = () => {
           dataSource={payDataSource}
           pagination={false}
         />
-        <Button type="default" style={{ width: "100%", marginTop: "15px" }}>
-          Thanh toán
+        <Button onClick={handleConfirm} type="default" style={{ width: "100%", marginTop: "15px" }}>
+          Xác nhận đơn hàng
         </Button>
       </S.CartAside>
     </S.CartWrapper>

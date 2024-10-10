@@ -1,0 +1,134 @@
+import { Table, Typography, Select } from "antd";
+import { useEffect, useState } from "react";
+import * as S from "./style";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllOrderStart, updateStatusStart } from "../../../reudux/slices/orderSlice";
+
+const { Title } = Typography;
+const { Option } = Select;
+
+// eslint-disable-next-line react/prop-types
+const OrderDetailsTable = ({ details }) => {
+  const columns = [
+    {
+      title: "Image",
+      dataIndex: "imageUrl",
+      key: "imageUrl",
+      render: (imageUrl) => <S.OrderDetailImage src={imageUrl} alt="product" />,
+    },
+    {
+      title: "Product Name",
+      dataIndex: "productname",
+      key: "productname",
+    },
+    {
+      title: "Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      render: (price) => `${price.toLocaleString("vi-VN")} ₫`,
+    },
+  ];
+
+  return (
+    <Table
+      columns={columns}
+      dataSource={details}
+      pagination={false}
+      rowKey="id"
+    />
+  );
+};
+
+const AllOrder = () => {
+  const dispatch = useDispatch();
+  const { orders } = useSelector((state) => state.orders);
+  const orderList = Array.isArray(orders.orders) ? orders.orders : [];
+
+  useEffect(() => {
+    dispatch(getAllOrderStart());
+  }, [dispatch]);
+
+  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
+
+  const handleStatusChange = (status, id) => {
+    dispatch(updateStatusStart({id, status}))
+    window.location.reload();
+  };
+
+  const orderColumns = [
+    {
+      title: "Order ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Total",
+      dataIndex: "total",
+      key: "total",
+      render: (total) => `${total.toLocaleString("vi-VN")} ₫`,
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "City",
+      dataIndex: "city",
+      key: "city",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status, record) => (
+        <Select
+          defaultValue={status}
+          style={{ width: 200 }}
+          onChange={(value) => handleStatusChange(value, record.id)}
+        >
+          <Option value="Đang đóng gói">Đang đóng gói</Option>
+          <Option value="Đang vận chuyển">Đang vận chuyển</Option>
+          <Option value="Đã giao hàng">Đã giao hàng</Option>
+        </Select>
+      ),
+    },
+  ];
+
+  const expandedRowRender = (record) => {
+    const orderDetails = record.OrderDetails || [];
+    return <OrderDetailsTable details={orderDetails} />;
+  };
+
+  const onExpand = (expanded, record) => {
+    if (expanded) {
+      setExpandedRowKeys([record.id]); 
+    } else {
+      setExpandedRowKeys([]);
+    }
+  };
+
+  return (
+    <S.OrdersContainer>
+      <Title level={2}>Quản lý Đơn Hàng</Title>
+      <Table
+        columns={orderColumns}
+        dataSource={orderList}
+        expandable={{
+          expandedRowRender,
+          expandedRowKeys,
+          onExpand,
+        }}
+        rowKey="id"
+        pagination={false} 
+      />
+    </S.OrdersContainer>
+  );
+};
+
+export default AllOrder;

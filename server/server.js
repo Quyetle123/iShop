@@ -6,6 +6,8 @@ import authRouter from "./routes/accountRoutes.js";
 import categoryRouter from "./routes/categoryRoutes.js";
 import ProductRouter from "./routes/productRoutes.js";
 import cartRouter from "./routes/cartRoutes.js"
+import orderRouter from "./routes/orderRoutes.js"
+import orderDetailRouter from "./routes/orderDetailRoutes.js"
 
 const app = express();
 
@@ -14,7 +16,9 @@ app.use(bodyParser.json());
 app.use("/api/auth", authRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/product", ProductRouter);
-app.use("/api/cart", cartRouter)
+app.use("/api/cart", cartRouter);
+app.use("/api/order", orderRouter);
+app.use("/api/orderDetail", orderDetailRouter)
 
 const PORT = 5000;
 
