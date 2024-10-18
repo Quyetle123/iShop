@@ -1,4 +1,3 @@
-import { error } from "console";
 import { Order, OrderDetail } from "../models/index.js";
 
 class orderController {

@@ -46,10 +46,8 @@ const productSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    updateProductSuccess(state, action) {
+    updateProductSuccess(state) {
       state.loading = false;
-      const index = state.products.filter((pd) => pd.id === action.payload.id);
-      state.products[index] = action.payload;
     },
     deleteProductStart(state) {
       state.loading = true;

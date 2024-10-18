@@ -11,7 +11,6 @@ import {
   NavLink,
   NavList,
 } from "./style";
-import { FaCartShopping } from "react-icons/fa6";
 import { getToken, removeToken } from "../../../utils/token";
 
 const Header = () => {
@@ -51,9 +50,6 @@ const Header = () => {
         </NavList>
       </Nav>
       <AccountContainer>
-        <FaCartShopping
-          style={{ color: "#fff", fontSize: "30px", marginRight: "20px" }}
-        />
         <AccountButton>{token ? token.username : "Tài khoản"}</AccountButton>
         <DropdownMenu>
           <DropdownItem style={{ display: token ? "none" : "block" }}>
@@ -62,11 +58,17 @@ const Header = () => {
           <DropdownItem style={{ display: token ? "none" : "block" }}>
             <Link to="/register">Đăng kí</Link>
           </DropdownItem>
+          <DropdownItem style={{ display: token ? "block" : "none" }}>
+            <Link to="/cart">Giỏ hàng</Link>
+          </DropdownItem>
+          <DropdownItem style={{ display: token ? "block" : "none" }}>
+            <Link to="/myOrder">Đơn hàng</Link>
+          </DropdownItem>
           <DropdownItem
             onClick={handleLogOut}
             style={{ display: token ? "block" : "none" }}
           >
-            <Link to="">Đăng xuất</Link>
+            <Link to="/">Đăng xuất</Link>
           </DropdownItem>
         </DropdownMenu>
       </AccountContainer>

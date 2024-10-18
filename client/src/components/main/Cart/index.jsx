@@ -13,9 +13,11 @@ import { getToken } from "../../../utils/token";
 import {addOrderStart} from "../../../reudux/slices/orderSlice";
 import {addOrderDetailStart} from "../../../reudux/slices/orderDetailSlice";
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { carts } = useSelector((state) => state.carts);
   const token = getToken();
 
@@ -133,6 +135,8 @@ const Cart = () => {
       
       dispatch(addOrderDetailStart({productname, quantity, price, productid, orderid: id, imageUrl}))
     });
+    dispatch()
+    navigate('/myOrder')
   }
 
   const columns = [

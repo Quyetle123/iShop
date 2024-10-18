@@ -1,7 +1,7 @@
-import { Product } from "../models/index.js";
+import { Account, Comment, Product } from "../models/index.js";
 
 class productController {
-  static async addProduct (req, res) {
+  static async addProduct(req, res) {
     const data = req.body;
     try {
       const products = await Product.create(data);
@@ -9,18 +9,18 @@ class productController {
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
-  
-  static async getAllProducts (req, res) {
+  }
+
+  static async getAllProducts(req, res) {
     try {
       const products = await Product.findAll();
       res.status(200).json({ products });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
-  
-  static async getProductByCategoryId (req, res) {
+  }
+
+  static async getProductByCategoryId(req, res) {
     const { categoryid } = req.params;
     try {
       const products = await Product.findAll({
@@ -32,12 +32,24 @@ class productController {
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
-  
-  static async getProductById (req, res) {
+  }
+
+  static async getProductById(req, res) {
     const { id } = req.params;
     try {
-      const product = await Product.findByPk(id);
+      const product = await Product.findOne({
+        where: {
+          id,
+        },
+        include: [
+          {
+            model: Comment,
+            include: {
+              model: Account,
+            },
+          },
+        ],
+      });
       if (product) {
         res.status(200).json({ product });
       } else {
@@ -46,9 +58,9 @@ class productController {
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
-  
-  static async updateProduct (req, res) {
+  }
+
+  static async updateProduct(req, res) {
     const { id } = req.params;
     const data = req.body;
     try {
@@ -62,9 +74,9 @@ class productController {
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
-  
-  static async deleteProduct (req, res) {
+  }
+
+  static async deleteProduct(req, res) {
     const { id } = req.params;
     try {
       const product = await Product.findByPk(id);
@@ -77,8 +89,7 @@ class productController {
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
-  
+  }
 }
 
-export default productController
+export default productController;

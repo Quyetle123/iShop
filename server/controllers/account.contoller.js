@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { Account } from "../models/index.js";
+import validator from "validator";
+import _ from "lodash";
 
 class AuthController {
   static generateToken(account) {

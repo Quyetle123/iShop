@@ -73,7 +73,7 @@ function* updateProductSaga(action) {
       `http://localhost:5000/api/product/updateProduct/${action.payload.id}`,
       action.payload
     );
-    
+    yield put(fetchProductesStart());
     yield put(updateProductSuccess(action.payload));
   } catch (error) {
     yield put(productError(error.message));
