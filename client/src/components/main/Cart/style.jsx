@@ -5,6 +5,11 @@ export const CartWrapper = styled.main`
   padding: 50px 150px;
 `;
 
+export const OutOfStockText = styled.span`
+  color:#ff7f7f;
+  font-weight: bold;
+`;
+
 export const CartArticle = styled.article`
   width: 64%;
   height: 500px;

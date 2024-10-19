@@ -48,8 +48,6 @@ const UpdateProduct = () => {
 
   const handleSubmit = async (value) => {
     const { productname, description, price, categoryid, quantity } = value;
-    const sold = 0;
-
     try {
       if (image) {
         const url = await uploadImageToFirebase(image);
@@ -61,7 +59,6 @@ const UpdateProduct = () => {
             price,
             categoryid,
             quantity,
-            sold,
             imageUrl: url,
           })
         );
@@ -74,7 +71,6 @@ const UpdateProduct = () => {
             price,
             categoryid,
             quantity,
-            sold,
           })
         );
       }

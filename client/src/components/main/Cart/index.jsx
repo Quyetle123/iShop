@@ -14,6 +14,7 @@ import {addOrderStart} from "../../../reudux/slices/orderSlice";
 import {addOrderDetailStart} from "../../../reudux/slices/orderDetailSlice";
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router-dom";
+import { updateProductStart } from "../../../reudux/slices/productSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ const Cart = () => {
 
   const dataSource = cartList.map((cart) => ({
     key: cart.id,
-    checkbox: (
+    checkbox: cart.Product.quantity === 0 ? (<S.OutOfStockText>Hết hàng</S.OutOfStockText>) : (
       <Checkbox
         onChange={(e) =>
           handleChecked(
@@ -132,16 +133,15 @@ const Cart = () => {
       const productid = cart.Product.id;
       const imageUrl = cart.Product.imageUrl;
       const productname = cart.Product.productname
-      
       dispatch(addOrderDetailStart({productname, quantity, price, productid, orderid: id, imageUrl}))
+      dispatch(updateProductStart({id: cart.Product.id, quantity: cart.Product.quantity - cart.quantity, sold: cart.quantity}))
     });
-    dispatch()
     navigate('/myOrder')
   }
 
   const columns = [
     {
-      title: "STT",
+      title: "",
       dataIndex: "checkbox",
       key: "checkbox",
     },
