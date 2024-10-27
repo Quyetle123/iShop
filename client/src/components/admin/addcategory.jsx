@@ -3,18 +3,29 @@ import TextArea from "antd/es/input/TextArea";
 import { useDispatch } from "react-redux";
 import { addCategoryStart } from "../../reudux/slices/categorySlice";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { uploadImageToFirebase } from "../../firebase/uploadImage";
 
 const AddCategory = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
-  const handleSubmit = (value) => {
-    const categoryname = value.categoryname;
-    const description = value.description;
-    dispatch(addCategoryStart({ categoryname, description }));
-    navigate('/admin/allCategories')
+  const navigate = useNavigate();
+  const [image, setImage] = useState();
+  const handleSubmit = async (value) => {
+    try {
+      const imageUrl = await uploadImageToFirebase(image);
+      const categoryname = value.categoryname;
+      const description = value.description;
+      await dispatch(addCategoryStart({ categoryname, description, imageUrl }));
+      navigate("/admin/allCategories");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  const handleFileChange = (e) => {
+    setImage(e.target.files[0]);
   };
   return (
-    <div style={{ width: "100%", marginTop: '100px' }}>
+    <div style={{ width: "100%", marginTop: "100px" }}>
       <Form
         onFinish={(value) => handleSubmit(value)}
         layout="vertical"
@@ -57,6 +68,19 @@ const AddCategory = () => {
           ]}
         >
           <TextArea showCount maxLength={500} placeholder="can resize" />
+        </Form.Item>
+
+        <Form.Item
+          label="Ảnh sản phẩm"
+          name="image"
+          rules={[
+            {
+              required: true,
+              message: "Chưa chọn ảnh!",
+            },
+          ]}
+        >
+          <input type="file" onChange={handleFileChange} />
         </Form.Item>
 
         <Form.Item

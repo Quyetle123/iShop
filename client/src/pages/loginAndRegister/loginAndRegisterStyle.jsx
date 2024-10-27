@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url(https://restore.bg/modules/ph_simpleblog/featured/75.jpg);
+  background-image: url(https://c.wallhere.com/photos/a9/da/app_storm_apple_mac_multicolored-776448.jpg!d);
   background-repeat: no-repeat;
   background-size: cover;
 `;

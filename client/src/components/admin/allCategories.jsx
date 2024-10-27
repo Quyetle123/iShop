@@ -18,6 +18,7 @@ const AllCategories = () => {
     key: category.id,
     id: index + 1,
     categoryName: category.categoryname,
+    image: <img src={category.imageUrl} style={{ width: "50px" }} />,
     description: category.description,
     updateAnddelete: (
       <div className="flex">
@@ -50,6 +51,11 @@ const AllCategories = () => {
       title: "Tên danh mục",
       dataIndex: "categoryName",
       key: "categoryName",
+    },
+    {
+      title: "Ảnh",
+      dataIndex: "image",
+      key: "image"
     },
     {
       title: "Giới thiệu",

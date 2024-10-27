@@ -10,15 +10,15 @@ import {
   updateQuantityStart,
 } from "../../../reudux/slices/cartSlice";
 import { getToken } from "../../../utils/token";
-import {addOrderStart} from "../../../reudux/slices/orderSlice";
-import {addOrderDetailStart} from "../../../reudux/slices/orderDetailSlice";
-import { v4 as uuidv4 } from 'uuid';
+import { addOrderStart } from "../../../reudux/slices/orderSlice";
+import { addOrderDetailStart } from "../../../reudux/slices/orderDetailSlice";
+import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import { updateProductStart } from "../../../reudux/slices/productSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { carts } = useSelector((state) => state.carts);
   const token = getToken();
 
@@ -45,28 +45,70 @@ const Cart = () => {
   }, [dispatch, token.id]);
 
   const [totalArr, setTotalArr] = useState([]);
+  const [productidArr, setProductidArr] = useState([]);
+  const [productnameArr, setProductnameArr] = useState([]);
+  const [quantityArr, setQuantityArr] = useState([]);
+  const [priceArr, setPriceArr] = useState([]);
+  const [imageUrlArr, setImageUrlArr] = useState([]);
+  const [productQuantityArr, setProductQuantityArr] = useState([]);
+  const [soldArr, setSoldArr] = useState([]);
 
-  const handleChecked = (e, total) => {
+  const handleChecked = (
+    e,
+    total,
+    productid,
+    productname,
+    quantity,
+    price,
+    imageUrl,
+    productQuantity,
+    sold
+  ) => {
     if (e.target.checked) {
       setTotalArr((prev) => [...prev, total]);
+      setProductidArr((prev) => [...prev, productid]);
+      setProductnameArr((prev) => [...prev, productname]);
+      setQuantityArr((prev) => [...prev, quantity]);
+      setPriceArr((prev) => [...prev, price]);
+      setImageUrlArr((prev) => [...prev, imageUrl]);
+      setProductQuantityArr((prev) => [...prev, productQuantity]);
+      setSoldArr((prev) => [...prev, sold])
     } else {
       setTotalArr((prev) => prev.filter((item) => item !== total));
+      setProductidArr((prev) => prev.filter((item) => item !== productid));
+      setProductnameArr((prev) => prev.filter((item) => item !== productname));
+      setQuantityArr((prev) => prev.filter((item) => item !== quantity));
+      setPriceArr((prev) => prev.filter((item) => item !== price));
+      setImageUrlArr((prev) => prev.filter((item) => item !== imageUrl));
+      setProductQuantityArr((prev) =>
+        prev.filter((item) => item !== productQuantity)
+      );
+      setSoldArr((prev) => prev.filter((item) => item !== sold))
     }
   };
 
-
   const dataSource = cartList.map((cart) => ({
     key: cart.id,
-    checkbox: cart.Product.quantity === 0 ? (<S.OutOfStockText>Hết hàng</S.OutOfStockText>) : (
-      <Checkbox
-        onChange={(e) =>
-          handleChecked(
-            e,
-            cart.Product.price * cart.quantity
-          )
-        }
-      />
-    ),
+    checkbox:
+      cart.Product.quantity === 0 ? (
+        <S.OutOfStockText>Hết hàng</S.OutOfStockText>
+      ) : (
+        <Checkbox
+          onChange={(e) =>
+            handleChecked(
+              e,
+              cart.Product.price * cart.quantity,
+              cart.Product.id,
+              cart.Product.productname,
+              cart.quantity,
+              cart.Product.price,
+              cart.Product.imageUrl,
+              cart.Product.quantity,
+              cart.Product.sold
+            )
+          }
+        />
+      ),
     productName: cart.Product.productname,
     image: <img src={`${cart.Product.imageUrl}`} style={{ width: "50px" }} />,
     price: (
@@ -77,9 +119,10 @@ const Cart = () => {
     quantity: (
       <InputNumber
         min={1}
-        max={10}
+        max={cart.Product.quantity}
         onChange={(value) => changeQuantity(value, cart.id)}
         defaultValue={cart.quantity}
+        disabled={totalArr.includes(cart.Product.price * cart.quantity)}
         onKeyDown={(e) => e.preventDefault()}
       />
     ),
@@ -119,25 +162,40 @@ const Cart = () => {
     setIsModalOpen(false);
   };
 
-  
-  
   const handleConfirm = () => {
     const total = totalArr.reduce((acc, curr) => acc + curr, 0);
-    const status = 'Đang đóng gói';
+    const status = "Đang đóng gói";
     const accountid = token.id;
     const id = uuidv4();
     dispatch(addOrderStart({ id, total, address, city, status, accountid }));
-    cartList.forEach(cart => {
-      const quantity = cart.quantity;
-      const price = cart.Product.price;
-      const productid = cart.Product.id;
-      const imageUrl = cart.Product.imageUrl;
-      const productname = cart.Product.productname
-      dispatch(addOrderDetailStart({productname, quantity, price, productid, orderid: id, imageUrl}))
-      dispatch(updateProductStart({id: cart.Product.id, quantity: cart.Product.quantity - cart.quantity, sold: cart.quantity}))
+    productidArr.forEach((item, index) => {
+      const quantity = quantityArr[index];
+      const price = priceArr[index];
+      const productid = productidArr[index];
+      const imageUrl = imageUrlArr[index];
+      const productname = productnameArr[index];
+      const productQuantity = productQuantityArr[index];
+      const soldProduct = soldArr[index];
+      dispatch(
+        addOrderDetailStart({
+          productname,
+          quantity,
+          price,
+          productid,
+          orderid: id,
+          imageUrl,
+        })
+      );
+      dispatch(
+        updateProductStart({
+          id: productid,
+          quantity: productQuantity - quantity,
+          sold: soldProduct + quantity,
+        })
+      );
     });
-    navigate('/myOrder')
-  }
+    navigate("/myOrder");
+  };
 
   const columns = [
     {
@@ -205,8 +263,16 @@ const Cart = () => {
             onOk={handleOk}
             onCancel={handleCancel}
           >
-            <Input onChange={(e) => setChangerAdress(e.target.value)} className="mt-2" placeholder="Tên đường(Số nhà, thôn, xóm)" />
-            <Input onChange={(e) => setChangeCity(e.target.value)} className="mt-2" placeholder="Tỉnh/thành phố" />
+            <Input
+              onChange={(e) => setChangerAdress(e.target.value)}
+              className="mt-2"
+              placeholder="Tên đường(Số nhà, thôn, xóm)"
+            />
+            <Input
+              onChange={(e) => setChangeCity(e.target.value)}
+              className="mt-2"
+              placeholder="Tỉnh/thành phố"
+            />
           </Modal>
         </>
       ),
@@ -247,7 +313,11 @@ const Cart = () => {
           dataSource={payDataSource}
           pagination={false}
         />
-        <Button onClick={handleConfirm} type="default" style={{ width: "100%", marginTop: "15px" }}>
+        <Button
+          onClick={handleConfirm}
+          type="default"
+          style={{ width: "100%", marginTop: "15px" }}
+        >
           Xác nhận đơn hàng
         </Button>
       </S.CartAside>

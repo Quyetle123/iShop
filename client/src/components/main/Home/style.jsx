@@ -43,21 +43,31 @@ export const Title = styled.h2`
   justify-content: center;
   svg {
     font-size: 40px;
-    margin-right: 10px; /* Khoảng cách giữa biểu tượng và văn bản */
+    margin-right: 10px;
   }
 `;
 
 export const ProductContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  padding: 50px 150px;
+  margin: 50px 150px;
+  box-sizing: border-box;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color:#2c2c2e transparent;
 `;
 
 export const ProductCard = styled.div`
   width: 24%;
+  margin-left: calc(4 / 3 * 1%);
   height: 450px;
   background-color: #2c2c2e;
   border-radius: 20px;
+  margin-bottom: 3px;
+  flex-shrink: 0;
+
+  &:first-child {
+    margin-left: 0;
+  }
 `;
 
 export const ImgContainer = styled.div`

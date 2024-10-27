@@ -9,6 +9,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { getToken } from "../../../utils/token";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(
   CategoryScale,
@@ -21,6 +24,15 @@ ChartJS.register(
 );
 
 const HomeAdmin = () => {
+  const token = getToken();
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if(token.role !== 'admin') {
+      navigate('/')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate]);
   const data = {
     labels: ["Ngày 1", "Ngày 2", "Ngày 3", "Ngày 4", "Ngày 5"], // Ngày
     datasets: [

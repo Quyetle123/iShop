@@ -15,7 +15,7 @@ const UpdateProduct = () => {
   const [image, setImage] = useState(null);
   const [formUpdate] = Form.useForm();
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { selectedProduct } = useSelector((state) => state.products);
 
@@ -94,7 +94,7 @@ const UpdateProduct = () => {
   );
 
   return (
-    <div style={{ width: "100%", marginTop: '100px' }}>
+    <div style={{ width: "100%", marginTop: "100px" }}>
       <Form
         onFinish={handleSubmit}
         form={formUpdate}

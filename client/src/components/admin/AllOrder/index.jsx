@@ -1,11 +1,18 @@
 import { Table, Typography, Select } from "antd";
 import { useEffect, useState } from "react";
+import io from "socket.io-client";
 import * as S from "./style";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllOrderStart, updateStatusStart } from "../../../reudux/slices/orderSlice";
+import {
+  getAllOrderStart,
+  updateStatusStart,
+} from "../../../reudux/slices/orderSlice.jsx";
 
 const { Title } = Typography;
 const { Option } = Select;
+
+const socket = io("http://localhost:5000");
+
 
 // eslint-disable-next-line react/prop-types
 const OrderDetailsTable = ({ details }) => {
@@ -47,6 +54,7 @@ const OrderDetailsTable = ({ details }) => {
 const AllOrder = () => {
   const dispatch = useDispatch();
   const { orders } = useSelector((state) => state.orders);
+
   const orderList = Array.isArray(orders.orders) ? orders.orders : [];
 
   useEffect(() => {
@@ -55,8 +63,20 @@ const AllOrder = () => {
 
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
-  const handleStatusChange = (status, id) => {
-    dispatch(updateStatusStart({id, status}))
+  const handleStatusChange = (status, id, accountid) => {
+    dispatch(updateStatusStart({ id, status }));
+    if (status === "Đang vận chuyển") {
+      socket.emit("sendMessage", {
+        message: `Đơn hàng ${id} của bạn đã được bàn giao cho đơn vị vận chuyển`,
+        accountid,
+      });
+    } else if (status === "Đã giao hàng") {
+      socket.emit("sendMessage", {
+        message:
+          "Đơn hàng của bạn đã được giao. Hãy viết bình luận đánh giá về sản phẩm",
+        accountid,
+      });
+    }
     window.location.reload();
   };
 
@@ -90,7 +110,9 @@ const AllOrder = () => {
         <Select
           defaultValue={status}
           style={{ width: 200 }}
-          onChange={(value) => handleStatusChange(value, record.id)}
+          onChange={(value) =>
+            handleStatusChange(value, record.id, record.accountid)
+          }
         >
           <Option value="Đang đóng gói">Đang đóng gói</Option>
           <Option value="Đang vận chuyển">Đang vận chuyển</Option>
@@ -107,14 +129,14 @@ const AllOrder = () => {
 
   const onExpand = (expanded, record) => {
     if (expanded) {
-      setExpandedRowKeys([record.id]); 
+      setExpandedRowKeys([record.id]);
     } else {
       setExpandedRowKeys([]);
     }
   };
 
   return (
-    <S.OrdersContainer>
+    <div style={{padding: '25px'}}>
       <Title level={2}>Quản lý Đơn Hàng</Title>
       <Table
         columns={orderColumns}
@@ -125,10 +147,10 @@ const AllOrder = () => {
           onExpand,
         }}
         rowKey="id"
-        pagination={false} 
+        pagination={false}
       />
-    </S.OrdersContainer>
+    </div>
   );
 };
 
-export default AllOrder;
+export default AllOrder; 

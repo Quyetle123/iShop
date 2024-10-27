@@ -6,7 +6,8 @@ import cartSaga from "./cartSaga.jsx";
 import orderSaga from "./orderSaga.jsx";
 import orderDetailSaga from "./orderDetailSaga.jsx";
 import commentSaga from "./commentSaga.jsx";
+import notifySaga from "./notifySaga.jsx";
 
 export default function* rootSaga() {
-  yield all([authSaga(), categorySaga(), productSaga(), cartSaga(), orderSaga(), orderDetailSaga(), commentSaga()]);
+  yield all([authSaga(), categorySaga(), productSaga(), cartSaga(), orderSaga(), orderDetailSaga(), commentSaga(), notifySaga()]);
 }

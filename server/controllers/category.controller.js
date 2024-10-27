@@ -1,4 +1,4 @@
-import { Category } from "../models/index.js";
+import { Category, Product } from "../models/index.js";
 
 class categoryController {
   static async addCategory (req, res) {
@@ -13,7 +13,11 @@ class categoryController {
   
   static async getAllCategories (req, res) {
     try {
-      const categories = await Category.findAll();
+      const categories = await Category.findAll({
+        include: {
+          model: Product,
+        }
+      });
       res.status(200).json({ categories });
     } catch (error) {
       res.status(400).json({ message: error.message });
@@ -23,7 +27,14 @@ class categoryController {
   static async getCategoryById (req, res) {
     const { id } = req.params;
     try {
-      const category = await Category.findByPk(id);
+      const category = await Category.findAll({
+        where: {
+          id
+        },
+        include: {
+          model: Product
+        }
+      });
       if (category) {
         res.status(200).json({ category });
       } else {

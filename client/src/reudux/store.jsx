@@ -8,6 +8,7 @@ import cartSlice from "./slices/cartSlice.jsx";
 import orderSlice from "./slices/orderSlice.jsx";
 import orderDetailSlice from "./slices/orderDetailSlice.jsx"
 import commentSlice from "./slices/commentSlice.jsx"
+import notifySlice from "./slices/notifySlice.jsx";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -19,7 +20,8 @@ export const store = configureStore({
     carts: cartSlice,
     orders: orderSlice,
     orderDetails: orderDetailSlice,
-    comments: commentSlice
+    comments: commentSlice,
+    notifies: notifySlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware),

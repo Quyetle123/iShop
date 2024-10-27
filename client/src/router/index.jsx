@@ -15,8 +15,8 @@ import Detail from "../components/main/Detail/index.jsx";
 import HomeAdmin from "../components/admin/Home/index.jsx";
 import Cart from "../components/main/Cart/index.jsx";
 import MyOrder from "../components/main/MyOrder/index.jsx";
-import AllOrder from "../components/admin/AllOrder/index.jsx";
 import Comment from "../components/main/Comment/index.jsx";
+import AllOrder from "../components/admin/AllOrder/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -32,24 +32,24 @@ export default createBrowserRouter([
         children: [
           {
             element: <Home />,
-            path: '/'
+            path: "/",
           },
           {
             element: <Detail />,
-            path: '/detail/:id'
+            path: "/detail/:id",
           },
           {
             element: <Cart />,
-            path: '/cart'
+            path: "/cart",
           },
           {
             element: <MyOrder />,
-            path: "/myOrder"
+            path: "/myOrder",
           },
           {
             element: <Comment />,
-            path: "/comment/:productid"
-          }
+            path: "/comment/:productid",
+          },
         ],
       },
       {
@@ -58,7 +58,7 @@ export default createBrowserRouter([
         children: [
           {
             element: <HomeAdmin />,
-            index: true
+            index: true,
           },
           {
             element: <AddCategory />,
@@ -86,8 +86,8 @@ export default createBrowserRouter([
           },
           {
             element: <AllOrder />,
-            path: "/admin/allOrder"
-          }
+            path: "/admin/allOrder",
+          },
         ],
       },
       {

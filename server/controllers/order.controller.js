@@ -1,5 +1,4 @@
 import { Order, OrderDetail } from "../models/index.js";
-
 class orderController {
   static async addOrder(req, res) {
     const data = req.body;
@@ -41,11 +40,12 @@ class orderController {
 
   static async updateStatusOrder(req, res) {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status, accountid } = req.body;
     try {
       const order = await Order.findByPk(id);
       if (order) {
         await order.update({ status });
+
         res.status(200).json({ order });
       } else {
         res.status(400).json({ message: "Order not found" });
