@@ -142,7 +142,7 @@ const Header = () => {
                 <NotNotify>
                   <p>Chưa có thông báo</p>
                 </NotNotify>
-              )}
+              )} 
             </NotifyMenu>
           )}
         </div>

@@ -1,4 +1,4 @@
-import { Table, Typography, Select } from "antd";
+import { Table, Select } from "antd";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import * as S from "./style";
@@ -8,7 +8,6 @@ import {
   updateStatusStart,
 } from "../../../reudux/slices/orderSlice.jsx";
 
-const { Title } = Typography;
 const { Option } = Select;
 
 const socket = io("http://localhost:5000");
@@ -136,8 +135,7 @@ const AllOrder = () => {
   };
 
   return (
-    <div style={{padding: '25px'}}>
-      <Title level={2}>Quản lý Đơn Hàng</Title>
+    <div style={{padding: '25px', marginTop: '80px'}}>
       <Table
         columns={orderColumns}
         dataSource={orderList}

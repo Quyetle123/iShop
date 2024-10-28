@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 export const HeaderTopContaier = styled.div`
     width: 100%;
-    height: 62px;
+    height: 80px;
     background-color: white;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
+    border-bottom:  1px solid #e5e7eb;
     display: flex;
     align-items: center;
     justify-content: right;
@@ -14,12 +14,12 @@ export const HeaderTopContaier = styled.div`
 
 export const Account = styled.p`
     position: absolute;
-    top: 16px;
-    left: 1110px;
+    top: 25px;
+    left: 1120px;
 `
 
 export const MenuList = styled.p`
     position: absolute;
-    top: 16px;
-    left: 1170px;
+    top: 25px;
+    left: 1183px;
 `

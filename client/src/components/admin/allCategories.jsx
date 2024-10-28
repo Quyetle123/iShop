@@ -1,8 +1,10 @@
-import { Button, Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { FaEdit } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
 import { deleteCategoryStart, fetchCategories } from "../../reudux/slices/categorySlice";
+import { Table } from "antd";
 
 const AllCategories = () => {
   const dispatch = useDispatch();
@@ -22,11 +24,9 @@ const AllCategories = () => {
     description: category.description,
     updateAnddelete: (
       <div className="flex">
-        <Button type="primary">
-          <Link to={`/admin/updateCategory/${category.id}`}>Sửa</Link>
-        </Button>
-        <Button
-          style={{ marginLeft: "10px" }}
+        <Link to={`/admin/updateCategory/${category.id}`}><FaEdit className="text-[20px] cursor-pointer" /></Link>
+        <MdDeleteOutline
+          className="ml-[10px] text-[20px] cursor-pointer hover:text-red-400"
           type="primary"
           danger
           onClick={() => {
@@ -34,9 +34,7 @@ const AllCategories = () => {
               dispatch(deleteCategoryStart(category.id))
             }
           }}
-        >
-          Xóa
-        </Button>
+        />
       </div>
     ),
   }));

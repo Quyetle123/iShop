@@ -4,13 +4,14 @@ export const HeaderContainer = styled.div`
     width: 250px;
     height: 100vh;
     position: fixed;
-    background-color: #333;
+    background-color: #fff;
+    border-right: 1px solid #e5e7eb;
 `;
 
 export const HeaderTop = styled.div`
-    background-color: #0e0c0c;
     padding: 10px 20px;
-    margin-bottom: 20px
+    margin-bottom: 20px;
+    background-color: #fff;
 `;
 
 export const LogoImg = styled.img`

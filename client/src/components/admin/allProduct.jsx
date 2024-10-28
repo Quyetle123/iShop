@@ -1,5 +1,4 @@
 import { Table } from "antd";
-import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +7,8 @@ import {
   deleteProductStart,
   fetchProductesStart,
 } from "../../reudux/slices/productSlice";
+import { FaEdit } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
 
 const Allproduct = () => {
   const dispatch = useDispatch();
@@ -42,11 +43,9 @@ const Allproduct = () => {
     sold: product.sold,
     updateAnddelete: (
       <div style={{ display: "flex" }}>
-        <Button type="primary">
-          <Link to={`/admin/updateProduct/${product.id}`}>Sửa</Link>
-        </Button>
-        <Button
-          style={{ marginLeft: "10px" }}
+          <Link to={`/admin/updateProduct/${product.id}`}><FaEdit className="text-[20px] cursor-pointer" /></Link>
+        <MdDeleteOutline
+          className="ml-[10px] text-[20px] cursor-pointer hover:text-red-400"
           type="primary"
           danger
           onClick={() => {
@@ -56,7 +55,7 @@ const Allproduct = () => {
           }}
         >
           Xóa
-        </Button>
+        </MdDeleteOutline>
       </div>
     ),
   }));

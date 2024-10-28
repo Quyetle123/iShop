@@ -23,6 +23,7 @@ ChartJS.register(
   Legend
 );
 
+
 const HomeAdmin = () => {
   const token = getToken();
   const navigate = useNavigate()
@@ -34,11 +35,11 @@ const HomeAdmin = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
   const data = {
-    labels: ["Ngày 1", "Ngày 2", "Ngày 3", "Ngày 4", "Ngày 5"], // Ngày
+    labels: ["Ngày 1", "Ngày 2", "Ngày 3", "Ngày 4", "Ngày 5"], 
     datasets: [
       {
         label: "Thu nhập",
-        data: [100, 200, 150, 300, 250], // Giá trị thu nhập tương ứng
+        data: [100, 200, 150, 300, 250],
         borderColor: "rgba(75, 192, 192, 1)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         fill: true,

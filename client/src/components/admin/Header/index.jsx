@@ -1,13 +1,51 @@
+import { HeaderContainer, HeaderTop, LogoImg } from "./style";
+import {
+  AppleOutlined,
+  AppstoreOutlined,
+  HomeOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
+import { Menu } from "antd";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { HeaderContainer, HeaderTop, LogoImg, MenuItem } from "./style";
-import { FaApple } from "react-icons/fa6";
-import { MdOutlineLibraryAdd } from "react-icons/md";
-import { IoMdHome } from "react-icons/io";
-import { FaListUl } from "react-icons/fa";
-import { IoBag } from "react-icons/io5";
 
+const items = [
+  {
+    key: "sub1",
+    label: <Link to='/admin'>Trang chủ</Link>,
+    icon: <HomeOutlined />,
+  },
+  {
+    key: "sub2",
+    label: "Quản lý danh mục",
+    icon: <AppstoreOutlined />,
+    children: [
+      { key: "5", label: <Link to='/admin/addCategory'>Thêm danh mục</Link> },
+      { key: "6", label: <Link to='/admin/allCategories'>Tất cả danh mục</Link> },
+    ],
+  },
+  {
+    key: "sub3",
+    label: "Quản lý sản phẩm",
+    icon: <AppleOutlined />,
+    children: [
+      { key: "7", label: <Link to='/admin/addProduct'>Thêm sản phẩm</Link> },
+      { key: "8", label: <Link to='/admin/allProduct'>Tất cả sản phẩm</Link> },
+    ],
+  },
+  {
+    key: "sub4",
+    label: <Link to='/admin/allOrder'>Tất cả đơn hàng</Link>,
+    icon: <ShoppingCartOutlined />,
+  },
+];
 
 const Header = () => {
+  const [current, setCurrent] = useState("1");
+  const onClick = (e) => {
+    setCurrent(e.key);
+  };
+
   return (
     <HeaderContainer>
       <HeaderTop>
@@ -16,60 +54,18 @@ const Header = () => {
           alt="Icon TopZone"
         />
       </HeaderTop>
-      <MenuItem>
-        <IoMdHome />
-        <Link
-          to="/admin"
-          className="no-underline text-white hover:underline ml-1"
-        >
-          Trang chủ
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <IoBag />
-        <Link
-          to="/admin/allOrder"
-          className="no-underline text-white hover:underline ml-1"
-        >
-          Tất cả đơn hàng
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <MdOutlineLibraryAdd />
-        <Link
-          to="/admin/addCategory"
-          className="no-underline text-white hover:underline ml-1"
-        >
-          Thêm danh mục
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <FaListUl />
-        <Link
-          to="/admin/allCategories"
-          className="no-underline text-white hover:underline ml-1"
-        >
-          Tất cả danh mục
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <MdOutlineLibraryAdd />
-        <Link
-          to="/admin/addProduct"
-          className="no-underline text-white hover:underline ml-1"
-        >
-          Thêm sản phẩm
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <FaApple />
-        <Link
-          to="/admin/allProduct"
-          className="no-underline text-white hover:underline ml-1"
-        >
-          Tất cả sản phẩm
-        </Link>
-      </MenuItem>
+      <Menu
+        onClick={onClick}
+        defaultOpenKeys={["sub1"]}
+        selectedKeys={[current]}
+        mode="inline"
+        items={items}
+        style={{
+          backgroundColor: "#fff",
+          color: "#fff",
+          borderRight: "none",
+        }}
+      />
     </HeaderContainer>
   );
 };
