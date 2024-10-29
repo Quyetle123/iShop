@@ -12,6 +12,8 @@ import orderRouter from "./routes/order.route.js";
 import orderDetailRouter from "./routes/orderDetail.route.js";
 import commentRouter from "./routes/comment.route.js";
 import notifyRouter from "./routes/notify.route.js";
+import storeRouter from "./routes/store.route.js"
+import storeAccountRouter from "./routes/storeAccount.route.js"
 import setupSocket from "./socket/socket.js";
 
 const app = express();
@@ -34,6 +36,8 @@ app.use("/api/order", orderRouter);
 app.use("/api/orderDetail", orderDetailRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/notify", notifyRouter);
+app.use("/api/store", storeRouter);
+app.use("/api/storeAccount", storeAccountRouter);
 
 setupSocket(io);
 

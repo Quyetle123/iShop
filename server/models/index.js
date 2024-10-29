@@ -5,6 +5,8 @@ import Comment from "./Comment.js";
 import Order from "./Order.js";
 import OrderDetail from "./OrderDetail.js";
 import Product from "./Product.js";
+import Store from "./Store.js";
+import StoreAccount from "./StoreAccount.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -30,4 +32,11 @@ Comment.belongsTo(Product, { foreignKey: "productid" });
 Account.hasMany(Comment, { foreignKey: "accountid" });
 Comment.belongsTo(Account, { foreignKey: "accountid" });
 
-export { Account, Cart, Category, Product, Order, OrderDetail, Comment };
+Store.hasMany(StoreAccount, { foreignKey: "storeid" });
+StoreAccount.belongsTo(Store, { foreignKey: "storeid" });
+
+Account.hasMany(StoreAccount, { foreignKey: "accountid" });
+StoreAccount.belongsTo(Account, { foreignKey: "accountid" });
+
+
+export { Account, Cart, Category, Product, Order, OrderDetail, Comment, Store, StoreAccount };

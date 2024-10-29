@@ -3,6 +3,7 @@ import {
   AppleOutlined,
   AppstoreOutlined,
   HomeOutlined,
+  ShopOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
@@ -37,6 +38,15 @@ const items = [
     key: "sub4",
     label: <Link to='/admin/allOrder'>Tất cả đơn hàng</Link>,
     icon: <ShoppingCartOutlined />,
+  },
+  {
+    key: "sub5",
+    label: "Quản lý cửa hàng",
+    icon: <ShopOutlined />,
+    children: [
+      { key: "9", label: <Link to='/admin/addStore'>Thêm cửa hàng</Link> },
+
+    ],
   },
 ];
 

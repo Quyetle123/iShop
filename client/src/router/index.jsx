@@ -17,6 +17,7 @@ import Cart from "../components/main/Cart/index.jsx";
 import MyOrder from "../components/main/MyOrder/index.jsx";
 import Comment from "../components/main/Comment/index.jsx";
 import AllOrder from "../components/admin/AllOrder/index.jsx";
+import AddStore from "../components/admin/AddStore/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -88,6 +89,10 @@ export default createBrowserRouter([
             element: <AllOrder />,
             path: "/admin/allOrder",
           },
+          {
+            element: <AddStore />,
+            path: "/admin/addStore",
+          }
         ],
       },
       {

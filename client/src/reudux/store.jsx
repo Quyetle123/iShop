@@ -9,6 +9,8 @@ import orderSlice from "./slices/orderSlice.jsx";
 import orderDetailSlice from "./slices/orderDetailSlice.jsx"
 import commentSlice from "./slices/commentSlice.jsx"
 import notifySlice from "./slices/notifySlice.jsx";
+import storeSlice from "./slices/storeSlice.jsx";
+import storeAccountSlice from "./slices/storeAccountSlice.jsx"
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -21,7 +23,9 @@ export const store = configureStore({
     orders: orderSlice,
     orderDetails: orderDetailSlice,
     comments: commentSlice,
-    notifies: notifySlice
+    notifies: notifySlice,
+    stores: storeSlice,
+    storeAccounts: storeAccountSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware),
