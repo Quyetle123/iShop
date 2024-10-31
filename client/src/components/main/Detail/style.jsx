@@ -32,7 +32,7 @@ export const DetailArticle = styled.article`
 
   h2 {
     font-size: 30px;
-    color: #fdb13a;
+    color: #c89979;
     margin-top: 10px;
   }
 
@@ -46,7 +46,7 @@ export const DetailArticle = styled.article`
     font-size: 17px;
     font-weight: bold;
     color: white;
-    background-color: #fdb13a;
+    background-color: rgb(150, 150, 150);
     border: none;
     border-radius: 5px;
     margin-top: 10px;
@@ -55,15 +55,15 @@ export const DetailArticle = styled.article`
 
     &:first-of-type {
       margin-top: 30px;
-      background-color: rgb(150, 150, 150);
+      background-color: #c89979;
     }
 
     &:hover {
-      background-color: #d8a200;
+      background-color: rgb(100, 100, 100);
     }
 
     &:first-of-type:hover {
-      background-color: rgb(100, 100, 100);
+      background-color: #d8a200;
     }
   }
 `;

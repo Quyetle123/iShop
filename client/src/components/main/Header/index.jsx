@@ -44,6 +44,7 @@ const Header = () => {
   };
 
   useEffect(() => {
+    if(!token) return;
     socket.on("connect", () => {
       console.log("Socket connected: ", socket.id);
     });
@@ -79,7 +80,9 @@ const Header = () => {
   }, [arrList]);
 
   useEffect(() => {
-    dispatch(fetchNotifyStart(token.id));
+    if(token) {
+      dispatch(fetchNotifyStart(token.id));
+    }
   }, [dispatch]);
 
   const deleteNotify = (id) => {

@@ -1,17 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as S from "./style";
-import { Button, Card, Form, Input, message, Steps } from "antd";
-import { useDispatch } from "react-redux";
+import { Button, Card, Form, Input, message, Select, Steps } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 import { addStoreStart } from "../../../reudux/slices/storeSlice";
 import { v4 as uuidv4 } from "uuid";
 import { registerStart } from "../../../reudux/slices/authSlice";
 import { addStoreAccountStart } from "../../../reudux/slices/storeAccountSlice";
+import { fetchAllBranchStart } from "../../../reudux/slices/branchSlice";
 
 const AddStore = () => {
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
   const [formData, setFormData] = useState({});
+  const { branches } = useSelector((state) => state.branches);
+  const branchList = Array.isArray(branches.branches) ? branches.branches : [];
+
+  useEffect(() => {
+    dispatch(fetchAllBranchStart());
+  }, [dispatch]);
+
+  console.log(branchList);
 
   const steps = [
     {
@@ -43,12 +52,18 @@ const AddStore = () => {
           </Form.Item>
           <Form.Item
             label="Chi nhánh"
-            name="branchCity"
+            name="branchid"
             rules={[
               { required: true, message: "Vui lòng nhập tên chi nhánh!" },
             ]}
           >
-            <Input />
+            <Select placeholder="Chọn chi nhánh">
+              {branchList.map((branch) => (
+                <Select.Option key={branch.id}>
+                  {branch.branchname}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Form>
       ),
@@ -145,7 +160,7 @@ const AddStore = () => {
             storename: allData.storename,
             address: allData.address,
             phoneNumber: allData.phoneNumber,
-            branchCity: allData.branchCity,
+            branchid: allData.branchid,
           })
         );
 

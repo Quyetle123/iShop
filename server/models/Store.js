@@ -21,9 +21,13 @@ const Store = sequelize.define(
       type: DataTypes.STRING(20),
       allowNull: false,
     },
-    branchCity: {
-      type: DataTypes.STRING(100),
+    branchid: {
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "branches",
+        key: "id",
+      },
     },
   },
   {

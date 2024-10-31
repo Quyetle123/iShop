@@ -18,6 +18,7 @@ import MyOrder from "../components/main/MyOrder/index.jsx";
 import Comment from "../components/main/Comment/index.jsx";
 import AllOrder from "../components/admin/AllOrder/index.jsx";
 import AddStore from "../components/admin/AddStore/index.jsx";
+import BranchAndStore from "../components/admin/BranchAndStore/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -92,6 +93,10 @@ export default createBrowserRouter([
           {
             element: <AddStore />,
             path: "/admin/addStore",
+          },
+          {
+            element: <BranchAndStore />,
+            path: "/admin/branch-store"
           }
         ],
       },

@@ -29,7 +29,9 @@ const Detail = () => {
   const { carts } = useSelector((state) => state.carts);
   useEffect(() => {
     dispatch(fetchProductByIdStart(id));
-    dispatch(fetchCartByAccountidStart(token.id));
+    if(token) {
+      dispatch(fetchCartByAccountidStart(token.id));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id]);
 

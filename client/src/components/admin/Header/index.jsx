@@ -41,11 +41,11 @@ const items = [
   },
   {
     key: "sub5",
-    label: "Quản lý cửa hàng",
+    label: "Chi nhánh - cửa hàng",
     icon: <ShopOutlined />,
     children: [
-      { key: "9", label: <Link to='/admin/addStore'>Thêm cửa hàng</Link> },
-
+      { key: "9", label: <Link to='/admin/branch-store'>Quản lí chi nhánh, cửa hàng</Link> },
+      { key: "10", label: <Link to='/admin/addStore'>Thêm cửa hàng</Link> },
     ],
   },
 ];

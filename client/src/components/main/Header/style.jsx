@@ -40,7 +40,7 @@ export const NavLink = styled.a`
   transition: all 0.3s ease;
 
   &:hover {
-    color: #fdb13a;
+    color: #c89979;
   }
 
   &:hover::after {
@@ -50,7 +50,7 @@ export const NavLink = styled.a`
     right: 0;
     bottom: 0;
     height: 2px;
-    background-color: #fdb13a;
+    background-color: #c89979;
     transform: scaleX(1);
   }
 
@@ -106,7 +106,7 @@ export const NotNotify = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`
+`;
 
 export const AccountButton = styled.button`
   background: none;

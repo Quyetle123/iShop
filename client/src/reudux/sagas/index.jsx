@@ -9,6 +9,7 @@ import commentSaga from "./commentSaga.jsx";
 import notifySaga from "./notifySaga.jsx";
 import storeSaga from "./storeSaga.jsx";
 import storeAccountSaga from "./storeAccountSaga.jsx";
+import branchSaga from "./branchSaga.jsx";
 
 export default function* rootSaga() {
   yield all([
@@ -21,6 +22,7 @@ export default function* rootSaga() {
     commentSaga(),
     notifySaga(),
     storeSaga(),
-    storeAccountSaga()
+    storeAccountSaga(),
+    branchSaga(),
   ]);
 }

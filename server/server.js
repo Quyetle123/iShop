@@ -14,6 +14,7 @@ import commentRouter from "./routes/comment.route.js";
 import notifyRouter from "./routes/notify.route.js";
 import storeRouter from "./routes/store.route.js"
 import storeAccountRouter from "./routes/storeAccount.route.js"
+import branchRouter from "./routes/branch.route.js";
 import setupSocket from "./socket/socket.js";
 
 const app = express();
@@ -38,6 +39,7 @@ app.use("/api/comment", commentRouter);
 app.use("/api/notify", notifyRouter);
 app.use("/api/store", storeRouter);
 app.use("/api/storeAccount", storeAccountRouter);
+app.use("/api/branch", branchRouter);
 
 setupSocket(io);
 

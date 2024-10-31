@@ -10,7 +10,7 @@ const storeSlice = createSlice({
   reducers: {
     addStoreStart(state) {
       state.loading = true;
-      state.error = false;
+      state.error = null;
     },
     addStoreSuccess(state, action) {
       state.loading = false;
