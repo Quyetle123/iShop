@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 /* eslint-disable react-refresh/only-export-components */
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import Admin from "../pages/admin/index.jsx";
@@ -19,6 +20,9 @@ import Comment from "../components/main/Comment/index.jsx";
 import AllOrder from "../components/admin/AllOrder/index.jsx";
 import AddStore from "../components/admin/AddStore/index.jsx";
 import BranchAndStore from "../components/admin/BranchAndStore/index.jsx";
+import AdminRoute from "./adminRoute.jsx";
+import UserRoute from "./userRoute.jsx";
+import UserLoginRoutes from "./userLoginRoutes.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -29,7 +33,11 @@ export default createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        element: <Main />,
+        element: (
+          <UserRoute>
+            <Main />
+          </UserRoute>
+        ),
         path: "/",
         children: [
           {
@@ -41,21 +49,37 @@ export default createBrowserRouter([
             path: "/detail/:id",
           },
           {
-            element: <Cart />,
+            element: (
+              <UserLoginRoutes>
+                <Cart />
+              </UserLoginRoutes>
+            ),
             path: "/cart",
           },
           {
-            element: <MyOrder />,
+            element: (
+              <UserLoginRoutes>
+                <MyOrder />
+              </UserLoginRoutes>
+            ),
             path: "/myOrder",
           },
           {
-            element: <Comment />,
+            element: (
+              <UserLoginRoutes>
+                <Comment />
+              </UserLoginRoutes>
+            ),
             path: "/comment/:productid",
           },
         ],
       },
       {
-        element: <Admin />,
+        element: (
+          <AdminRoute>
+            <Admin />
+          </AdminRoute>
+        ),
         path: "/admin",
         children: [
           {
@@ -96,8 +120,8 @@ export default createBrowserRouter([
           },
           {
             element: <BranchAndStore />,
-            path: "/admin/branch-store"
-          }
+            path: "/admin/branch-store",
+          },
         ],
       },
       {
