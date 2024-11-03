@@ -47,27 +47,10 @@ export const Title = styled.h2`
   }
 `;
 
-export const ProductContainer = styled.div`
-  display: flex;
-  margin: 50px 150px;
-  box-sizing: border-box;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color:#2c2c2e transparent;
-`;
-
 export const ProductCard = styled.div`
-  width: 24%;
-  margin-left: calc(4 / 3 * 1%);
   height: 450px;
   background-color: #2c2c2e;
   border-radius: 20px;
-  margin-bottom: 3px;
-  flex-shrink: 0;
-
-  &:first-child {
-    margin-left: 0;
-  }
 `;
 
 export const ImgContainer = styled.div`

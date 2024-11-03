@@ -13,6 +13,7 @@ export const DetailAside = styled.aside`
   width: 50%;
   display: flex;
   justify-content: center;
+  overflow: hidden;
 
   img {
     width: 80%;

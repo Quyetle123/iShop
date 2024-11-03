@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:where(.css-dev-only-do-not-override-1hpnbz2).ant-carousel .slick-dots-bottom {
+    bottom: -15px;
+}
