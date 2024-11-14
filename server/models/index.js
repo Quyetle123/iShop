@@ -8,6 +8,9 @@ import Product from "./Product.js";
 import Store from "./Store.js";
 import StoreAccount from "./StoreAccount.js";
 import Branch from "./Branch.js";
+import Color from "./Color.js";
+import ProductColor from "./ProductColor.js";
+import ProductImage from "./ProductImage.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -15,8 +18,8 @@ Cart.belongsTo(Account, { foreignKey: "accountid" });
 Category.hasMany(Product, { foreignKey: "categoryid" });
 Product.belongsTo(Category, { foreignKey: "categoryid" });
 
-Product.hasMany(Cart, { foreignKey: "productid" });
-Cart.belongsTo(Product, { foreignKey: "productid" });
+ProductColor.hasMany(Cart, { foreignKey: "productColorid" });
+Cart.belongsTo(ProductColor, { foreignKey: "productColorid" });
 
 Account.hasMany(Order, { foreignKey: "accountid" });
 Order.belongsTo(Account, { foreignKey: "accountid" });
@@ -24,8 +27,8 @@ Order.belongsTo(Account, { foreignKey: "accountid" });
 Order.hasMany(OrderDetail, { foreignKey: "orderid" });
 OrderDetail.belongsTo(Order, { foreignKey: "orderid" });
 
-Product.hasMany(OrderDetail, { foreignKey: "productid" });
-OrderDetail.belongsTo(Product, { foreignKey: "productid" });
+ProductColor.hasMany(OrderDetail, { foreignKey: "productColorid" });
+OrderDetail.belongsTo(ProductColor, { foreignKey: "productColorid" });
 
 Product.hasMany(Comment, { foreignKey: "productid" });
 Comment.belongsTo(Product, { foreignKey: "productid" });
@@ -42,6 +45,15 @@ StoreAccount.belongsTo(Account, { foreignKey: "accountid" });
 Branch.hasMany(Store, { foreignKey: "branchid" });
 Store.belongsTo(Branch, { foreignKey: "branchid" });
 
+Color.hasMany(ProductColor, { foreignKey: "colorid" });
+ProductColor.belongsTo(Color, { foreignKey: "colorid" });
+
+Product.hasMany(ProductColor, { foreignKey: "productid" });
+ProductColor.belongsTo(Product, { foreignKey: "productid" });
+
+ProductColor.hasMany(ProductImage, { foreignKey: "productColorid" });
+ProductImage.belongsTo(ProductColor, { foreignKey: "productColorid" });
+
 export {
   Account,
   Cart,
@@ -52,5 +64,8 @@ export {
   Comment,
   Store,
   StoreAccount,
-  Branch
+  Branch,
+  Color,
+  ProductColor,
+  ProductImage,
 };

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom";
 import {
@@ -44,7 +45,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if(!token) return;
+    if (!token) return;
     socket.on("connect", () => {
       console.log("Socket connected: ", socket.id);
     });
@@ -73,14 +74,17 @@ const Header = () => {
     setShowAccountMenu((prev) => !prev);
   };
 
-  const { notifies } = useSelector((state) => state.notifies);
+  const { notifies } = useSelector((state) => state.notifies) || { notify: [] };
   const arrList = Array.isArray(notifies.notify) ? notifies.notify : [];
-  useEffect(() => {
-    setNotifyList(arrList);
-  }, [arrList]);
+
+  if (arrList.length > 0) {
+    useEffect(() => {
+      setNotifyList(arrList);
+    }, [arrList]);
+  }
 
   useEffect(() => {
-    if(token) {
+    if (token) {
       dispatch(fetchNotifyStart(token.id));
     }
   }, [dispatch]);
@@ -92,6 +96,7 @@ const Header = () => {
   return (
     <HeaderContainer>
       <Logo
+        className="w-[70px] h-[30px]"
         src="https://pos.nvncdn.com/4e732c-26/art/artCT/20161123_21IwG4VaWJ8BScUhd2coxILg.png"
         alt="Logo"
       />
@@ -145,7 +150,7 @@ const Header = () => {
                 <NotNotify>
                   <p>Chưa có thông báo</p>
                 </NotNotify>
-              )} 
+              )}
             </NotifyMenu>
           )}
         </div>

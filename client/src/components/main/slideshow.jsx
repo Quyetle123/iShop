@@ -1,8 +1,7 @@
-// Slideshow.js
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import styled from "styled-components";
-import { FaAngleLeft } from "react-icons/fa6";
-import { FaChevronRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 // Define styled components
 const Container = styled.div`
@@ -33,7 +32,7 @@ const Button = styled.button`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #333; /* Màu nền */
+  background-color: #333;
   color: white;
   border: none;
   padding: 0;
@@ -80,14 +79,7 @@ const Dot = styled.div`
   cursor: pointer;
 `;
 
-const images = [
-  "https://cdnv2.tgdd.vn/mwg-static/common/Banner/da/8e/da8eba2f63bb581e77876158d035764f.png",
-  "https://cdnv2.tgdd.vn/mwg-static/common/Banner/70/07/7007476ab205d1e806b3079d4d3eaceb.png",
-  "https://cdnv2.tgdd.vn/mwg-static/common/Banner/66/b2/66b2b0735f5c40fdab7da671a4056754.png",
-  "https://cdnv2.tgdd.vn/mwg-static/common/Banner/9c/80/9c8001c1c10c2482545a84346cb63846.png",
-];
-
-const Slideshow = () => {
+const Slideshow = ({ images = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToPrev = () => {
@@ -106,20 +98,24 @@ const Slideshow = () => {
     setCurrentIndex(index);
   };
 
+  if (images.length === 0) {
+    return <div>No images available</div>;
+  }
+
   return (
     <Container>
       <SlidesContainer translate={currentIndex * 100}>
         {images.map((src, index) => (
           <Slide key={index}>
-            <Image src={src} alt={`Slide ${index + 1}`} />
+            <Image src={src.image} alt={`Slide ${index + 1}`} />
           </Slide>
         ))}
       </SlidesContainer>
       <Button onClick={goToPrev} disabled={images.length <= 1}>
-        <FaAngleLeft />
+        <FaAngleLeft className="text-[15px]" />
       </Button>
       <Button onClick={goToNext} disabled={images.length <= 1}>
-        <FaChevronRight />
+        <FaAngleRight className="text-[15px]" />
       </Button>
       <DotsContainer>
         {images.map((_, index) => (

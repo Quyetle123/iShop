@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useDispatch, useSelector } from "react-redux";
 import {
   DetailArticle,
@@ -9,7 +10,7 @@ import {
   CommentContent,
   Main,
 } from "./style";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchProductByIdStart } from "../../../reudux/slices/productSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -19,9 +20,11 @@ import {
 } from "../../../reudux/slices/cartSlice";
 import { getToken } from "../../../utils/token";
 import dayjs from "dayjs";
+import Slideshow from "../slideshow";
 
 const Detail = () => {
   const token = getToken();
+  const [apiColor, setApiColor] = useState(0)
   const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedProduct } = useSelector((state) => state.products);
@@ -29,15 +32,16 @@ const Detail = () => {
   const { carts } = useSelector((state) => state.carts);
   useEffect(() => {
     dispatch(fetchProductByIdStart(id));
-    if(token) {
+    if (token) {
       dispatch(fetchCartByAccountidStart(token.id));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id]);
 
+  const handleCheckedColor = (i) => {
+    setApiColor(i)
+  }
   const quantity = 1;
   const navigate = useNavigate();
-
   const handleAddToCart = () => {
     let duplicateFound = false;
     carts.carts?.forEach((cart) => {
@@ -56,7 +60,7 @@ const Detail = () => {
       dispatch(
         addCartStart({
           quantity,
-          productid: id,
+          productColorid: product.ProductColors[apiColor].id,
           accountid: token.id,
         })
       );
@@ -85,15 +89,40 @@ const Detail = () => {
     <Main>
       <DetailContainer>
         <DetailAside>
-          <img src={product.imageUrl} alt="Product" />
+          <Slideshow images={product.ProductColors[apiColor].ProductImages} />
         </DetailAside>
         <DetailArticle>
           <h1>{product.productname}</h1>
           <h2>{product.price.toLocaleString("vi-VN")} đ</h2>
           <p>{product.description}</p>
+          <p>Màu sắc: {product.ProductColors[apiColor].Color.name}</p>
+          <div className="flex space-x-4 mt-5">
+            {product.ProductColors.map((color, index) => (
+              <input
+                key={color.id}
+                onClick={() => handleCheckedColor(index)}
+                type="radio"
+                id="radio1"
+                name="group"
+                value="option1"
+                style={{
+                  appearance: "none",
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "50%",
+                  border: "3px solid #fff",
+                  backgroundColor: `${color.Color.hex_code}`,
+                  cursor: "pointer",
+                }}
+              />
+            ))}
+          </div>
           <button
             style={{
-              display: product.quantity > 0 && token ? "block" : "none",
+              display:
+                product.ProductColors[0].quantity > 0 && token
+                  ? "block"
+                  : "none",
             }}
             onClick={handleAddToCart}
           >
@@ -101,7 +130,7 @@ const Detail = () => {
           </button>
           <button
             style={{
-              display: product.quantity > 0 ? "none" : "block",
+              display: product.ProductColors[0].quantity > 0 ? "none" : "block",
               backgroundColor: "lightcoral",
               cursor: "text",
             }}

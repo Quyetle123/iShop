@@ -1,4 +1,10 @@
-import { Order, OrderDetail } from "../models/index.js";
+import {
+  Order,
+  OrderDetail,
+  Product,
+  ProductColor,
+  ProductImage,
+} from "../models/index.js";
 class orderController {
   static async addOrder(req, res) {
     const data = req.body;
@@ -19,6 +25,17 @@ class orderController {
         },
         include: {
           model: OrderDetail,
+          include: {
+            model: ProductColor,
+            include: [
+              {
+                model: Product,
+              },
+              {
+                model: ProductImage,
+              },
+            ],
+          },
         },
       });
       res.status(200).json({ orders });
@@ -30,7 +47,20 @@ class orderController {
   static async getAllOrder(req, res) {
     try {
       const orders = await Order.findAll({
-        include: OrderDetail,
+        include: {
+          model: OrderDetail,
+          include: {
+            model: ProductColor,
+            include: [
+              {
+                model: Product,
+              },
+              {
+                model: ProductImage,
+              },
+            ],
+          },
+        },
       });
       res.status(200).json({ orders });
     } catch (error) {

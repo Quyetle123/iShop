@@ -1,4 +1,4 @@
-import { Category, Product } from "../models/index.js";
+import { Category, Product, ProductColor, ProductImage } from "../models/index.js";
 
 class categoryController {
   static async addCategory (req, res) {
@@ -16,6 +16,14 @@ class categoryController {
       const categories = await Category.findAll({
         include: {
           model: Product,
+          include: {
+          model: ProductColor,
+          include: [
+            {
+              model: ProductImage
+            }
+          ]
+        }
         }
       });
       res.status(200).json({ categories });

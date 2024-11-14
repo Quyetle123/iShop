@@ -11,7 +11,7 @@ const { Title } = Typography;
 const MyOrder = () => {
   const token = getToken();
   const dispatch = useDispatch();
-
+  
   const { orders } = useSelector((state) => state.orders);
   const orderList = Array.isArray(orders.orders) ? orders.orders : [];
 
@@ -70,8 +70,7 @@ const MyOrder = () => {
         <S.StyledCard title={`Mã số đơn hàng: ${order.id}`} key={order.id}>
           <Space direction="vertical" size="middle" style={{ width: "100%" }}>
             <p>
-              <strong>Tổng tiền:</strong> {order.total.toLocaleString("vi-VN")}{" "}
-              ₫
+              <strong>Tổng tiền:</strong> {order.total.toLocaleString("vi-VN")} ₫
             </p>
             <p>
               <strong>Địa chỉ:</strong> {order.address}, {order.city}
@@ -83,11 +82,11 @@ const MyOrder = () => {
               columns={orderDetailColumns(order.status)}
               dataSource={order.OrderDetails.map((detail) => ({
                 key: detail.id,
-                productImage: detail.imageUrl,
-                productName: detail.productname,
+                productImage: detail.ProductColor.ProductImages[0]?.image || "", // First image URL
+                productName: detail.ProductColor.Product.productname,
                 quantity: detail.quantity,
                 price: detail.price.toLocaleString("vi-VN"),
-                productid: detail.productid,
+                productid: detail.ProductColor.Product.id,
               }))}
               pagination={false}
               rowKey="productid"

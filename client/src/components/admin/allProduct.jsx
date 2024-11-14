@@ -1,4 +1,5 @@
-import { Table } from "antd";
+/* eslint-disable react/prop-types */
+import { Table, Image } from "antd";
 import { Link } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,17 +11,15 @@ import {
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 
-const Allproduct = () => {
+const AllProduct = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
   const productList = Array.isArray(products.products) ? products.products : [];
-  console.log(productList);
 
   useEffect(() => {
     dispatch(fetchProductesStart());
   }, [dispatch]);
 
-  // eslint-disable-next-line react/prop-types
   const Price = ({ value }) => (
     <NumericFormat
       value={value}
@@ -33,31 +32,27 @@ const Allproduct = () => {
   );
 
   const dataSource = productList.map((product, index) => ({
-    key: index,
+    key: product.id,
     productId: index + 1,
     productName: product.productname,
-    image: <img src={product.imageUrl} style={{ width: "50px" }} />,
     price: <Price value={product.price} />,
     description: product.description,
-    quantity: product.quantity,
-    sold: product.sold,
-    updateAnddelete: (
+    updateAndDelete: (
       <div style={{ display: "flex" }}>
-          <Link to={`/admin/updateProduct/${product.id}`}><FaEdit className="text-[20px] cursor-pointer" /></Link>
+        <Link to={`/admin/updateProduct/${product.id}`}>
+          <FaEdit className="text-[20px] cursor-pointer" />
+        </Link>
         <MdDeleteOutline
           className="ml-[10px] text-[20px] cursor-pointer hover:text-red-400"
-          type="primary"
-          danger
           onClick={() => {
             if (window.confirm("Bạn thật sự muốn xóa sản phẩm này?")) {
               dispatch(deleteProductStart(product.id));
             }
           }}
-        >
-          Xóa
-        </MdDeleteOutline>
+        />
       </div>
     ),
+    ProductColors: product.ProductColors,
   }));
 
   const columns = [
@@ -72,11 +67,6 @@ const Allproduct = () => {
       key: "productName",
     },
     {
-      title: "Ảnh",
-      dataIndex: "image",
-      key: "image",
-    },
-    {
       title: "Giá",
       dataIndex: "price",
       key: "price",
@@ -87,26 +77,74 @@ const Allproduct = () => {
       key: "description",
     },
     {
-      title: "Số lượng",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Đã bán",
-      dataIndex: "sold",
-      key: "sold",
-    },
-    {
       title: "Sửa, xóa",
-      dataIndex: "updateAnddelete",
-      key: "updateAnddelete",
+      dataIndex: "updateAndDelete",
+      key: "updateAndDelete",
     },
   ];
+
+  const expandedRowRender = (record) => {
+    const colorData = record.ProductColors.map((color) => ({
+      key: color.id,
+      colorName: color.Color.name,
+      firstImage:
+        color.ProductImages?.[0]?.image || "No Image Available",
+      quantity: color.quantity,
+      sold: color.sold,
+    }));
+
+    const colorColumns = [
+      {
+        title: "Màu sắc",
+        dataIndex: "colorName",
+        key: "colorName",
+      },
+      {
+        title: "Ảnh",
+        dataIndex: "firstImage",
+        key: "firstImage",
+        render: (text) =>
+          text !== "No Image Available" ? (
+            <Image width={50} src={text} alt="Product Color Image" />
+          ) : (
+            text
+          ),
+      },
+      {
+        title: "Số lượng",
+        dataIndex: "quantity",
+        key: "quantity",
+      },
+      {
+        title: "Đã bán",
+        dataIndex: "sold",
+        key: "sold",
+      },
+    ];
+
+    return (
+      <Table
+        columns={colorColumns}
+        dataSource={colorData}
+        pagination={false}
+        rowKey="colorId"
+      />
+    );
+  };
+
   return (
     <div style={{ padding: "20px", marginTop: '70px' }}>
-      <Table dataSource={dataSource} columns={columns} pagination={false} />
+      <Table
+        dataSource={dataSource}
+        columns={columns}
+        pagination={false}
+        expandable={{
+          expandedRowRender,
+          rowExpandable: (record) => record.ProductColors.length > 0,
+        }}
+      />
     </div>
   );
 };
 
-export default Allproduct;
+export default AllProduct;

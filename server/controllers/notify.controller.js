@@ -1,5 +1,6 @@
 import Notify from "../models/Notify.js";
 
+
 class notifyController {
   static async addNotitfy(req, res) {
     const data = req.body;

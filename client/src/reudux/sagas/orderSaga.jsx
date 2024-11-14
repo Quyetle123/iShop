@@ -60,8 +60,7 @@ function* updateStatusSaga(action) {
       action.payload
     );
     yield put(updateStatusSuccess());
-    yield put(getAllOrderStart())
-    yield put(getOrderStart(action.payload.id));
+    yield put(getAllOrderStart());
   } catch (error) {
     yield put(updateStatusFailure(error.message));
   }

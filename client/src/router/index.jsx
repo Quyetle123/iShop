@@ -23,6 +23,7 @@ import BranchAndStore from "../components/admin/BranchAndStore/index.jsx";
 import AdminRoute from "./adminRoute.jsx";
 import UserRoute from "./userRoute.jsx";
 import UserLoginRoutes from "./userLoginRoutes.jsx";
+import ColorManager from "../components/admin/ColorManager/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -122,6 +123,10 @@ export default createBrowserRouter([
             element: <BranchAndStore />,
             path: "/admin/branch-store",
           },
+          {
+            element: <ColorManager />,
+            path: "/admin/colorManager"
+          }
         ],
       },
       {

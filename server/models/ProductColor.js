@@ -1,45 +1,43 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
-const OrderDetail = sequelize.define(
-  "OrderDetail",
+const ProductColor = sequelize.define(
+  "ProductColor",
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.STRING(50),
       primaryKey: true,
+      allowNull: false,
     },
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    price: {
+    sold: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    productColorid: {
+    productid: {
       type: DataTypes.STRING(50),
       allowNull: false,
       references: {
-        model: "product_colors",
-        key: "id",
-      },
+        model: "products",
+        key: "id"
+      }
     },
-    orderid: {
-      type: DataTypes.STRING(50),
+    colorid: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "orders",
+        model: "colors",
         key: "id",
       },
     },
   },
   {
-    tableName: "orderDetails",
+    tableName: "product_colors",
     timestamps: true,
-    createdAt: "createdAt",
-    updatedAt: "updatedAt",
   }
 );
 
-export default OrderDetail;
+export default ProductColor;

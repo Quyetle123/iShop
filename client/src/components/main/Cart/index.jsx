@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Button, Checkbox, Input, InputNumber, Modal, Table } from "antd";
 import { IoClose } from "react-icons/io5";
 import { NumericFormat } from "react-number-format";
@@ -14,7 +15,6 @@ import { addOrderStart } from "../../../reudux/slices/orderSlice";
 import { addOrderDetailStart } from "../../../reudux/slices/orderDetailSlice";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
-import { updateProductStart } from "../../../reudux/slices/productSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -24,7 +24,6 @@ const Cart = () => {
 
   const cartList = Array.isArray(carts.carts) ? carts.carts : [];
 
-  // eslint-disable-next-line react/prop-types
   const Price = ({ value }) => (
     <NumericFormat
       value={value}
@@ -41,94 +40,77 @@ const Cart = () => {
 
   useEffect(() => {
     dispatch(fetchCartByAccountidStart(token.id));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, token.id]);
 
   const [totalArr, setTotalArr] = useState([]);
-  const [productidArr, setProductidArr] = useState([]);
-  const [productnameArr, setProductnameArr] = useState([]);
+  const [productColoridArr, setProductColoridArr] = useState([]);
   const [quantityArr, setQuantityArr] = useState([]);
   const [priceArr, setPriceArr] = useState([]);
-  const [imageUrlArr, setImageUrlArr] = useState([]);
-  const [productQuantityArr, setProductQuantityArr] = useState([]);
-  const [soldArr, setSoldArr] = useState([]);
 
   const handleChecked = (
     e,
     total,
-    productid,
-    productname,
+    productColorid,
     quantity,
     price,
-    imageUrl,
-    productQuantity,
-    sold
   ) => {
     if (e.target.checked) {
       setTotalArr((prev) => [...prev, total]);
-      setProductidArr((prev) => [...prev, productid]);
-      setProductnameArr((prev) => [...prev, productname]);
+      setProductColoridArr((prev) => [...prev, productColorid]);
       setQuantityArr((prev) => [...prev, quantity]);
       setPriceArr((prev) => [...prev, price]);
-      setImageUrlArr((prev) => [...prev, imageUrl]);
-      setProductQuantityArr((prev) => [...prev, productQuantity]);
-      setSoldArr((prev) => [...prev, sold])
     } else {
       setTotalArr((prev) => prev.filter((item) => item !== total));
-      setProductidArr((prev) => prev.filter((item) => item !== productid));
-      setProductnameArr((prev) => prev.filter((item) => item !== productname));
+      setProductColoridArr((prev) => prev.filter((item) => item !== productColorid));
       setQuantityArr((prev) => prev.filter((item) => item !== quantity));
       setPriceArr((prev) => prev.filter((item) => item !== price));
-      setImageUrlArr((prev) => prev.filter((item) => item !== imageUrl));
-      setProductQuantityArr((prev) =>
-        prev.filter((item) => item !== productQuantity)
-      );
-      setSoldArr((prev) => prev.filter((item) => item !== sold))
     }
   };
 
   const dataSource = cartList.map((cart) => ({
     key: cart.id,
     checkbox:
-      cart.Product.quantity === 0 ? (
+      cart.ProductColor.quantity === 0 ? (
         <S.OutOfStockText>Hết hàng</S.OutOfStockText>
       ) : (
         <Checkbox
           onChange={(e) =>
             handleChecked(
               e,
-              cart.Product.price * cart.quantity,
-              cart.Product.id,
-              cart.Product.productname,
+              cart.ProductColor.Product.price * cart.quantity,
+              cart.ProductColor.id,
               cart.quantity,
-              cart.Product.price,
-              cart.Product.imageUrl,
-              cart.Product.quantity,
-              cart.Product.sold
+              cart.ProductColor.Product.price,
             )
           }
         />
       ),
-    productName: cart.Product.productname,
-    image: <img src={`${cart.Product.imageUrl}`} style={{ width: "50px" }} />,
+    productName: cart.ProductColor.Product.productname,
+    image: (
+      <img
+        src={`${cart.ProductColor.ProductImages[0]?.image}`}
+        style={{ width: "50px" }}
+        alt={cart.ProductColor.Product.productname}
+      />
+    ),
     price: (
       <S.PriceText>
-        <Price value={cart.Product.price} /> đ
+        <Price value={cart.ProductColor.Product.price} /> đ
       </S.PriceText>
     ),
     quantity: (
       <InputNumber
         min={1}
-        max={cart.Product.quantity}
+        max={cart.ProductColor.quantity}
         onChange={(value) => changeQuantity(value, cart.id)}
         defaultValue={cart.quantity}
-        disabled={totalArr.includes(cart.Product.price * cart.quantity)}
+        disabled={totalArr.includes(cart.ProductColor.Product.price * cart.quantity)}
         onKeyDown={(e) => e.preventDefault()}
       />
     ),
     total: (
       <S.PriceText>
-        <Price value={cart.Product.price * cart.quantity} /> đ
+        <Price value={cart.ProductColor.Product.price * cart.quantity} /> đ
       </S.PriceText>
     ),
     delete: (
@@ -144,6 +126,7 @@ const Cart = () => {
       </div>
     ),
   }));
+  
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [changeAdress, setChangerAdress] = useState();
@@ -168,29 +151,16 @@ const Cart = () => {
     const accountid = token.id;
     const id = uuidv4();
     dispatch(addOrderStart({ id, total, address, city, status, accountid }));
-    productidArr.forEach((item, index) => {
+    productColoridArr.forEach((item, index) => {
+      const productColorid = productColoridArr[index];
       const quantity = quantityArr[index];
       const price = priceArr[index];
-      const productid = productidArr[index];
-      const imageUrl = imageUrlArr[index];
-      const productname = productnameArr[index];
-      const productQuantity = productQuantityArr[index];
-      const soldProduct = soldArr[index];
       dispatch(
         addOrderDetailStart({
-          productname,
           quantity,
           price,
-          productid,
+          productColorid,
           orderid: id,
-          imageUrl,
-        })
-      );
-      dispatch(
-        updateProductStart({
-          id: productid,
-          quantity: productQuantity - quantity,
-          sold: soldProduct + quantity,
         })
       );
     });

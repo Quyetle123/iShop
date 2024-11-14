@@ -26,7 +26,7 @@ const Comment = sequelize.define(
       },
     },
     productid: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(50),
       allowNull: false,
       references: {
         model: "products",

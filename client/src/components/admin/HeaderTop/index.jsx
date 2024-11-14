@@ -11,6 +11,7 @@ const HeaderTop = () => {
     dispatch(logoutStart());
     removeToken();
     navigate("/");
+    window.location.reload();
   };
   return (
     <HeaderTopContaier>

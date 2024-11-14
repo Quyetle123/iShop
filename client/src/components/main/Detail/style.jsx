@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 export const Main = styled.div`
-  padding: 100px 150px;
-  background-color: #f9f9f9;
+  padding: 50px 150px;
+  background-color: #3e3e3f;
+  color: #fff;
 `;
 
 export const DetailContainer = styled.main`
@@ -13,10 +14,11 @@ export const DetailAside = styled.aside`
   width: 50%;
   display: flex;
   justify-content: center;
+  border-radius: 10px;
   overflow: hidden;
 
   img {
-    width: 80%;
+    width: 100%;
   }
 `;
 
@@ -64,7 +66,7 @@ export const DetailArticle = styled.article`
     }
 
     &:first-of-type:hover {
-      background-color: #d8a200;
+      background-color: #c08060;
     }
   }
 `;

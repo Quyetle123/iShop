@@ -10,6 +10,9 @@ import notifySaga from "./notifySaga.jsx";
 import storeSaga from "./storeSaga.jsx";
 import storeAccountSaga from "./storeAccountSaga.jsx";
 import branchSaga from "./branchSaga.jsx";
+import colorSaga from "./colorSaga.jsx";
+import productColorSaga from "./productColorSaga.jsx";
+import productImageSaga from "./productImageSaga.jsx";
 
 export default function* rootSaga() {
   yield all([
@@ -24,5 +27,8 @@ export default function* rootSaga() {
     storeSaga(),
     storeAccountSaga(),
     branchSaga(),
+    colorSaga(),
+    productColorSaga(),
+    productImageSaga()
   ]);
 }

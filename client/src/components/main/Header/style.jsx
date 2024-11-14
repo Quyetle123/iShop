@@ -6,7 +6,6 @@ export const HeaderContainer = styled.header`
   align-items: center;
   padding: 10px 150px;
   background-color: #101010;
-  border-bottom: 1px solid #dee2e6;
   position: relative;
 `;
 
@@ -33,7 +32,7 @@ export const NavItem = styled.li`
 
 export const NavLink = styled.a`
   text-decoration: none;
-  font-size: 20px;
+  font-size: 17px;
   color: #fff;
   position: relative;
   padding-bottom: 5px;
@@ -112,7 +111,7 @@ export const AccountButton = styled.button`
   background: none;
   border: none;
   color: #fff;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: bold;
   cursor: pointer;
   display: flex;

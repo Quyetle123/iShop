@@ -35,11 +35,16 @@ const Home = () => {
     return grouped;
   };
 
-  
+  const images = [
+    {id: 1, image: "https://cdnv2.tgdd.vn/mwg-static/common/Banner/da/8e/da8eba2f63bb581e77876158d035764f.png"},
+    {id: 2, image: "https://cdnv2.tgdd.vn/mwg-static/common/Banner/70/07/7007476ab205d1e806b3079d4d3eaceb.png"},
+    {id: 3, image: "https://cdnv2.tgdd.vn/mwg-static/common/Banner/66/b2/66b2b0735f5c40fdab7da671a4056754.png"},
+    {id: 4, image: "https://cdnv2.tgdd.vn/mwg-static/common/Banner/9c/80/9c8001c1c10c2482545a84346cb63846.png"},
+  ];
 
   return (
     <Main>
-      <Slideshow />
+      <Slideshow images={images} />
       <CategoryContainer>
         {categoryList.map((category) => (
           <CategoryCard key={category.id}>
@@ -67,7 +72,10 @@ const Home = () => {
                         <Link to={`/detail/${product.id}`}>
                           <ImgContainer>
                             <img
-                              src={product.imageUrl}
+                              src={
+                                product.ProductColors?.[1]?.ProductImages?.[0]
+                                  ?.image || "No Image Available"
+                              }
                               alt={product.productname}
                             />
                           </ImgContainer>

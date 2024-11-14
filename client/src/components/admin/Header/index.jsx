@@ -30,8 +30,9 @@ const items = [
     label: "Quản lý sản phẩm",
     icon: <AppleOutlined />,
     children: [
-      { key: "7", label: <Link to='/admin/addProduct'>Thêm sản phẩm</Link> },
-      { key: "8", label: <Link to='/admin/allProduct'>Tất cả sản phẩm</Link> },
+      { key: "7", label: <Link to='/admin/colorManager'>Màu sắc sản phẩm</Link> },
+      { key: "8", label: <Link to='/admin/addProduct'>Thêm sản phẩm</Link> },
+      { key: "9", label: <Link to='/admin/allProduct'>Tất cả sản phẩm</Link> },
     ],
   },
   {
@@ -44,8 +45,8 @@ const items = [
     label: "Chi nhánh - cửa hàng",
     icon: <ShopOutlined />,
     children: [
-      { key: "9", label: <Link to='/admin/branch-store'>Quản lí chi nhánh, cửa hàng</Link> },
-      { key: "10", label: <Link to='/admin/addStore'>Thêm cửa hàng</Link> },
+      { key: "10", label: <Link to='/admin/branch-store'>Quản lí chi nhánh, cửa hàng</Link> },
+      { key: "11", label: <Link to='/admin/addStore'>Thêm cửa hàng</Link> },
     ],
   },
 ];

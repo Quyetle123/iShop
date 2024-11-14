@@ -1,4 +1,11 @@
-import { Account, Comment, Product } from "../models/index.js";
+import {
+  Account,
+  Color,
+  Comment,
+  Product,
+  ProductColor,
+  ProductImage,
+} from "../models/index.js";
 
 class productController {
   static async addProduct(req, res) {
@@ -13,7 +20,19 @@ class productController {
 
   static async getAllProducts(req, res) {
     try {
-      const products = await Product.findAll();
+      const products = await Product.findAll({
+        include: {
+          model: ProductColor,
+          include: [
+            {
+              model: ProductImage,
+            },
+            {
+              model: Color,
+            },
+          ],
+        },
+      });
       res.status(200).json({ products });
     } catch (error) {
       res.status(400).json({ message: error.message });
@@ -47,6 +66,17 @@ class productController {
             include: {
               model: Account,
             },
+          },
+          {
+            model: ProductColor,
+            include: [
+              {
+                model: ProductImage,
+              },
+              {
+                model: Color
+              }
+            ],
           },
         ],
       });

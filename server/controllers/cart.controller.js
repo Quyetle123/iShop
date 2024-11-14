@@ -1,4 +1,4 @@
-import { Cart, Account, Product } from "../models/index.js";
+import { Cart, Account, Product, ProductColor, ProductImage, Color } from "../models/index.js";
 
 class cartController {
   static async addCart(req, res) {
@@ -19,7 +19,15 @@ class cartController {
           accountid,
         },
         include: {
-          model: Product,
+          model: ProductColor,
+          include: [
+            {
+              model: Product
+            },
+            {
+              model: ProductImage
+            }
+          ]
         },
       });
       res.status(200).json({ carts });
@@ -42,15 +50,15 @@ class cartController {
       res.status(400).json({ message: error.message });
     }
   }
-  static async deleteCart (req, res) {
-    const {id} = req.params;
+  static async deleteCart(req, res) {
+    const { id } = req.params;
     try {
-      const  cart = await Cart.findByPk(id);
-      if(cart) {
+      const cart = await Cart.findByPk(id);
+      if (cart) {
         await cart.destroy();
-        res.status(200).json({message: "Cart deleted successfully"});
+        res.status(200).json({ message: "Cart deleted successfully" });
       } else {
-        res.status(404).json({message: "Cart not found"});
+        res.status(404).json({ message: "Cart not found" });
       }
     } catch (error) {
       res.status(400).json({ message: error.message });

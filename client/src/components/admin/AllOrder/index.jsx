@@ -1,7 +1,7 @@
+/* eslint-disable react/prop-types */
 import { Table, Select } from "antd";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
-import * as S from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllOrderStart,
@@ -13,18 +13,31 @@ const { Option } = Select;
 const socket = io("http://localhost:5000");
 
 
-// eslint-disable-next-line react/prop-types
 const OrderDetailsTable = ({ details }) => {
   const columns = [
     {
       title: "Image",
-      dataIndex: "imageUrl",
-      key: "imageUrl",
-      render: (imageUrl) => <S.OrderDetailImage src={imageUrl} alt="product" />,
+      dataIndex: "ProductColor",
+      key: "image",
+      render: (ProductColor) => {
+        const firstImageUrl =
+          ProductColor.ProductImages && ProductColor.ProductImages.length > 0
+            ? ProductColor.ProductImages[0].image
+            : "";
+        return firstImageUrl ? (
+          <img
+            src={firstImageUrl}
+            alt="Product"
+            style={{ width: 50, height: 50, objectFit: "cover" }}
+          />
+        ) : (
+          "No image"
+        );
+      },
     },
     {
       title: "Product Name",
-      dataIndex: "productname",
+      dataIndex: ["ProductColor", "Product", "productname"],
       key: "productname",
     },
     {
@@ -76,7 +89,6 @@ const AllOrder = () => {
         accountid,
       });
     }
-    window.location.reload();
   };
 
   const orderColumns = [
@@ -135,7 +147,7 @@ const AllOrder = () => {
   };
 
   return (
-    <div style={{padding: '25px', marginTop: '80px'}}>
+    <div style={{ padding: "25px", marginTop: "80px" }}>
       <Table
         columns={orderColumns}
         dataSource={orderList}
@@ -151,4 +163,4 @@ const AllOrder = () => {
   );
 };
 
-export default AllOrder; 
+export default AllOrder;

@@ -13,13 +13,13 @@ const Cart = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    productid: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "products",
-        key: "id",
-      },
+    productColorid: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        references: {
+            model: "product_colors",
+            key: "id"
+        }
     },
     accountid: {
       type: DataTypes.STRING(50),
