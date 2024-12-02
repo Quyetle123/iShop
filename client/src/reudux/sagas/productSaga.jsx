@@ -49,6 +49,7 @@ function* fetchProductByIdSaga(action) {
       `http://localhost:5000/api/product/${action.payload}`
     );
     yield put(fetchProductByIdSuccess(response.data));
+    yield put()
   } catch (error) {
     yield put(productError(error.message));
   }

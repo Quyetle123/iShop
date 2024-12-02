@@ -35,6 +35,7 @@ const Product = sequelize.define(
     timestamps: true,
     createdAt: "createdAt",
     updatedAt: "updatedAt",
+    paranoid: true,
   }
 );
 

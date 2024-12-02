@@ -73,7 +73,7 @@ const Home = () => {
                           <ImgContainer>
                             <img
                               src={
-                                product.ProductColors?.[1]?.ProductImages?.[0]
+                                product.ProductColors?.[0]?.ProductImages?.[0]
                                   ?.image || "No Image Available"
                               }
                               alt={product.productname}

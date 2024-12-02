@@ -69,13 +69,17 @@ class productController {
           },
           {
             model: ProductColor,
+            separate: true,
+            order: [["createdAt", "ASC"]],
             include: [
               {
                 model: ProductImage,
+                separate: true,
+                order: [["createdAt", "ASC"]],
               },
               {
-                model: Color
-              }
+                model: Color,
+              },
             ],
           },
         ],

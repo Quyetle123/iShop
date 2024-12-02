@@ -33,7 +33,7 @@ const socket = io("http://localhost:5000");
 
 const Header = () => {
   const dispatch = useDispatch();
-  const [notifyList, setNotifyList] = useState();
+  const [notifyList, setNotifyList] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(false);
@@ -51,6 +51,7 @@ const Header = () => {
     });
 
     socket.on("newMessage", (notify) => {
+      console.log(notify);
       if (notify.accountid === token.id) {
         setNotifyList((notifies) => [...notifies, notify]);
         setHasNewNotifications(true);
@@ -77,11 +78,11 @@ const Header = () => {
   const { notifies } = useSelector((state) => state.notifies) || { notify: [] };
   const arrList = Array.isArray(notifies.notify) ? notifies.notify : [];
 
-  if (arrList.length > 0) {
-    useEffect(() => {
+  useEffect(() => {
+    if (arrList.length > 0) {
       setNotifyList(arrList);
-    }, [arrList]);
-  }
+    }
+  }, [arrList]);
 
   useEffect(() => {
     if (token) {
@@ -134,7 +135,7 @@ const Header = () => {
           </NotifyButton>
           {showNotifications && (
             <NotifyMenu style={{ right: "-10px", top: "30px" }}>
-              {notifyList && notifyList.length > 0 ? (
+              {notifyList?.length > 0 ? (
                 notifyList.map((notify) => (
                   <DropdownItem key={notify.id}>
                     <p style={{ width: "90%" }}>{notify.message}</p>

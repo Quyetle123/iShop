@@ -1,7 +1,12 @@
-import { Category, Product, ProductColor, ProductImage } from "../models/index.js";
+import {
+  Category,
+  Product,
+  ProductColor,
+  ProductImage,
+} from "../models/index.js";
 
 class categoryController {
-  static async addCategory (req, res) {
+  static async addCategory(req, res) {
     const data = req.body;
     try {
       const category = await Category.create(data);
@@ -9,39 +14,43 @@ class categoryController {
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
-  
-  static async getAllCategories (req, res) {
+  }
+
+  static async getAllCategories(req, res) {
     try {
       const categories = await Category.findAll({
         include: {
           model: Product,
           include: {
-          model: ProductColor,
-          include: [
-            {
-              model: ProductImage
-            }
-          ]
-        }
-        }
+            model: ProductColor,
+            separate: true,
+            order: [["createdAt", "ASC"]],
+            include: [
+              {
+                model: ProductImage,
+                separate: true,
+                order: [["createdAt", "ASC"]],
+              },
+            ],
+          },
+        },
       });
       res.status(200).json({ categories });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
-  
-  static async getCategoryById (req, res) {
+  }
+
+  static async getCategoryById(req, res) {
     const { id } = req.params;
     try {
       const category = await Category.findAll({
         where: {
-          id
+          id,
         },
         include: {
-          model: Product
-        }
+          model: Product,
+        },
       });
       if (category) {
         res.status(200).json({ category });
@@ -51,9 +60,9 @@ class categoryController {
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
-  
-  static async updateCategory (req, res) {
+  }
+
+  static async updateCategory(req, res) {
     const { id } = req.params;
     const data = req.body;
     try {
@@ -67,9 +76,9 @@ class categoryController {
     } catch (error) {
       res.status(404).json({ message: "Category not found" });
     }
-  };
-  
-  static async deleteCategory (req, res) {
+  }
+
+  static async deleteCategory(req, res) {
     const { id } = req.params;
     try {
       const category = await Category.findByPk(id);
@@ -82,8 +91,7 @@ class categoryController {
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
-  };
-  
+  }
 }
 
-export default categoryController
+export default categoryController;

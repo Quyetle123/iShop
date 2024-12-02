@@ -30,6 +30,7 @@ class orderController {
             include: [
               {
                 model: Product,
+                paranoid: false,
               },
               {
                 model: ProductImage,
@@ -54,6 +55,7 @@ class orderController {
             include: [
               {
                 model: Product,
+                paranoid: false,
               },
               {
                 model: ProductImage,

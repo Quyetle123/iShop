@@ -57,7 +57,7 @@ const MyOrder = () => {
       render: (text, record) =>
         status === "Đã giao hàng" ? (
           <Button type="primary" ghost>
-            <Link to={`/comment/${record.productid}`}>Đánh giá sản phẩm</Link>
+            <Link to={`/comment/${record.productColorid}`}>Đánh giá sản phẩm</Link>
           </Button>
         ) : null,
     },
@@ -82,11 +82,11 @@ const MyOrder = () => {
               columns={orderDetailColumns(order.status)}
               dataSource={order.OrderDetails.map((detail) => ({
                 key: detail.id,
-                productImage: detail.ProductColor.ProductImages[0]?.image || "", // First image URL
+                productImage: detail.ProductColor.ProductImages[0]?.image || "", 
                 productName: detail.ProductColor.Product.productname,
                 quantity: detail.quantity,
                 price: detail.price.toLocaleString("vi-VN"),
-                productid: detail.ProductColor.Product.id,
+                productColorid: detail.ProductColor.id,
               }))}
               pagination={false}
               rowKey="productid"

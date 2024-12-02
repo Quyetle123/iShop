@@ -9,6 +9,7 @@ import {
   Avatar,
   CommentContent,
   Main,
+  CommentContentP,
 } from "./style";
 import { useEffect, useState } from "react";
 import { fetchProductByIdStart } from "../../../reudux/slices/productSlice";
@@ -24,7 +25,7 @@ import Slideshow from "../slideshow";
 
 const Detail = () => {
   const token = getToken();
-  const [apiColor, setApiColor] = useState(0)
+  const [apiColor, setApiColor] = useState(0);
   const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedProduct } = useSelector((state) => state.products);
@@ -38,14 +39,15 @@ const Detail = () => {
   }, [dispatch, id]);
 
   const handleCheckedColor = (i) => {
-    setApiColor(i)
-  }
+    setApiColor(i);
+  };
   const quantity = 1;
   const navigate = useNavigate();
   const handleAddToCart = () => {
     let duplicateFound = false;
     carts.carts?.forEach((cart) => {
-      if (cart.Product.id == Number(id)) {
+      console.log(cart);
+      if (cart.ProductColor.Product.id == id) {
         duplicateFound = true;
         dispatch(
           updateQuantityStart({
@@ -110,9 +112,11 @@ const Detail = () => {
                   width: "50px",
                   height: "50px",
                   borderRadius: "50%",
-                  border: "3px solid #fff",
+                  border: "3.5px solid #fff",
                   backgroundColor: `${color.Color.hex_code}`,
                   cursor: "pointer",
+                  boxShadow: index === apiColor ? "0 0 10px #fff" : "none",
+                  transition: "box-shadow 0.2s ease-in-out",
                 }}
               />
             ))}
@@ -124,7 +128,7 @@ const Detail = () => {
                   ? "block"
                   : "none",
             }}
-            onClick={handleAddToCart}
+            onClick={() => handleAddToCart()}
           >
             Thêm vào giỏ hàng
           </button>
@@ -149,11 +153,11 @@ const Detail = () => {
                 {comment.Account.username.charAt(0).toUpperCase()}
               </Avatar>
               <CommentContent>
-                <p>
+                <CommentContentP>
                   <b>{comment.Account.username}</b>
-                </p>
+                </CommentContentP>
                 <div>{renderStars(comment.rating)}</div>
-                <p>{comment.comment}</p>
+                <CommentContentP>{comment.comment}</CommentContentP>
                 <small>{dayjs(comment.createdAt).format("DD/MM/YYYY")}</small>
               </CommentContent>
             </CommentCard>

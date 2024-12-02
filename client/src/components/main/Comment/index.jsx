@@ -2,24 +2,24 @@ import { useEffect, useState } from "react";
 import { Rate, Form, Input, Typography } from "antd";
 import * as S from "./style";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductByIdStart } from "../../../reudux/slices/productSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { addCommentStart } from "../../../reudux/slices/commentSlice";
 import { getToken } from "../../../utils/token";
+import { fetchProductColorByIdStart } from "../../../reudux/slices/productColorSlice";
 
 const { TextArea } = Input;
 const { Title } = Typography;
 
 const Comment = () => {
-  const { productid } = useParams();
+  const { productColorid } = useParams();
   const token = getToken();
   const accountid = token.id;
   const dispatch = useDispatch();
-  const { selectedProduct } = useSelector((state) => state.products);
-  const product = selectedProduct ? selectedProduct.product : null;
+  const { productColor } = useSelector((state) => state.productColors);
+  const productComment = productColor ? productColor.productColor : null;
   useEffect(() => {
-    dispatch(fetchProductByIdStart(productid));
-  }, [dispatch, productid]);
+    dispatch(fetchProductColorByIdStart(productColorid));
+  }, [dispatch, productColorid]);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const navigate = useNavigate()
@@ -29,11 +29,12 @@ const Comment = () => {
       alert("Bạn chưa bình luận và đánh giá sản phẩm");
       return;
     }
+    const productid = productComment.productid
     dispatch(addCommentStart({rating, comment, productid, accountid}))
     navigate(`/detail/${productid}`)
   };
 
-  if (!product) {
+  if (!productColor) {
     return <div>Loading...</div>;
   }
 
@@ -41,10 +42,10 @@ const Comment = () => {
     <S.ReviewContainer>
       <S.StyledCard>
         <S.ProductInfo>
-          <S.ProductImage src={product.imageUrl} alt="Sản phẩm" />
+          <S.ProductImage src={productComment.ProductImages[0].image} alt="Sản phẩm" />
           <S.ProductDetails>
-            <Title level={4}>{product.productname}</Title>
-            <p>{product.description}</p>
+            <Title level={4}>{productComment.Product.productname}</Title>
+            <p>{productComment.Product.description}</p>
           </S.ProductDetails>
         </S.ProductInfo>
 

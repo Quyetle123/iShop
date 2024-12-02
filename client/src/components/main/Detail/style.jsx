@@ -135,3 +135,7 @@ export const CommentContent = styled.div`
     }
   }
 `;
+
+export const CommentContentP = styled.p`
+  color: #333;
+`
