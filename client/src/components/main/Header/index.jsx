@@ -110,17 +110,17 @@ const Header = () => {
           </NavItem>
           <NavItem>
             <NavLink>
-              <Link>Danh sách sản phẩm</Link>
+              <Link to="/">Danh sách sản phẩm</Link>
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink>
-              <Link>Bài viết</Link>
+              <Link to="/">Bài viết</Link>
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink>
-              <Link>Liên hệ</Link>
+              <Link to="/">Liên hệ</Link>
             </NavLink>
           </NavItem>
         </NavList>
@@ -173,9 +173,9 @@ const Header = () => {
               </DropdownItem>
               <DropdownItem
                 onClick={handleLogOut}
-                style={{ display: token ? "block" : "none" }}
+                style={{ display: token ? "block" : "none", cursor: "pointer" }}
               >
-                <Link to="/">Đăng xuất</Link>
+                <span>Đăng xuất</span>
               </DropdownItem>
             </DropdownMenu>
           )}

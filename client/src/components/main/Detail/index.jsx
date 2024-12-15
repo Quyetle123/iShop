@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -22,10 +23,12 @@ import {
 import { getToken } from "../../../utils/token";
 import dayjs from "dayjs";
 import Slideshow from "../slideshow";
+import { message } from "antd";
 
 const Detail = () => {
   const token = getToken();
   const [apiColor, setApiColor] = useState(0);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedProduct } = useSelector((state) => state.products);
@@ -46,8 +49,7 @@ const Detail = () => {
   const handleAddToCart = () => {
     let duplicateFound = false;
     carts.carts?.forEach((cart) => {
-      console.log(cart);
-      if (cart.ProductColor.Product.id == id) {
+      if (cart.ProductColor.id == product.ProductColors[apiColor].id) {
         duplicateFound = true;
         dispatch(
           updateQuantityStart({
@@ -68,7 +70,19 @@ const Detail = () => {
       );
     }
 
-    navigate("/cart");
+    setLoading(true);
+
+    try {
+      message.success("Sản phẩm đã được thêm vào giỏ hàng!");
+      setTimeout(() => {
+        navigate("/cart");
+        window.location.reload();
+      }, 1000);
+    } catch (error) {
+      message.error("Có lỗi xảy ra, vui lòng thử lại!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderStars = (rating) => {

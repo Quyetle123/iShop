@@ -2,8 +2,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import Admin from "../pages/admin/index.jsx";
-import Login from "../pages/loginAndRegister/login.jsx";
-import Register from "../pages/loginAndRegister/resgister.jsx";
 import Main from "../pages/main/index.jsx";
 import AddCategory from "../components/admin/addcategory.jsx";
 import AllCategories from "../components/admin/allCategories.jsx";
@@ -24,6 +22,8 @@ import AdminRoute from "./adminRoute.jsx";
 import UserRoute from "./userRoute.jsx";
 import UserLoginRoutes from "./userLoginRoutes.jsx";
 import ColorManager from "../components/admin/ColorManager/index.jsx";
+import Login from "../pages/auth/login.jsx";
+import Register from "../pages/auth/resgister.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -125,8 +125,8 @@ export default createBrowserRouter([
           },
           {
             element: <ColorManager />,
-            path: "/admin/colorManager"
-          }
+            path: "/admin/colorManager",
+          },
         ],
       },
       {

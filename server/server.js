@@ -3,6 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { Server } from "socket.io";
 import http from "http";
+import dotenv from "dotenv";
 import sequelize from "./config/db.js";
 import authRouter from "./routes/account.route.js";
 import categoryRouter from "./routes/category.route.js";
@@ -12,12 +13,12 @@ import orderRouter from "./routes/order.route.js";
 import orderDetailRouter from "./routes/orderDetail.route.js";
 import commentRouter from "./routes/comment.route.js";
 import notifyRouter from "./routes/notify.route.js";
-import storeRouter from "./routes/store.route.js"
-import storeAccountRouter from "./routes/storeAccount.route.js"
+import storeRouter from "./routes/store.route.js";
+import storeAccountRouter from "./routes/storeAccount.route.js";
 import branchRouter from "./routes/branch.route.js";
 import colorRouter from "./routes/color.route.js";
 import productColorRouter from "./routes/productColor.route.js";
-import productImageRouter from "./routes/productImage.route.js"
+import productImageRouter from "./routes/productImage.route.js";
 import setupSocket from "./socket/socket.js";
 
 const app = express();
@@ -31,6 +32,8 @@ const io = new Server(server, {
 
 app.use(cors());
 app.use(bodyParser.json());
+
+dotenv.config();
 
 app.use("/api/auth", authRouter);
 app.use("/api/category", categoryRouter);
@@ -49,7 +52,7 @@ app.use("/api/productImage", productImageRouter);
 
 setupSocket(io);
 
-const PORT = 5000;
+const PORT = process.env.PORT;
 
 sequelize
   .sync()

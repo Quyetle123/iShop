@@ -30,7 +30,7 @@ export const NavItem = styled.li`
   margin: 0 15px;
 `;
 
-export const NavLink = styled.a`
+export const NavLink = styled.div`
   text-decoration: none;
   font-size: 17px;
   color: #fff;

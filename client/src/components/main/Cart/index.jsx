@@ -40,6 +40,7 @@ const Cart = () => {
 
   useEffect(() => {
     dispatch(fetchCartByAccountidStart(token.id));
+    
   }, [dispatch, token.id]);
 
   const [totalArr, setTotalArr] = useState([]);
@@ -47,13 +48,7 @@ const Cart = () => {
   const [quantityArr, setQuantityArr] = useState([]);
   const [priceArr, setPriceArr] = useState([]);
 
-  const handleChecked = (
-    e,
-    total,
-    productColorid,
-    quantity,
-    price,
-  ) => {
+  const handleChecked = (e, total, productColorid, quantity, price) => {
     if (e.target.checked) {
       setTotalArr((prev) => [...prev, total]);
       setProductColoridArr((prev) => [...prev, productColorid]);
@@ -61,7 +56,9 @@ const Cart = () => {
       setPriceArr((prev) => [...prev, price]);
     } else {
       setTotalArr((prev) => prev.filter((item) => item !== total));
-      setProductColoridArr((prev) => prev.filter((item) => item !== productColorid));
+      setProductColoridArr((prev) =>
+        prev.filter((item) => item !== productColorid)
+      );
       setQuantityArr((prev) => prev.filter((item) => item !== quantity));
       setPriceArr((prev) => prev.filter((item) => item !== price));
     }
@@ -80,7 +77,7 @@ const Cart = () => {
               cart.ProductColor.Product.price * cart.quantity,
               cart.ProductColor.id,
               cart.quantity,
-              cart.ProductColor.Product.price,
+              cart.ProductColor.Product.price
             )
           }
         />
@@ -104,7 +101,9 @@ const Cart = () => {
         max={cart.ProductColor.quantity}
         onChange={(value) => changeQuantity(value, cart.id)}
         defaultValue={cart.quantity}
-        disabled={totalArr.includes(cart.ProductColor.Product.price * cart.quantity)}
+        disabled={totalArr.includes(
+          cart.ProductColor.Product.price * cart.quantity
+        )}
         onKeyDown={(e) => e.preventDefault()}
       />
     ),
@@ -126,7 +125,6 @@ const Cart = () => {
       </div>
     ),
   }));
-  
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [changeAdress, setChangerAdress] = useState();

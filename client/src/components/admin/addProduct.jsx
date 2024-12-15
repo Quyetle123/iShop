@@ -41,10 +41,19 @@ const AddProduct = () => {
   const handleSubmit = async (value) => {
     const productid = uuidv4();
     const productColorid = uuidv4();
+
     try {
-      const url = await Promise.all(
-        images.map((image) => uploadImageToFirebase(image))
+      const urlWithIndex = await Promise.all(
+        images.map(async (image, index) => ({
+          index,
+          url: await uploadImageToFirebase(image),
+        }))
       );
+
+      const sortedUrls = urlWithIndex
+        .sort((a, b) => a.index - b.index)
+        .map((item) => item.url);
+
       const { productname, description, price, categoryid, quantity, colorid } =
         value;
 
@@ -68,7 +77,7 @@ const AddProduct = () => {
         })
       );
 
-      url.forEach((image) => {
+      sortedUrls.forEach((image) => {
         dispatch(
           addProductImageStart({
             image,
@@ -89,7 +98,11 @@ const AddProduct = () => {
   };
 
   const handleRemoveImage = (index) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    setImages((prevImages) => {
+      const newImages = prevImages.filter((_, i) => i !== index);
+      URL.revokeObjectURL(prevImages[index].preview);
+      return newImages;
+    });
   };
 
   const categoryOptions = useMemo(

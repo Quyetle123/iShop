@@ -57,11 +57,19 @@ const UpdateProduct = () => {
 
   const handleSubmit = async (value) => {
     const { productname, description, price, categoryid, quantity } = value;
+
     try {
-      const url = await Promise.all(
-        images.map((image) => uploadImageToFirebase(image))
+      const urlWithIndex = await Promise.all(
+        images.map(async (image, index) => ({
+          index,
+          url: await uploadImageToFirebase(image),
+        }))
       );
-      console.log(url);
+
+      const sortedUrls = urlWithIndex
+        .sort((a, b) => a.index - b.index)
+        .map((item) => item.url);
+
       dispatch(
         updateProductStart({
           id,
@@ -70,8 +78,10 @@ const UpdateProduct = () => {
           price,
           categoryid,
           quantity,
+          images: sortedUrls,
         })
       );
+
       navigate("/admin/allProduct");
     } catch (error) {
       console.error("Error updating product:", error);
@@ -253,11 +263,8 @@ const UpdateProduct = () => {
         </Form>
 
         {selectedProduct?.product.ProductColors.map((item) => (
-          <div  key={item.id} className="border border-gray-300 p-3 mb-5">
-            <Form
-              initialValues={{ quantity: item.quantity }}
-              layout="vertical"
-            >
+          <div key={item.id} className="border border-gray-300 p-3 mb-5">
+            <Form initialValues={{ quantity: item.quantity }} layout="vertical">
               <p>
                 <b>Màu sắc</b>: {item.Color.name}
               </p>
