@@ -24,6 +24,9 @@ import UserLoginRoutes from "./userLoginRoutes.jsx";
 import ColorManager from "../components/admin/ColorManager/index.jsx";
 import Login from "../pages/auth/login.jsx";
 import Register from "../pages/auth/resgister.jsx";
+import AddPost from "../components/admin/AddPost/index.jsx";
+import AllPost from "../components/admin/AllPosts/index.jsx";
+import UpdatePost from "../components/admin/UpdatePost/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -127,6 +130,18 @@ export default createBrowserRouter([
             element: <ColorManager />,
             path: "/admin/colorManager",
           },
+          {
+            element: <AddPost />,
+            path: "/admin/add-post"
+          },
+          {
+            element: <AllPost />,
+            path: "/admin/all-posts"
+          },
+          {
+            element: <UpdatePost />,
+            path: "/admin/update-post/:id"
+          }
         ],
       },
       {

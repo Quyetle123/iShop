@@ -15,6 +15,7 @@ import branchSlice from "./slices/branchSlice.jsx";
 import colorSlice from "./slices/colorSlice.jsx";
 import productColorSlice from "./slices/productColorSlice.jsx";
 import productImageSlice from "./slices/productImageSlice.jsx";
+import postSlice from "./slices/postSlice.jsx"
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -33,7 +34,8 @@ export const store = configureStore({
     branches: branchSlice,
     colors: colorSlice,
     productColors: productColorSlice,
-    productImages: productImageSlice
+    productImages: productImageSlice,
+    posts: postSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware),

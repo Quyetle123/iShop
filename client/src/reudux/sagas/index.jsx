@@ -13,6 +13,7 @@ import branchSaga from "./branchSaga.jsx";
 import colorSaga from "./colorSaga.jsx";
 import productColorSaga from "./productColorSaga.jsx";
 import productImageSaga from "./productImageSaga.jsx";
+import postSaga from "./postSaga.jsx";
 
 export default function* rootSaga() {
   yield all([
@@ -29,6 +30,7 @@ export default function* rootSaga() {
     branchSaga(),
     colorSaga(),
     productColorSaga(),
-    productImageSaga()
+    productImageSaga(),
+    postSaga(),
   ]);
 }

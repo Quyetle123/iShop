@@ -92,7 +92,7 @@ const AllProduct = () => {
       quantity: color.quantity,
       sold: color.sold,
     }));
-
+    
     const colorColumns = [
       {
         title: "Màu sắc",
