@@ -39,12 +39,24 @@ class productController {
     }
   }
 
-  static async getProductByCategoryId(req, res) {
+  static async getProductByCategory(req, res) {
     const { categoryid } = req.params;
     try {
       const products = await Product.findAll({
         where: { categoryid },
         limit: 4,
+        order: [["quantity", "DESC"]],
+      });
+      res.status(200).json({ products });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+  static async getProductByCategoryId(req, res) {
+    const { categoryid } = req.params;
+    try {
+      const products = await Product.findAll({
+        where: { categoryid },
         order: [["quantity", "DESC"]],
       });
       res.status(200).json({ products });
@@ -124,6 +136,7 @@ class productController {
       res.status(400).json({ message: error.message });
     }
   }
+
 }
 
 export default productController;
