@@ -42,6 +42,14 @@ const productSlice = createSlice({
       state.loading = false;
       state.products = action.payload
     },
+    fetchProductByCateStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchProductByCateSuccess(state, action) {
+      state.loading = false;
+      state.products = action.payload
+    },
     updateProductStart(state) {
       state.loading = true;
       state.error = null;
@@ -72,6 +80,8 @@ export const {
   fetchProductByIdSuccess,
   fetchProductByCateIdStart,
   fetchProductByCateIdSuccess,
+  fetchProductByCateStart,
+  fetchProductByCateSuccess,
   updateProductStart,
   updateProductSuccess,
   deleteProductStart,

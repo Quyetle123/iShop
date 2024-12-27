@@ -24,6 +24,7 @@ import UserLoginRoutes from "./userLoginRoutes.jsx";
 import ColorManager from "../components/admin/ColorManager/index.jsx";
 import Login from "../pages/auth/login.jsx";
 import Register from "../pages/auth/resgister.jsx";
+import Shop from "../components/main/FilterCategory/index.jsx";
 import AddPost from "../components/admin/AddPost/index.jsx";
 import AllPost from "../components/admin/AllPosts/index.jsx";
 import UpdatePost from "../components/admin/UpdatePost/index.jsx";
@@ -47,6 +48,10 @@ export default createBrowserRouter([
           {
             element: <Home />,
             path: "/",
+          },
+          {
+            element: <Shop />,
+            path: "/shop",
           },
           {
             element: <Detail />,

@@ -6,6 +6,8 @@ import {
   deleteProductSuccess,
   fetchProductByCateIdStart,
   fetchProductByCateIdSuccess,
+  fetchProductByCateStart,
+  fetchProductByCateSuccess,
   fetchProductByIdStart,
   fetchProductByIdSuccess,
   fetchProductesStart,
@@ -65,6 +67,17 @@ function* fetchProductByCateIdSaga(action) {
     yield put(productError(error.message));
   }
 }
+function* fetchProductByCateSaga(action) {
+  try {
+    const response = yield call(
+      axios.get,
+      `http://localhost:5000/api/product/productByCate/${action.payload}`
+    );
+    yield put(fetchProductByCateSuccess(response.data));
+  } catch (error) {
+    yield put(productError(error.message));
+  }
+}
 
 function* updateProductSaga(action) {
   try {
@@ -98,6 +111,7 @@ export default function* productSaga() {
   yield takeLatest(fetchProductesStart.type, fetchProductesSaga);
   yield takeLatest(fetchProductByIdStart.type, fetchProductByIdSaga);
   yield takeLatest(fetchProductByCateIdStart.type, fetchProductByCateIdSaga);
+  yield takeLatest(fetchProductByCateStart.type, fetchProductByCateIdSaga);
   yield takeLatest(updateProductStart.type, updateProductSaga);
   yield takeLatest(deleteProductStart.type, deleteProductSaga);
 }
