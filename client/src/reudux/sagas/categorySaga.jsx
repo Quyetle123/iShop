@@ -78,9 +78,9 @@ function* deleteCategorySaga(action) {
 }
 
 export default function* categorySaga() {
-  yield takeLatest(fetchCategories.type, fetchCategoriesSaga);
-  yield takeLatest(fetchCategoryById.type, fetchCategoryByIdSaga);
-  yield takeLatest(addCategoryStart.type, addCategorySaga);
-  yield takeLatest(updateCategoryStart.type, updateCategorySaga);
-  yield takeLatest(deleteCategoryStart.type, deleteCategorySaga);
+  yield takeLatest(fetchCategories, fetchCategoriesSaga);
+  yield takeLatest(fetchCategoryById, fetchCategoryByIdSaga);
+  yield takeLatest(addCategoryStart, addCategorySaga);
+  yield takeLatest(updateCategoryStart, updateCategorySaga);
+  yield takeLatest(deleteCategoryStart, deleteCategorySaga);
 }

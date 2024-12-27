@@ -5,6 +5,7 @@ import {
   HomeOutlined,
   ShopOutlined,
   ShoppingCartOutlined,
+  FileTextOutlined
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useState } from "react";
@@ -49,6 +50,15 @@ const items = [
       { key: "11", label: <Link to='/admin/addStore'>Thêm cửa hàng</Link> },
     ],
   },
+  {
+    key: "sub6",
+    label: "Bài viết",
+    icon: <FileTextOutlined />,
+    children: [
+      {key: "12", label: <Link to='/admin/add-post'>Thêm bài viết</Link>},
+      {key: "13", label: <Link to="/admin/all-posts">Tất cả bài viết</Link>}
+    ]
+  }
 ];
 
 const Header = () => {
