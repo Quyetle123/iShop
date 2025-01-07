@@ -11,6 +11,8 @@ import Branch from "./Branch.js";
 import Color from "./Color.js";
 import ProductColor from "./ProductColor.js";
 import ProductImage from "./ProductImage.js";
+import Post from "./Post.js";
+import Vourcher from "./Vourcher.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -68,4 +70,6 @@ export {
   Color,
   ProductColor,
   ProductImage,
+  Post,
+  Vourcher
 };
