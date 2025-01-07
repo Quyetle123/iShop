@@ -67,6 +67,15 @@ class AuthController {
       res.status(400).json({ message: error.message });
     }
   }
+
+  static async getAccounts(req, res) {
+    try {
+      const accounts = await Account.findAll();
+      res.status(200).json({accounts});
+    } catch (error) {
+      res.status(400).json({message: error.message});
+    }
+  }
 }
 
 export default AuthController;

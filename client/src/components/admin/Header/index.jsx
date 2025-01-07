@@ -58,6 +58,15 @@ const items = [
       {key: "12", label: <Link to='/admin/add-post'>Thêm bài viết</Link>},
       {key: "13", label: <Link to="/admin/all-posts">Tất cả bài viết</Link>}
     ]
+  },
+  {
+    key: "sub7",
+    label: "Mã giảm giá",
+    icon: <FileTextOutlined />,
+    children: [
+      {key: "14", label: <Link to='/admin/add-vourcher'>Thêm mã giảm giá</Link>},
+      {key: "15", label: <Link to="/admin/all-vourchers">Tất cả mã giảm giá</Link>}
+    ]
   }
 ];
 

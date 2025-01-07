@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Input, Button, Upload, message } from "antd";
+import { Form, Input, Button, Upload, message, Card } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { Editor } from "react-draft-wysiwyg";
 import { convertToRaw, EditorState } from "draft-js";
@@ -42,7 +42,7 @@ const AddPost = () => {
   };
 
   return (
-    <div className="m-[90px] p-[50px] bg-[#fff] rounded-[10px] min-h-[600px]">
+    <Card className="m-[90px] p-[50px] bg-[#fff] rounded-[10px] min-h-[600px]">
       <Form
         form={form}
         layout="vertical"
@@ -86,7 +86,7 @@ const AddPost = () => {
           </Button>
         </Form.Item>
       </Form>
-    </div>
+    </Card>
   );
 };
 

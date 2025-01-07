@@ -2,6 +2,9 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 import {
+  fetchAccountFailure,
+  fetchAccountsStart,
+  fetchAccountsSuccess,
   loginFailure,
   loginStart,
   loginSuccess,
@@ -54,7 +57,17 @@ function* handleLogin(action) {
   }
 }
 
+function* getAccountsSaga() {
+  try {
+    const response = yield call(axios.get, "http://localhost:5000/api/auth");
+    yield put(fetchAccountsSuccess(response.data));
+  } catch (error) {
+    yield put(fetchAccountFailure(error.message));
+  }
+}
+
 export default function* authSaga() {
-  yield takeLatest(registerStart.type, handleRegister);
-  yield takeLatest(loginStart.type, handleLogin);
+  yield takeLatest(registerStart, handleRegister);
+  yield takeLatest(loginStart, handleLogin);
+  yield takeLatest(fetchAccountsStart, getAccountsSaga);
 }

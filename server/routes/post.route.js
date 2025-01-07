@@ -8,4 +8,4 @@ router.get('/', PostController.allPosts);
 router.get('/:id', PostController.postById);
 router.put('/updatePost/:id', PostController.updatePost)
 
-export default router
+export default router;
