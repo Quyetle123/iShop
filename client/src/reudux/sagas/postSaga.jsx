@@ -19,7 +19,7 @@ function* addPostSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/post/addPost",
+      `${import.meta.env.LOCALHOST}/post/addPost`,
       action.payload
     );
     yield put(addPostSuccess(response.data));
@@ -30,7 +30,7 @@ function* addPostSaga(action) {
 
 function* fetchPostsSaga() {
   try {
-    const response = yield call(axios.get, "http://localhost:5000/api/post");
+    const response = yield call(axios.get, `${import.meta.env.LOCALHOST}/post`);
     yield put(fetchPostsSuccess(response.data));
   } catch (error) {
     yield put(fetchPostsError(error.message));
@@ -39,7 +39,7 @@ function* fetchPostsSaga() {
 
 function* fetchPostByIdSaga(action) {
   try {
-    const response = yield call(axios.get, `http://localhost:5000/api/post/${action.payload}`);
+    const response = yield call(axios.get, `${import.meta.env.LOCALHOST}/post/${action.payload}`);
     yield put(fetchPostByIdSuccess(response.data));
   } catch (error) {
     yield put(fetchPostByIdError(error.message))
@@ -48,7 +48,7 @@ function* fetchPostByIdSaga(action) {
 
 function* updatePostSaga(action) {
   try {
-    yield call(axios.put, `http://localhost:5000/api/post/updatePost/${action.payload.id}`, action.payload);
+    yield call(axios.put, `${import.meta.env.LOCALHOST}/post/updatePost/${action.payload.id}`, action.payload);
     yield put(updatePostSuccess());
     yield put(fetchPostsStart());
   } catch (error) {

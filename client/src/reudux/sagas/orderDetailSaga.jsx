@@ -6,7 +6,7 @@ function* addOrderDetailSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/orderDetail/addOrderDetail",
+      `${import.meta.env.LOCALHOST}/orderDetail/addOrderDetail`,
       action.payload
     );
     yield put(addOrderDetailSuccess(response.data));

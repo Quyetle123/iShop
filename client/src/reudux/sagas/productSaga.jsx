@@ -20,7 +20,7 @@ function* addProductSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/product/addProduct",
+      `${import.meta.env.LOCALHOST}/product/addProduct`,
       action.payload
     );
     yield put(addProductSuccess(response.data));
@@ -33,7 +33,7 @@ function* fetchProductesSaga() {
   try {
     const response = yield call(
       axios.get,
-      "http://localhost:5000/api/product/allProducts"
+      `${import.meta.env.LOCALHOST}/product/allProducts`
     );
     yield put(fetchProductesSuccess(response.data));
     console.log(response);
@@ -46,7 +46,7 @@ function* fetchProductByIdSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `http://localhost:5000/api/product/${action.payload}`
+      `${import.meta.env.LOCALHOST}/product/${action.payload}`
     );
     yield put(fetchProductByIdSuccess(response.data));
   } catch (error) {
@@ -58,7 +58,7 @@ function* fetchProductByCateIdSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `http://localhost:5000/api/product/productByCateId/${action.payload}`
+      `${import.meta.env.LOCALHOST}/product/productByCateId/${action.payload}`
     );
     yield put(fetchProductByCateIdSuccess(response.data));
   } catch (error) {
@@ -70,7 +70,7 @@ function* updateProductSaga(action) {
   try {
     yield call(
       axios.put,
-      `http://localhost:5000/api/product/updateProduct/${action.payload.id}`,
+      `${import.meta.env.LOCALHOST}/product/updateProduct/${action.payload.id}`,
       action.payload
     );
     yield put(fetchProductesStart());
@@ -84,7 +84,7 @@ function* deleteProductSaga(action) {
   try {
     yield call(
       axios.delete,
-      `http://localhost:5000/api/product/deleteProduct/${action.payload}`
+      `${import.meta.env.LOCALHOST}/product/deleteProduct/${action.payload}`
     );
     yield put(deleteProductSuccess());
     yield put(fetchProductesStart());
