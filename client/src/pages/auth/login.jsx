@@ -15,7 +15,7 @@ import {
 } from "./loginAndRegisterStyle";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginStart } from "../../reudux/slices/authSlice";
+import { loginStart } from "../../redux/slices/authSlice";
 
 function Login() {
   const [username, setUsername] = useState();

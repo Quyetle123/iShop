@@ -12,7 +12,7 @@ import {
 import { FaApple } from "react-icons/fa";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchCategories } from "../../../reudux/slices/categorySlice";
+import { fetchCategories } from "../../../redux/slices/categorySlice";
 import { Carousel, Row, Col } from "antd";
 
 const Home = () => {

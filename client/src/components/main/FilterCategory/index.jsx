@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaApple } from 'react-icons/fa';
 import { Carousel, Row, Col } from 'antd';
-import { fetchProductesStart } from '../../../reudux/slices/productSlice.jsx';
+import { fetchProductesStart } from '../../../redux/slices/productSlice.jsx';
 import {
   CategoryCard,
   CategoryContainer,

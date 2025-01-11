@@ -26,7 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteNotifyStart,
   fetchNotifyStart,
-} from "../../../reudux/slices/notifySlice";
+} from "../../../redux/slices/notifySlice";
 import { TiDeleteOutline } from "react-icons/ti";
 
 const socket = io("http://localhost:5000");

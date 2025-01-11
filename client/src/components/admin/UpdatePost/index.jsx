@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPostByIdStart,
   updatePostStart,
-} from "../../../reudux/slices/postSlice";
+} from "../../../redux/slices/postSlice";
 import { useNavigate, useParams } from "react-router-dom";
 
 const UpdatePost = () => {

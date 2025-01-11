@@ -13,13 +13,13 @@ import {
   CommentContentP,
 } from "./style";
 import { useEffect, useState } from "react";
-import { fetchProductByIdStart } from "../../../reudux/slices/productSlice";
+import { fetchProductByIdStart } from "../../../redux/slices/productSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   addCartStart,
   fetchCartByAccountidStart,
   updateQuantityStart,
-} from "../../../reudux/slices/cartSlice";
+} from "../../../redux/slices/cartSlice";
 import { getToken } from "../../../utils/token";
 import dayjs from "dayjs";
 import Slideshow from "../slideshow";

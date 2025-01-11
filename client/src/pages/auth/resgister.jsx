@@ -11,7 +11,7 @@ import {
   LoginButton,
 } from "./loginAndRegisterStyle";
 import { useDispatch, useSelector } from "react-redux";
-import { registerStart } from "../../reudux/slices/authSlice";
+import { registerStart } from "../../redux/slices/authSlice";
 import {useNavigate} from "react-router-dom";
 
 const Register = () => {
