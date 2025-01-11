@@ -1,10 +1,10 @@
 import { Button, Card, Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useDispatch } from "react-redux";
-import { addCategoryStart } from "../../redux/slices/categorySlice";
+import { addCategoryStart } from "../../../redux/slices/categorySlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { uploadImageToFirebase } from "../../firebase/uploadImage";
+import { uploadImageToFirebase } from "../../../firebase/uploadImage";
 
 const AddCategory = () => {
   const dispatch = useDispatch();

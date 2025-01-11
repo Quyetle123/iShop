@@ -6,15 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProductByIdStart,
   updateProductStart,
-} from "../../redux/slices/productSlice";
-import { fetchCategories } from "../../redux/slices/categorySlice";
-import { uploadImageToFirebase } from "../../firebase/uploadImage";
+} from "../../../redux/slices/productSlice";
+import { fetchCategories } from "../../../redux/slices/categorySlice";
+import { uploadImageToFirebase } from "../../../firebase/uploadImage";
 import TextArea from "antd/es/input/TextArea";
 import { TiDelete } from "react-icons/ti";
-import { getAllColorStart } from "../../redux/slices/colorSlice";
-import { addProductColorStart } from "../../redux/slices/productColorSlice";
+import { getAllColorStart } from "../../../redux/slices/colorSlice";
+import { addProductColorStart } from "../../../redux/slices/productColorSlice";
 import { v4 as uuidv4 } from "uuid";
-import { addProductImageStart } from "../../redux/slices/productImageSlice";
+import { addProductImageStart } from "../../../redux/slices/productImageSlice";
 
 const UpdateProduct = () => {
   const { id } = useParams();
