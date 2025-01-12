@@ -17,7 +17,7 @@ function* handleRegister(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/auth/register",
+      `${import.meta.env.LOCALHOST}/auth/register`,
       action.payload
     );
     if (response && response.data) {
@@ -39,7 +39,7 @@ function* handleLogin(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/auth/login",
+      `${import.meta.env.LOCALHOST}/auth/login`,
       action.payload
     );
     if (response) {
