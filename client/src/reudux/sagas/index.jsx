@@ -15,6 +15,8 @@ import productColorSaga from "./productColorSaga.jsx";
 import productImageSaga from "./productImageSaga.jsx";
 import postSaga from "./postSaga.jsx";
 import vourcherSaga from "./vourcherSaga.jsx";
+import voucherAccountSaga from "./voucherAccountSaga.jsx";
+import voucherUsageSaga from "./voucherUsageSaga.jsx";
 
 export default function* rootSaga() {
   yield all([
@@ -33,6 +35,9 @@ export default function* rootSaga() {
     productColorSaga(),
     productImageSaga(),
     postSaga(),
-    vourcherSaga()
+    vourcherSaga(),
+    voucherAccountSaga(),
+    voucherAccountSaga(),
+    voucherUsageSaga(),
   ]);
 }

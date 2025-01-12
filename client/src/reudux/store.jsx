@@ -16,7 +16,10 @@ import colorSlice from "./slices/colorSlice.jsx";
 import productColorSlice from "./slices/productColorSlice.jsx";
 import productImageSlice from "./slices/productImageSlice.jsx";
 import postSlice from "./slices/postSlice.jsx";
-import vourcherSlice from "./slices/vourcherSlice.jsx"
+import vourcherSlice from "./slices/vourcherSlice.jsx";
+import voucherAccountSlice from "./slices/voucherAccountSlice.jsx";
+import voucherProductSlice from "./slices/voucherProductSlice.jsx";
+import voucherUsageSlice from "./slices/voucherUsageSlice.jsx";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -37,7 +40,10 @@ export const store = configureStore({
     productColors: productColorSlice,
     productImages: productImageSlice,
     posts: postSlice,
-    vourchers: vourcherSlice
+    vourchers: vourcherSlice,
+    voucherAccounts: voucherAccountSlice,
+    voucherProducts: voucherProductSlice,
+    voucherUsages: voucherUsageSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware),
