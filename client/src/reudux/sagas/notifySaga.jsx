@@ -7,7 +7,7 @@ const token = getToken()
 
 function* fetchNotifyByAcountidSaga(action) {
     try {
-        const response = yield call(axios.get, `${import.meta.env.LOCALHOST}/notify/${action.payload}`);
+        const response = yield call(axios.get, `${import.meta.env.VITE_LOCALHOST}/notify/${action.payload}`);
         yield put(fetchNotifySuccess(response.data));
     } catch (error) {
         yield put(fetchNotifyFailure(error.message));
@@ -16,7 +16,7 @@ function* fetchNotifyByAcountidSaga(action) {
 
 function* deleteNotifySaga(action) {
     try {
-        yield call(axios.delete, `${import.meta.env.LOCALHOST}/notify/deleteNotify/${action.payload}`);
+        yield call(axios.delete, `${import.meta.env.VITE_LOCALHOST}/notify/deleteNotify/${action.payload}`);
         yield put(deleteNotifySuccess());
         yield put(fetchNotifyStart(token.id));
     } catch (error) {

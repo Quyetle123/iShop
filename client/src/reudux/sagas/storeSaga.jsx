@@ -6,7 +6,7 @@ function* addStoreSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      `${import.meta.env.LOCALHOST}/store/addStore`,
+      `${import.meta.env.VITE_LOCALHOST}/store/addStore`,
       action.payload
     );
     yield put(addStoreSuccess(response.data));

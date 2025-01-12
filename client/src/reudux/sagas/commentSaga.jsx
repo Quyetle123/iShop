@@ -6,7 +6,7 @@ function* addCommentSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      `${import.meta.env.LOCALHOST}/comment/addComment`,
+      `${import.meta.env.VITE_LOCALHOST}/comment/addComment`,
       action.payload
     );
     yield put(addCommentSuccess(response.data));

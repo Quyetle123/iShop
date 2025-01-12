@@ -6,7 +6,7 @@ function* addVoucherAccountSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/voucherAccount/addVoucherAccount",
+      `${import.meta.env.VITE_LOCALHOST}/voucherAccount/addVoucherAccount`,
       action.payload
     );
     yield put(addVoucherAccountSuccess(response.data));

@@ -6,7 +6,7 @@ function* addBranchSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      `${import.meta.env.LOCALHOST}/auth/branch/addBranch`,
+      `${import.meta.env.VITE_LOCALHOST}/auth/branch/addBranch`,
       action.payload
     );
     yield put(addBranchSuccess(response.data))
@@ -17,7 +17,7 @@ function* addBranchSaga(action) {
 
 function* fetchAllBranchSaga() {
     try {
-        const response = yield call(axios.get, `${import.meta.env.LOCALHOST}/auth/branch`);
+        const response = yield call(axios.get, `${import.meta.env.VITE_LOCALHOST}/auth/branch`);
         yield put(fetchAllBranchSuccess(response.data));
     } catch (error) {
         yield put(fetchAllBranchFailure(error.message))

@@ -6,7 +6,7 @@ function* addVoucherProductSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/voucherProduct/addVoucherProduct",
+      `${import.meta.env.VITE_LOCALHOST}/voucherProduct/addVoucherProduct`,
       action.payload
     );
     yield put(addVoucherProductSuccess(response.data));

@@ -15,7 +15,7 @@ function* addProductColorSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      `${import.meta.env.LOCALHOST}/productColor/addProductColor`,
+      `${import.meta.env.VITE_LOCALHOST}/productColor/addProductColor`,
       action.payload
     );
     yield put(addProductColorSuccess(response.data));
@@ -29,7 +29,7 @@ function* fetchProductColorsSaga() {
   try {
     const response = yield call(
       axios.get,
-      `${import.meta.env.LOCALHOST}/productColor`
+      `${import.meta.env.VITE_LOCALHOST}/productColor`
     );
     yield put(fetchProductColorsSuccess(response.data));
   } catch (error) {
@@ -39,7 +39,7 @@ function* fetchProductColorsSaga() {
 
 function* fetchProductColorByIdSaga(action) {
   try {
-    const response = yield call(axios.get, `${import.meta.env.LOCALHOST}/productColor/${action.payload}`);
+    const response = yield call(axios.get, `${import.meta.env.VITE_LOCALHOST}/productColor/${action.payload}`);
     yield put(fetchProductColorByIdSuccess(response.data));
   } catch (error) {
     yield put(fetchProductColorByIdFailure(error.message));
