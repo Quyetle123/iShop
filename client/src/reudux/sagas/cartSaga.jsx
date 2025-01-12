@@ -22,7 +22,7 @@ function* addCartSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      `${import.meta.env.LOCALHOST}/cart/addCart`,
+      `${import.meta.env.VITE_LOCALHOST}/cart/addCart`,
       action.payload
     );
     yield put(addCartSuccess(response.data));
@@ -35,7 +35,7 @@ function* fetchCartByAccountidSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `${import.meta.env.LOCALHOST}/cart/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/cart/${action.payload}`
     );
     yield put(fetchCartByAccountidSuccess(response.data));
   } catch (error) {
@@ -47,7 +47,7 @@ function* updateQuantitySaga(action) {
   try {
     yield call(
       axios.put,
-      `${import.meta.env.LOCALHOST}/cart/updateQuantity/${action.payload.id}`,
+      `${import.meta.env.VITE_LOCALHOST}/cart/updateQuantity/${action.payload.id}`,
       action.payload
     );
     yield put(updateQuantitySuccess());
@@ -61,7 +61,7 @@ function* deleteCartSaga(action) {
   try {
     yield call(
       axios.delete,
-      `${import.meta.env.LOCALHOST}/cart/deleteCart/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/cart/deleteCart/${action.payload}`
     );
     yield put(deleteCartSucess());
     yield put(fetchCartByAccountidStart(token.id));

@@ -6,7 +6,7 @@ function* addOrderDetailSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      `${import.meta.env.LOCALHOST}/orderDetail/addOrderDetail`,
+      `${import.meta.env.VITE_LOCALHOST}/orderDetail/addOrderDetail`,
       action.payload
     );
     yield put(addOrderDetailSuccess(response.data));

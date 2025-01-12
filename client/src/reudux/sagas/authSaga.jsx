@@ -17,7 +17,7 @@ function* handleRegister(action) {
   try {
     const response = yield call(
       axios.post,
-      `${import.meta.env.LOCALHOST}/auth/register`,
+      `${import.meta.env.VITE_LOCALHOST}/auth/register`,
       action.payload
     );
     if (response && response.data) {
@@ -39,7 +39,7 @@ function* handleLogin(action) {
   try {
     const response = yield call(
       axios.post,
-      `${import.meta.env.LOCALHOST}/auth/login`,
+      `${import.meta.env.VITE_LOCALHOST}/auth/login`,
       action.payload
     );
     if (response) {
@@ -59,7 +59,10 @@ function* handleLogin(action) {
 
 function* getAccountsSaga() {
   try {
-    const response = yield call(axios.get, "http://localhost:5000/api/auth");
+    const response = yield call(
+      axios.get,
+      `${import.meta.env.VITE_LOCALHOST}/auth`
+    );
     yield put(fetchAccountsSuccess(response.data));
   } catch (error) {
     yield put(fetchAccountFailure(error.message));

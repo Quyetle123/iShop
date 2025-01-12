@@ -10,7 +10,7 @@ function* addProductImageSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      `${import.meta.env.LOCALHOST}/productImage/addProductImage`,
+      `${import.meta.env.VITE_LOCALHOST}/productImage/addProductImage`,
       action.payload
     );
     yield put(addProductImageSuccess(response.data));

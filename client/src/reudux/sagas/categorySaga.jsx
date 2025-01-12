@@ -18,8 +18,9 @@ function* fetchCategoriesSaga() {
   try {
     const response = yield call(
       axios.get,
-      `${import.meta.env.LOCALHOST}/category/allCategories`
+      `${import.meta.env.VITE_LOCALHOST}/category/allCategories`
     );
+    console.log(import.meta.env.VITE_LOCALHOST)
     yield put(fetchCategoriesSuccess(response.data));
   } catch (error) {
     yield put(setError(error.message));
@@ -30,7 +31,7 @@ function* fetchCategoryByIdSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `${import.meta.env.LOCALHOST}/category/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/category/${action.payload}`
     );
     yield put(fetchCategoryByIdSuccess(response.data));
   } catch (error) {
@@ -42,7 +43,7 @@ function* addCategorySaga(action) {
   try {
     const response = yield call(
       axios.post,
-      `${import.meta.env.LOCALHOST}/category/addCategory`,
+      `${import.meta.env.VITE_LOCALHOST}/category/addCategory`,
       action.payload
     );
     yield put(addCategorySuccess(response.data));
@@ -55,7 +56,7 @@ function* updateCategorySaga(action) {
   try {
     yield call(
       axios.put,
-      `${import.meta.env.LOCALHOST}/category/updateCategory/${action.payload.id}`,
+      `${import.meta.env.VITE_LOCALHOST}/category/updateCategory/${action.payload.id}`,
       action.payload
     );
     yield put(updateCategorySuccess(action.payload));
@@ -68,7 +69,7 @@ function* deleteCategorySaga(action) {
   try {
     yield call(
       axios.delete,
-      `${import.meta.env.LOCALHOST}/category/deleteCategory/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/category/deleteCategory/${action.payload}`
     );
     yield put(deleteCategorySuccess());
     yield put(fetchCategories());
