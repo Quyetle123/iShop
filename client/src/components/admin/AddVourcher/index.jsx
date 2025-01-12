@@ -14,6 +14,7 @@ import * as S from "./style";
 import { UploadOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
+import { v4 as uuidv4 } from "uuid";
 import { DatePicker } from "antd";
 import { useEffect, useState } from "react";
 import { uploadImageToFirebase } from "../../../firebase/uploadImage";
@@ -21,6 +22,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addVourcherStart } from "../../../reudux/slices/vourcherSlice";
 import { fetchProductesStart } from "../../../reudux/slices/productSlice";
 import { fetchAccountsStart } from "../../../reudux/slices/authSlice";
+import { addVoucherAccountStart } from "../../../reudux/slices/voucherAccountSlice";
+import { addVoucherProductStart } from "../../../reudux/slices/voucherProductSlice";
 const { RangePicker } = DatePicker;
 
 const AddVourcher = () => {
@@ -32,7 +35,7 @@ const AddVourcher = () => {
   const accountList = Array.isArray(accounts.accounts) ? accounts.accounts : [];
 
   useEffect(() => {
-    dispatch(fetchAccountsStart())
+    dispatch(fetchAccountsStart());
     dispatch(fetchProductesStart());
   }, [dispatch]);
   const [current, setCurrent] = useState(0);
@@ -57,9 +60,18 @@ const AddVourcher = () => {
     }
   };
 
+  const [selectedProduct, setSelectedProduct] = useState();
+  const [selectedAccount, setSelectedAccount] = useState();
+
   const handleChooseProduct = (value) => {
-    console.log(`selected ${value}`);
+    setSelectedProduct(value);
   };
+
+  const handleChooseAccount = (value) => {
+    setSelectedAccount(value);
+  };
+
+  console.log(selectedProduct);
 
   const steps = [
     {
@@ -77,6 +89,7 @@ const AddVourcher = () => {
                 ]}
               />
             </Form.Item>
+
             <Form.Item label="Áp dụng cho tài khoản:">
               <Select
                 defaultValue={chooseAccount}
@@ -85,7 +98,7 @@ const AddVourcher = () => {
                   { value: "Tất cả", label: "Tất cả" },
                   {
                     value: "Khách hàng chỉ định",
-                    label: "Khách hàng được chỉ định",
+                    label: "Khách hàng chỉ định",
                   },
                 ]}
               />
@@ -93,7 +106,7 @@ const AddVourcher = () => {
 
             <Form.Item label="Lượt sử dụng:">
               <Select
-                defaultValue={chooseAccount}
+                defaultValue={quantityUse}
                 onChange={(value) => setQuantityUse(value)}
                 options={[
                   {
@@ -206,6 +219,7 @@ const AddVourcher = () => {
       content: (
         <div>
           <Select
+            id="product"
             mode="multiple"
             style={{
               width: "100%",
@@ -238,13 +252,14 @@ const AddVourcher = () => {
       content: (
         <div>
           <Select
+            id="account"
             mode="multiple"
             style={{
               width: "100%",
               padding: "2px",
             }}
             placeholder="Chọn sản phẩm"
-            onChange={handleChooseProduct}
+            onChange={handleChooseAccount}
             options={accountList.map((account) => ({
               value: account.id,
               label: (
@@ -261,7 +276,21 @@ const AddVourcher = () => {
     },
     quantityUse === "Giới hạn số lượng" && {
       title: "Số lượng giới hạn",
-      content: <p>hi</p>,
+      content: (
+        <div>
+          <Form form={form} layout="vertical" className="space-y-4">
+            <Form.Item
+              label="Số lượng"
+              name="quantity"
+              rules={[
+                { required: true, message: "Mã code không được để trống!" },
+              ]}
+            >
+              <Input placeholder="Nhập mã code" />
+            </Form.Item>
+          </Form>
+        </div>
+      ),
     },
   ].filter(Boolean);
 
@@ -281,52 +310,79 @@ const AddVourcher = () => {
     setCurrent(current - 1);
   };
 
-  const onFinish = async (values) => {
-    try {
-      const image = await uploadImageToFirebase(imageFile);
+  const onFinish = async () => {
+    const image = await uploadImageToFirebase(imageFile);
+    form.validateFields().then((values) => {
+      const voucher_id = uuidv4();
+      setFormData((prevData) => ({ ...prevData, ...values }));
+
+      const allData = formData;
       const formatDate = {
         valid_from: dayjs(
           new Date(
-            values.time[0].$y,
-            values.time[0].$M,
-            values.time[0].$D,
-            values.time[0].$H,
-            values.time[0].$m,
-            values.time[0].$s
+            allData.time[0].$y,
+            allData.time[0].$M,
+            allData.time[0].$D,
+            allData.time[0].$H,
+            allData.time[0].$m,
+            allData.time[0].$s
           )
         ).format("YYYY-MM-DD HH:mm:ss"),
         valid_to: dayjs(
           new Date(
-            values.time[1].$y,
-            values.time[1].$M,
-            values.time[1].$D,
-            values.time[1].$H,
-            values.time[1].$m,
-            values.time[1].$s
+            allData.time[1].$y,
+            allData.time[1].$M,
+            allData.time[1].$D,
+            allData.time[1].$H,
+            allData.time[1].$m,
+            allData.time[1].$s
           )
         ).format("YYYY-MM-DD HH:mm:ss"),
       };
-      await dispatch(
+      dispatch(
         addVourcherStart({
-          code: values.code,
-          description: values.description,
+          id: voucher_id,
+          code: allData.code,
+          description: allData.description,
           image,
           discount_amount:
-            values.discount_amount && Number(values.discount_amount),
+            allData.discount_amount && Number(allData.discount_amount),
           discount_percent:
-            values.discount_percent && Number(values.discount_percent),
+            allData.discount_percent && Number(allData.discount_percent),
           max_discount_amount:
-            values.max_discount_amount && Number(values.max_discount_amount),
+            allData.max_discount_amount && Number(allData.max_discount_amount),
           minimum_order_value:
-            values.minimum_order_value && Number(values.minimum_order_value),
+            allData.minimum_order_value && Number(allData.minimum_order_value),
           valid_from: formatDate.valid_from,
           valid_to: formatDate.valid_to,
+          quantity: allData.quantity && Number(allData.quantity),
+          is_single_use:
+            quantityUse === "Mỗi người tối đa 1 lần" ? true : false,
           status,
         })
       );
-    } catch (error) {
-      console.error("Error:", error);
-    }
+      if (selectedAccount.length > 0) {
+        selectedAccount.map((slAccount) => {
+          dispatch(
+            addVoucherAccountStart({
+              voucher_id,
+              account_id: slAccount,
+            })
+          );
+        });
+      }
+
+      if (selectedProduct.length > 0) {
+        selectedProduct.map((slProduct) => {
+          dispatch(
+            addVoucherProductStart({
+              voucher_id,
+              product_id: slProduct,
+            })
+          );
+        });
+      }
+    });
   };
   return (
     <S.Container>

@@ -5,8 +5,7 @@ const Vourcher = sequelize.define(
   "Vourcher",
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.STRING(50),
       primaryKey: true,
     },
     code: {
@@ -44,6 +43,15 @@ const Vourcher = sequelize.define(
     valid_to: {
       type: DataTypes.DATE,
       allowNull: false,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    is_single_use: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     status: {
       type: DataTypes.BOOLEAN,
