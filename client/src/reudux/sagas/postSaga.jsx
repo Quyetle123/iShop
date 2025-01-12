@@ -3,6 +3,9 @@ import {
   addPostError,
   addPostStart,
   addPostSuccess,
+  deletePostError,
+  deletePostStart,
+  deletePostSuccess,
   fetchPostByIdError,
   fetchPostByIdStart,
   fetchPostByIdSuccess,
@@ -56,9 +59,23 @@ function* updatePostSaga(action) {
   }
 }
 
+function* deletePostSaga(action) {
+  try {
+    yield call(
+      axios.delete,
+      `http://localhost:5000/api/post/deletePost/${action.payload}`
+    );
+    yield put(deletePostSuccess());
+    yield put(fetchPostsStart());
+  } catch (error) {
+    yield put(deletePostError(error.message));
+  }
+}
+
 export default function* postSaga() {
   yield takeLatest(addPostStart, addPostSaga);
   yield takeLatest(fetchPostsStart, fetchPostsSaga);
   yield takeLatest(fetchPostByIdStart, fetchPostByIdSaga);
   yield takeLatest(updatePostStart, updatePostSaga);
+  yield takeLatest(deletePostStart, deletePostSaga); 
 }
