@@ -27,6 +27,7 @@ import Register from "../pages/auth/resgister.jsx";
 import AddPost from "../components/admin/AddPost/index.jsx";
 import AllPost from "../components/admin/AllPosts/index.jsx";
 import UpdatePost from "../components/admin/UpdatePost/index.jsx";
+import WishList from "../components/main/Wishlist/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -59,6 +60,14 @@ export default createBrowserRouter([
               </UserLoginRoutes>
             ),
             path: "/cart",
+          },
+          {
+            element: (
+              <UserLoginRoutes>
+                <WishList />
+              </UserLoginRoutes>
+            ),
+            path: "/wishlist",
           },
           {
             element: (

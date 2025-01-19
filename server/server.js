@@ -20,6 +20,7 @@ import colorRouter from "./routes/color.route.js";
 import productColorRouter from "./routes/productColor.route.js";
 import productImageRouter from "./routes/productImage.route.js";
 import postRouter from "./routes/post.route.js"
+import wishListRouter from "./routes/wishlist.route.js"
 import setupSocket from "./socket/socket.js";
 
 const app = express();
@@ -51,6 +52,7 @@ app.use("/api/color", colorRouter);
 app.use("/api/productColor", productColorRouter);
 app.use("/api/productImage", productImageRouter);
 app.use("/api/post", postRouter)
+app.use("/api/wishList", wishListRouter)
 
 setupSocket(io);
 

@@ -11,6 +11,7 @@ import Branch from "./Branch.js";
 import Color from "./Color.js";
 import ProductColor from "./ProductColor.js";
 import ProductImage from "./ProductImage.js";
+import Wishlist from "./Wishlist.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -54,6 +55,12 @@ ProductColor.belongsTo(Product, { foreignKey: "productid" });
 ProductColor.hasMany(ProductImage, { foreignKey: "productColorid" });
 ProductImage.belongsTo(ProductColor, { foreignKey: "productColorid" });
 
+Account.hasMany(Wishlist, {foreignKey: "accountid"});
+Wishlist.belongsTo(Account, {foreignKey: "accountid"});
+
+ProductColor.hasMany(Wishlist, {foreignKey: "productColorid"});
+Wishlist.belongsTo(ProductColor, {foreignKey: "productColorid"});
+
 export {
   Account,
   Cart,
@@ -68,4 +75,5 @@ export {
   Color,
   ProductColor,
   ProductImage,
+  Wishlist
 };

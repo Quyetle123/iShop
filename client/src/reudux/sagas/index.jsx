@@ -14,6 +14,7 @@ import colorSaga from "./colorSaga.jsx";
 import productColorSaga from "./productColorSaga.jsx";
 import productImageSaga from "./productImageSaga.jsx";
 import postSaga from "./postSaga.jsx";
+import wishlistSaga  from "./wishlishtSaga.jsx";
 
 export default function* rootSaga() {
   yield all([
@@ -32,5 +33,6 @@ export default function* rootSaga() {
     productColorSaga(),
     productImageSaga(),
     postSaga(),
+    wishlistSaga()
   ]);
 }
