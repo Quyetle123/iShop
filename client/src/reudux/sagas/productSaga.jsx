@@ -6,6 +6,7 @@ import {
   deleteProductSuccess,
   fetchProductByCateIdStart,
   fetchProductByCateIdSuccess,
+  fetchProductByCateStart,
   fetchProductByIdStart,
   fetchProductByIdSuccess,
   fetchProductesStart,
@@ -20,7 +21,7 @@ function* addProductSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/product/addProduct",
+      `${import.meta.env.VITE_LOCALHOST}/product/addProduct`,
       action.payload
     );
     yield put(addProductSuccess(response.data));
@@ -33,7 +34,7 @@ function* fetchProductesSaga() {
   try {
     const response = yield call(
       axios.get,
-      "http://localhost:5000/api/product/allProducts"
+      `${import.meta.env.VITE_LOCALHOST}/product/allProducts`
     );
     yield put(fetchProductesSuccess(response.data));
     console.log(response);
@@ -46,10 +47,9 @@ function* fetchProductByIdSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `http://localhost:5000/api/product/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/product/${action.payload}`
     );
     yield put(fetchProductByIdSuccess(response.data));
-    yield put()
   } catch (error) {
     yield put(productError(error.message));
   }
@@ -61,6 +61,7 @@ function* fetchProductByCateIdSaga(action) {
     const response = yield call(
       axios.get,
       `http://localhost:5000/api/product/productByCate/${categoryId}`
+      `${import.meta.env.VITE_LOCALHOST}/product/productByCateId/${action.payload}`
     );
     yield put(fetchProductByCateIdSuccess(response.data));
   } catch (error) {
@@ -72,7 +73,7 @@ function* updateProductSaga(action) {
   try {
     yield call(
       axios.put,
-      `http://localhost:5000/api/product/updateProduct/${action.payload.id}`,
+      `${import.meta.env.VITE_LOCALHOST}/product/updateProduct/${action.payload.id}`,
       action.payload
     );
     yield put(fetchProductesStart());
@@ -86,7 +87,7 @@ function* deleteProductSaga(action) {
   try {
     yield call(
       axios.delete,
-      `http://localhost:5000/api/product/deleteProduct/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/product/deleteProduct/${action.payload}`
     );
     yield put(deleteProductSuccess());
     yield put(fetchProductesStart());

@@ -12,7 +12,7 @@ function* addColorSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/color/addColor",
+      `${import.meta.env.VITE_LOCALHOST}/color/addColor`,
       action.payload
     );
     yield put(addColorSuccess(response.data));
@@ -24,7 +24,7 @@ function* addColorSaga(action) {
 
 function* getAllColorSaga() {
   try {
-    const response = yield call(axios.get, "http://localhost:5000/api/color");
+    const response = yield call(axios.get, `${import.meta.env.VITE_LOCALHOST}/color`);
     yield put(getAllColorSuccess(response.data));
   } catch (error) {
     yield put(getAllColorSuccess(error.message))

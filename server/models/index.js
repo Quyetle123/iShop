@@ -11,6 +11,11 @@ import Branch from "./Branch.js";
 import Color from "./Color.js";
 import ProductColor from "./ProductColor.js";
 import ProductImage from "./ProductImage.js";
+import Post from "./Post.js";
+import Vourcher from "./Vourcher.js";
+import VoucherAccount from "./VoucherAccount.js";
+import VoucherProduct from "./VoucherProduct.js";
+import VoucherUsage from "./VoucherUsage.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -42,6 +47,12 @@ StoreAccount.belongsTo(Store, { foreignKey: "storeid" });
 Account.hasMany(StoreAccount, { foreignKey: "accountid" });
 StoreAccount.belongsTo(Account, { foreignKey: "accountid" });
 
+Account.hasMany(VoucherAccount, { foreignKey: "account_id" });
+VoucherAccount.belongsTo(Account, { foreignKey: "account_id" });
+
+Account.hasMany(VoucherUsage, { foreignKey: "accountid" });
+VoucherUsage.belongsTo(Account, { foreignKey: "accountid" });
+
 Branch.hasMany(Store, { foreignKey: "branchid" });
 Store.belongsTo(Branch, { foreignKey: "branchid" });
 
@@ -51,8 +62,20 @@ ProductColor.belongsTo(Color, { foreignKey: "colorid" });
 Product.hasMany(ProductColor, { foreignKey: "productid" });
 ProductColor.belongsTo(Product, { foreignKey: "productid" });
 
+Product.hasMany(VoucherProduct, { foreignKey: "product_id" });
+VoucherProduct.belongsTo(Product, { foreignKey: "product_id" });
+
 ProductColor.hasMany(ProductImage, { foreignKey: "productColorid" });
 ProductImage.belongsTo(ProductColor, { foreignKey: "productColorid" });
+
+Vourcher.hasMany(VoucherAccount, { foreignKey: "voucher_id" });
+VoucherAccount.belongsTo(Vourcher, { foreignKey: "voucher_id" });
+
+Vourcher.hasMany(VoucherProduct, { foreignKey: "voucher_id" });
+VoucherProduct.belongsTo(Vourcher, { foreignKey: "voucher_id" });
+
+Vourcher.hasMany(VoucherUsage, { foreignKey: "voucher_id" });
+VoucherUsage.belongsTo(Vourcher, { foreignKey: "voucher_id" });
 
 export {
   Account,
@@ -68,4 +91,9 @@ export {
   Color,
   ProductColor,
   ProductImage,
+  Post,
+  Vourcher,
+  VoucherAccount,
+  VoucherProduct,
+  VoucherUsage,
 };

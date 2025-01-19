@@ -135,6 +135,7 @@ const Detail = () => {
               />
             ))}
           </div>
+          <button>Đặt mua</button>
           <button
             style={{
               display:
