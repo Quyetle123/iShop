@@ -1,4 +1,4 @@
-import { Vourcher } from "../models/index.js";
+import { VoucherAccount, VoucherProduct, Vourcher } from "../models/index.js";
 
 class VourcherController {
   static async addVourcher(req, res) {
@@ -13,7 +13,16 @@ class VourcherController {
 
   static async allVourchers(req, res) {
     try {
-      const vourchers = await Vourcher.findAll();
+      const vourchers = await Vourcher.findAll({
+        include: [
+          {
+            model: VoucherAccount,
+          },
+          {
+            model: VoucherProduct,
+          },
+        ],
+      });
       res.status(200).json({ vourchers });
     } catch (error) {
       res.status(400).json({ message: error.message });

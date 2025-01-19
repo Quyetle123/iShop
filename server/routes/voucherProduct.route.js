@@ -3,6 +3,8 @@ import VoucherProductController from "../controllers/voucherProduct.controller.j
 
 const router = express.Router();
 
-router.post('/addVoucherAccount', VoucherProductController);
+router.post('/addVoucherProduct', VoucherProductController.addVoucherProduct);
+router.get('/', VoucherProductController.allVoucherProducts);
+router.get('/:id', VoucherProductController.voucherProductById);
 
 export default router;

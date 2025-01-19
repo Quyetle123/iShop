@@ -1,29 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Wrapper,
-  FormLogin,
-  FormHeading,
-  FormBox,
-  FormGroup,
-  EyeIcon,
-  RememberForgot,
-  LoginButton,
-  DiffrentTitle,
-  DiffrentLogin,
-  LoginFacebook,
-  LoginGoogle,
-} from "./loginAndRegisterStyle";
+import { Form, Input, Button, Checkbox, Typography, Space } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginStart } from "../../reudux/slices/authSlice";
+import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
+
+const { Title, Text } = Typography;
 
 function Login() {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { role } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
+
   const handleSubmit = () => {
     dispatch(loginStart({ username, password }));
   };
@@ -35,58 +26,114 @@ function Login() {
       navigate("/admin");
     }
   }, [role, navigate]);
+
   return (
-    <Wrapper>
-      <FormLogin>
-        <FormHeading>Đăng nhập</FormHeading>
-        <FormBox>
-          <FormGroup>
-            <i className="bx bx-user"></i>
-            <input
-              type="text"
-              name="user"
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "linear-gradient(135deg, #1e1e2f, #2a2a47)",
+        padding: "20px",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "400px",
+          width: "100%",
+          background: "#fff",
+          padding: "40px",
+          borderRadius: "10px",
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Title level={3} style={{ textAlign: "center", color: "#2a2a47" }}>
+          Đăng nhập
+        </Title>
+        <Form layout="vertical" onFinish={handleSubmit}>
+          <Form.Item
+            label="Tên đăng nhập"
+            name="username"
+            rules={[{ required: true, message: "Vui lòng nhập tên đăng nhập!" }]}
+          >
+            <Input
               placeholder="Tên đăng nhập"
               onChange={(e) => setUsername(e.target.value)}
             />
-          </FormGroup>
-          <FormGroup>
-            <i className="bx bxs-key"></i>
-            <input
-              type="password"
-              name="pass"
+          </Form.Item>
+          <Form.Item
+            label="Mật khẩu"
+            name="password"
+            rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+          >
+            <Input.Password
               placeholder="Mật khẩu"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <EyeIcon>
-              <i className="fa-solid fa-eye"></i>
-            </EyeIcon>
-          </FormGroup>
-          <RememberForgot>
-            <div>
-              <input type="checkbox" name="" id="" />
-              Lưu tài khoản
-            </div>
-            <span>Quên mật khẩu</span>
-          </RememberForgot>
-          <LoginButton onClick={handleSubmit}>Đăng nhập</LoginButton>
-          <DiffrentTitle>
-            --------------------- Lựa chọn khác ---------------------
-          </DiffrentTitle>
-          <DiffrentLogin>
-            <LoginFacebook>Facebook</LoginFacebook>
-            <LoginGoogle>Google</LoginGoogle>
-          </DiffrentLogin>
-          <RememberForgot>
-            <p></p>
-            <span>
-              <Link className="no-underline text-white" to="/register">
-                Đăng kí tài khoản
-              </Link>
-            </span>
-          </RememberForgot>
-        </FormBox>
-      </FormLogin>
-    </Wrapper>
+          </Form.Item>
+          <Form.Item>
+            <Space
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Checkbox>Lưu tài khoản</Checkbox>
+              <Link to="/forgot-password">Quên mật khẩu?</Link>
+            </Space>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              style={{
+                backgroundColor: "#2a2a47",
+                borderColor: "#2a2a47",
+                height: "40px",
+              }}
+            >
+              Đăng nhập
+            </Button>
+          </Form.Item>
+          <Text type="secondary" style={{ display: "block", textAlign: "center" }}>
+            ------------------ Lựa chọn khác ------------------
+          </Text>
+          <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+            <Button
+              icon={<FacebookOutlined />}
+              style={{
+                backgroundColor: "#3b5998",
+                color: "#fff",
+                width: "100%",
+              }}
+              block
+            >
+              Đăng nhập bằng Facebook
+            </Button>
+            <Button
+              icon={<GoogleOutlined />}
+              style={{
+                backgroundColor: "#db4437",
+                color: "#fff",
+                width: "100%",
+              }}
+              block
+            >
+              Đăng nhập bằng Google
+            </Button>
+          </Space>
+          <Text type="secondary" style={{ display: "block", textAlign: "center" }}>
+            Chưa có tài khoản?{" "}
+            <Link to="/register" style={{ color: "#2a2a47" }}>
+              Đăng kí ngay
+            </Link>
+          </Text>
+        </Form>
+      </div>
+    </div>
   );
 }
 

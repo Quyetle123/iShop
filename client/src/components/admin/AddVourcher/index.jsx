@@ -30,6 +30,7 @@ const AddVourcher = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
   const productList = Array.isArray(products.products) ? products.products : [];
+  console.log(productList);
 
   const { accounts } = useSelector((state) => state.auth);
   const accountList = Array.isArray(accounts.accounts) ? accounts.accounts : [];
@@ -41,7 +42,7 @@ const AddVourcher = () => {
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
   const [formData, setFormData] = useState({});
-  const [status, setStatus] = useState();
+  const [status, setStatus] = useState(true);
   const [imageFile, setImageFile] = useState(null);
   const onChange = (checked) => {
     setStatus(checked);
@@ -60,18 +61,17 @@ const AddVourcher = () => {
     }
   };
 
-  const [selectedProduct, setSelectedProduct] = useState();
-  const [selectedAccount, setSelectedAccount] = useState();
+  const [selectedProduct, setSelectedProduct] = useState("");
+  const [selectedAccount, setSelectedAccount] = useState("");
 
   const handleChooseProduct = (value) => {
     setSelectedProduct(value);
   };
 
+  console.log(selectedProduct);
   const handleChooseAccount = (value) => {
     setSelectedAccount(value);
   };
-
-  console.log(selectedProduct);
 
   const steps = [
     {
@@ -220,7 +220,6 @@ const AddVourcher = () => {
         <div>
           <Select
             id="product"
-            mode="multiple"
             style={{
               width: "100%",
               padding: "2px",
@@ -229,19 +228,7 @@ const AddVourcher = () => {
             onChange={handleChooseProduct}
             options={productList.map((product) => ({
               value: product.id,
-              label: (
-                <Space>
-                  <img
-                    className="w-[20px]"
-                    src={
-                      product.ProductColors[0].ProductImages[0].image ||
-                      "default_image_url"
-                    }
-                    alt={product.productname}
-                  />
-                  <p>{product.productname}</p>
-                </Space>
-              ),
+              label: product.productname,
             }))}
           />
         </div>
@@ -310,6 +297,8 @@ const AddVourcher = () => {
     setCurrent(current - 1);
   };
 
+  console.log(selectedProduct);
+
   const onFinish = async () => {
     const image = await uploadImageToFirebase(imageFile);
     form.validateFields().then((values) => {
@@ -339,6 +328,7 @@ const AddVourcher = () => {
           )
         ).format("YYYY-MM-DD HH:mm:ss"),
       };
+
       dispatch(
         addVourcherStart({
           id: voucher_id,
@@ -361,26 +351,23 @@ const AddVourcher = () => {
           status,
         })
       );
-      if (selectedAccount.length > 0) {
-        selectedAccount.map((slAccount) => {
-          dispatch(
-            addVoucherAccountStart({
-              voucher_id,
-              account_id: slAccount,
-            })
-          );
-        });
+
+      if (selectedAccount !== "") {
+        dispatch(
+          addVoucherAccountStart({
+            voucher_id,
+            account_id: selectedAccount,
+          })
+        );
       }
 
-      if (selectedProduct.length > 0) {
-        selectedProduct.map((slProduct) => {
-          dispatch(
-            addVoucherProductStart({
-              voucher_id,
-              product_id: slProduct,
-            })
-          );
-        });
+      if (selectedProduct !== "") {
+        dispatch(
+          addVoucherProductStart({
+            voucher_id,
+            product_id: selectedProduct,
+          })
+        );
       }
     });
   };

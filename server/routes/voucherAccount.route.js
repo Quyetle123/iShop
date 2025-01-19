@@ -4,5 +4,7 @@ import VoucherAccountController from "../controllers/voucherAccount.controller.j
 const router = express.Router();
 
 router.post('/addVoucherAccount', VoucherAccountController.addVoucherAccount);
+router.get('/', VoucherAccountController.allVoucherAccount);
+router.get('/:id', VoucherAccountController.voucherAccountById);
 
 export default router;
