@@ -10,6 +10,29 @@ class VoucherAccountController {
       res.status(400).json({ message: error.message });
     }
   }
+
+  static async allVoucherAccount(req, res) {
+    try {
+      const voucherAccount = await VoucherAccount.findAll();
+      res.status(200).json({ voucherAccount });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async voucherAccountById(req, res) {
+    const { id } = req.params;
+    try {
+      const voucherAccount = await VoucherAccount.findByPk(id);
+      if(voucherAccount) {
+        res.status(200).json({voucherAccount})
+      } else {
+        res.status(404).json({message: "voucher account not found"});
+      }
+    } catch (error) {
+      res.status(400).json({message: error.message});
+    }
+  }
 }
 
-export default VoucherAccountController
+export default VoucherAccountController;

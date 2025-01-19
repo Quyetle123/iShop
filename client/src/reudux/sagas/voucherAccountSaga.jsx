@@ -18,3 +18,4 @@ function* addVoucherAccountSaga(action) {
 export default function* voucherAccountSaga() {
     yield takeLatest(addVoucherAccountStart, addVoucherAccountSaga);
 }
+

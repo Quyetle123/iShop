@@ -1,8 +1,9 @@
-import { Table } from "antd";
+import { Switch, Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
+import dayjs from "dayjs";
 import { MdDeleteOutline } from "react-icons/md";
 import { fetchVourchersStart } from "../../../reudux/slices/vourcherSlice";
 const AllVourcher = () => {
@@ -13,17 +14,21 @@ const AllVourcher = () => {
     ? vourchers.vourchers
     : [];
 
+
   useEffect(() => {
     dispatch(fetchVourchersStart());
   }, [dispatch]);
-  const dataSource = vourcherList.map((post, index) => ({
-    key: post.id,
-    stt: index + 1,
-    image: <img src={post.image} style={{ width: "50px" }} />,
-    title: post.title,
+  const dataSource = vourcherList.map((voucher) => ({
+    key: voucher.id,
+    code: voucher.code,
+    status: <Switch checked={voucher.status} />,
+    image: <img src={voucher.image} style={{ width: "50px" }} />,
+    description: voucher.description,
+    valid_from: dayjs(voucher.valid_from).format("DD/MM/YYYY HH:mm:ss"),
+    valid_to: dayjs(voucher.valid_to).format("DD/MM/YYYY HH:mm:ss"),
     updateAnddelete: (
       <div className="flex">
-        <Link to={`/admin/update-post/${post.id}`}>
+        <Link to={`/admin/update-post/${voucher.id}`}>
           <FaEdit className="text-[20px] cursor-pointer" />
         </Link>
         <MdDeleteOutline
@@ -40,6 +45,11 @@ const AllVourcher = () => {
       title: "CODE",
       dataIndex: "code",
       key: "code",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
     },
     {
       title: "Ảnh",

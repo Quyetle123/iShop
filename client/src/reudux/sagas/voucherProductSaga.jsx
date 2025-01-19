@@ -1,6 +1,10 @@
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { addVoucherProductError, addVoucherProductStart, addVoucherProductSuccess } from "../slices/voucherProductSlice";
+import {
+  addVoucherProductError,
+  addVoucherProductStart,
+  addVoucherProductSuccess,
+} from "../slices/voucherProductSlice";
 
 function* addVoucherProductSaga(action) {
   try {
@@ -16,5 +20,5 @@ function* addVoucherProductSaga(action) {
 }
 
 export default function* voucherProductSaga() {
-    yield takeLatest(addVoucherProductStart, addVoucherProductSaga);
+  yield takeLatest(addVoucherProductStart, addVoucherProductSaga);
 }
