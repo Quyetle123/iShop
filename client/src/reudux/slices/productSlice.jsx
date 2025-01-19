@@ -34,19 +34,12 @@ const productSlice = createSlice({
       state.loading = false;
       state.selectedProduct = action.payload;
     },
-    fetchProductByCateIdStart(state) {
+    fetchProductByCateIdStart(state, action) {
       state.loading = true;
       state.error = null;
+      state.categoryId = action.payload;
     },
     fetchProductByCateIdSuccess(state, action) {
-      state.loading = false;
-      state.products = action.payload
-    },
-    fetchProductByCateStart(state) {
-      state.loading = true;
-      state.error = null;
-    },
-    fetchProductByCateSuccess(state, action) {
       state.loading = false;
       state.products = action.payload
     },
@@ -80,8 +73,6 @@ export const {
   fetchProductByIdSuccess,
   fetchProductByCateIdStart,
   fetchProductByCateIdSuccess,
-  fetchProductByCateStart,
-  fetchProductByCateSuccess,
   updateProductStart,
   updateProductSuccess,
   deleteProductStart,

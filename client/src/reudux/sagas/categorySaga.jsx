@@ -33,7 +33,7 @@ function* fetchCategoryByIdSaga(action) {
       axios.get,
       `${import.meta.env.VITE_LOCALHOST}/category/${action.payload}`
     );
-    yield put(fetchCategoryByIdSuccess(response.data));
+    yield put(fetchCategoryByIdSuccess(response.data.category[0]));
   } catch (error) {
     yield put(setError(error.message));
   }

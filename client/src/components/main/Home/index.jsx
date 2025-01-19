@@ -17,7 +17,7 @@ import {
 } from "./style";
 import { FaApple, FaShoppingCart, FaClock } from "react-icons/fa";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchCategories } from "../../../reudux/slices/categorySlice";
 import { Carousel, Row, Col } from "antd";
 import { fetchVourchersStart } from "../../../reudux/slices/vourcherSlice";
@@ -25,6 +25,7 @@ import dayjs from "dayjs";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
 
   const { categories } = useSelector((state) => state.categories);
   const categoryList = Array.isArray(categories.categories)
@@ -104,7 +105,7 @@ const Home = () => {
 
       <CategoryContainer>
         {categoryList.map((category) => (
-          <CategoryCard key={category.id}>
+          <CategoryCard key={category.id} onClick={() => navigate(`/${category.id}`)}>
             <img src={category.imageUrl} alt={category.categoryname} />
             <h3>{category.categoryname}</h3>
           </CategoryCard>

@@ -36,7 +36,8 @@ export const CategoryCard = styled.div`
 export const Title = styled.h2`
   color: #fff;
   font-size: 35px;
-  margin: 30px 150px 0 150px;
+  margin: 0px 150px 0 150px;
+  padding-top: 30px;
   text-align: center;
   display: flex;
   align-items: center;

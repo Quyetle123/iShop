@@ -1,33 +1,55 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { FaApple } from 'react-icons/fa';
-import { Carousel, Row, Col } from 'antd';
-import { fetchProductesStart } from '../../../reudux/slices/productSlice.jsx';
+import React, { useEffect, useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { FaApple } from "react-icons/fa";
+import { Carousel, Row, Col, Input, Select } from "antd";
+import { fetchCategoryById } from "../../../reudux/slices/categorySlice";
 import {
-  CategoryCard,
-  CategoryContainer,
   ImgContainer,
   Main,
   ProductCard,
   Title,
   TitleContainer,
-} from './style';
+} from "./style";
+import debounce from "lodash/debounce";
+
+const { Option } = Select;
 
 const Shop = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { categories } = useSelector((state) => state.categories);
-  const { products, loading } = useSelector((state) => state.products);
-  const categoryList = Array.isArray(categories.categories) ? categories.categories : [];
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("");
+
+  const { selectedCategory, status, error } = useSelector(
+    (state) => state.categories
+  );
 
   useEffect(() => {
-    dispatch(fetchProductesStart());
-  }, [dispatch]);
+    if (id) {
+      dispatch(fetchCategoryById(id));
+    }
+  }, [dispatch, id]);
+
+  const debouncedSearch = useMemo(
+    () => debounce((value) => setSearchTerm(value), 300),
+    []
+  );
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    debouncedSearch(value);
+  };
+
+  const handleFilterChange = (value) => {
+    setFilter(value);
+  };
 
   useEffect(() => {
-    setFilteredProducts(products);
-  }, [products]);
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   const groupProducts = (products, groupSize) => {
     const grouped = [];
@@ -37,71 +59,98 @@ const Shop = () => {
     return grouped;
   };
 
-  const handleCategoryClick = (categoryId) => {
-    if (categoryId === null) {
-      setFilteredProducts(products);
-    } else {
-      const filtered = products.filter(
-        (product) => product.categoryId === categoryId
+  const filteredProducts = selectedCategory?.Products?.filter((product) =>
+    product.productname.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const sortedProducts = (products) => {
+    if (filter === "newest") {
+      return [...products].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
-      setFilteredProducts(filtered);
+    } else if (filter === "priceLowHigh") {
+      return [...products].sort((a, b) => a.price - b.price);
+    } else if (filter === "priceHighLow") {
+      return [...products].sort((a, b) => b.price - a.price);
+    } else if (filter === "bestSelling") {
+      return [...products].sort((a, b) => b.ProductColors[0]?.sold - a.ProductColors[0]?.sold);
+    } else {
+      return products;
     }
   };
 
-  const images = [
-    { id: 1, image: 'https://cdnv2.tgdd.vn/mwg-static/common/Banner/da/8e/da8eba2f63bb581e77876158d035764f.png' },
-    { id: 2, image: 'https://cdnv2.tgdd.vn/mwg-static/common/Banner/70/07/7007476ab205d1e806b3079d4d3eaceb.png' },
-    { id: 3, image: 'https://cdnv2.tgdd.vn/mwg-static/common/Banner/66/b2/66b2b0735f5c40fdab7da671a4056754.png' },
-    { id: 4, image: 'https://cdnv2.tgdd.vn/mwg-static/common/Banner/9c/80/9c8001c1c10c2482545a84346cb63846.png' },
-  ];
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (status === "failed") {
+    return <div>Error: {error}</div>;
+  }
+
+  const productsToShow = sortedProducts(filteredProducts);
 
   return (
     <Main>
-      {/* <Slideshow images={images} /> */}
-      <CategoryContainer>
-        <CategoryCard onClick={() => handleCategoryClick(null)}>
-          <h3>All Products</h3>
-        </CategoryCard>
-        {categoryList.map((category) => (
-          <CategoryCard key={category.id} onClick={() => handleCategoryClick(category.id)}>
-            <img src={category.imageUrl} alt={category.categoryname} />
-            <h3>{category.categoryname}</h3>
-          </CategoryCard>
-        ))}
-      </CategoryContainer>
-      <div>
-        <Title className="pb-5">
-          <FaApple /> {filteredProducts.length ? 'Filtered Products' : 'All Products'}
-        </Title>
-        <Carousel style={{ padding: '0 150px' }} dots={true}>
-          {groupProducts(filteredProducts, 4).map((group, index) => (
-            <div key={index}>
-              <Row gutter={24}>
-                {group.map((product) => (
-                  <Col span={6} key={product.id}>
-                    <ProductCard>
-                      <Link to={`/detail/${product.id}`}>
-                        <ImgContainer>
-                          <img
-                            src={product.ProductColors?.[0]?.ProductImages?.[0]?.image || 'No Image Available'}
-                            alt={product.productname}
-                          />
-                        </ImgContainer>
-                        <TitleContainer>
-                          <p style={{ marginBottom: '20px' }}>{product.productname}</p>
-                          <p>
-                            <b>{product.price.toLocaleString('vi-VN')}₫</b>
-                          </p>
-                        </TitleContainer>
-                      </Link>
-                    </ProductCard>
-                  </Col>
-                ))}
-              </Row>
-            </div>
-          ))}
-        </Carousel>
-      </div>
+      {selectedCategory && (
+        <>
+          <Title className="pb-5">
+            <FaApple />
+            {selectedCategory.categoryname}
+          </Title>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", gap: "10px", padding: "0px 150px" }}>
+            <Input
+              placeholder="Search products..."
+              onChange={handleSearch}
+              style={{ flex: 1, borderRadius: "8px", padding: "10px", border: "1px solid #ccc" }}
+            />
+            <Select
+              defaultValue=""
+              style={{ width: "200px", borderRadius: "8px", background: "transparent" }}
+              onChange={handleFilterChange}
+              placeholder="Sort by"
+            >
+              <Option value="">Default</Option>
+              <Option value="newest">Mới ra mắt</Option>
+              <Option value="bestSelling">Bán chạy</Option>
+              <Option value="priceLowHigh">Giá thấp đến cao</Option>
+              <Option value="priceHighLow">Giá cao đến thấp</Option>
+            </Select>
+          </div>
+          <Carousel style={{ padding: "0 150px" }} dots={true}>
+            {groupProducts(productsToShow, 4).map((group, index) => (
+              <div key={index}>
+                <Row gutter={24}>
+                  {group.map((product) => (
+                    <Col span={6} key={product.id}>
+                      <ProductCard>
+                        <Link to={`/detail/${product.id}`}>
+                          <ImgContainer>
+                            <img
+                              src={
+                                product.ProductColors?.[0]?.ProductImages?.[0]
+                                  ?.image || "No Image Available"
+                              }
+                              alt={product.productname}
+                            />
+                          </ImgContainer>
+                          <TitleContainer>
+                            <p style={{ marginBottom: "20px" }}>
+                              {product.productname}
+                            </p>
+                            <p>
+                              <b>{product.price.toLocaleString("vi-VN")}₫</b>
+                            </p>
+                          </TitleContainer>
+                        </Link>
+                      </ProductCard>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            ))}
+          </Carousel>
+        </>
+      )}
     </Main>
   );
 };

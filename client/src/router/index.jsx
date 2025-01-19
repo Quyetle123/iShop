@@ -53,7 +53,7 @@ export default createBrowserRouter([
           },
           {
             element: <Shop />,
-            path: "/shop",
+            path: "/:id",
           },
           {
             element: <Detail />,
