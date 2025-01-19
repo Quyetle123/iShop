@@ -32,7 +32,7 @@ function* fetchCategoryByIdSaga(action) {
       axios.get,
       `http://localhost:5000/api/category/${action.payload}`
     );
-    yield put(fetchCategoryByIdSuccess(response.data));
+    yield put(fetchCategoryByIdSuccess(response.data.category[0]));
   } catch (error) {
     yield put(setError(error.message));
   }

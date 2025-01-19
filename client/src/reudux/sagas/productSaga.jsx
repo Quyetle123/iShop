@@ -6,8 +6,6 @@ import {
   deleteProductSuccess,
   fetchProductByCateIdStart,
   fetchProductByCateIdSuccess,
-  fetchProductByCateStart,
-  fetchProductByCateSuccess,
   fetchProductByIdStart,
   fetchProductByIdSuccess,
   fetchProductesStart,
@@ -59,22 +57,12 @@ function* fetchProductByIdSaga(action) {
 
 function* fetchProductByCateIdSaga(action) {
   try {
+    const categoryId = action.payload;
     const response = yield call(
       axios.get,
-      `http://localhost:5000/api/product/productByCateId/${action.payload}`
+      `http://localhost:5000/api/product/productByCate/${categoryId}`
     );
     yield put(fetchProductByCateIdSuccess(response.data));
-  } catch (error) {
-    yield put(productError(error.message));
-  }
-}
-function* fetchProductByCateSaga(action) {
-  try {
-    const response = yield call(
-      axios.get,
-      `http://localhost:5000/api/product/productByCate/${action.payload}`
-    );
-    yield put(fetchProductByCateSuccess(response.data));
   } catch (error) {
     yield put(productError(error.message));
   }
@@ -108,11 +96,10 @@ function* deleteProductSaga(action) {
 }
 
 export default function* productSaga() {
-  yield takeLatest(addProductStart.type, addProductSaga);
-  yield takeLatest(fetchProductesStart.type, fetchProductesSaga);
-  yield takeLatest(fetchProductByIdStart.type, fetchProductByIdSaga);
-  yield takeLatest(fetchProductByCateIdStart.type, fetchProductByCateIdSaga);
-  yield takeLatest(fetchProductByCateStart.type, fetchProductByCateIdSaga);
-  yield takeLatest(updateProductStart.type, updateProductSaga);
-  yield takeLatest(deleteProductStart.type, deleteProductSaga);
+  yield takeLatest(addProductStart, addProductSaga);
+  yield takeLatest(fetchProductesStart, fetchProductesSaga);
+  yield takeLatest(fetchProductByIdStart, fetchProductByIdSaga);
+  yield takeLatest(fetchProductByCateIdStart, fetchProductByCateIdSaga);
+  yield takeLatest(updateProductStart, updateProductSaga);
+  yield takeLatest(deleteProductStart, deleteProductSaga);
 }

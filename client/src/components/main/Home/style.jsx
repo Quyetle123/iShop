@@ -20,6 +20,7 @@ export const CategoryCard = styled.div`
 
   &:hover {
     transform: scale(1.05);
+    cursor: pointer;
   }
 
   img {

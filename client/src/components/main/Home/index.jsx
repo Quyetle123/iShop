@@ -11,12 +11,13 @@ import {
 } from "./style";
 import { FaApple } from "react-icons/fa";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchCategories } from "../../../reudux/slices/categorySlice";
 import { Carousel, Row, Col } from "antd";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
 
   const { categories } = useSelector((state) => state.categories);
   const categoryList = Array.isArray(categories.categories)
@@ -47,7 +48,7 @@ const Home = () => {
       <Slideshow images={images} />
       <CategoryContainer>
         {categoryList.map((category) => (
-          <CategoryCard key={category.id}>
+          <CategoryCard key={category.id} onClick={() => navigate(`/${category.id}`)}>
             <img src={category.imageUrl} alt={category.categoryname} />
             <h3>{category.categoryname}</h3>
           </CategoryCard>
