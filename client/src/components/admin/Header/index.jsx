@@ -103,9 +103,9 @@ const Header = () => {
           }}
         >
           <img
-            src="https://pos.nvncdn.com/4e732c-26/art/artCT/20161123_21IwG4VaWJ8BScUhd2coxILg.png"
+            src="https://pos.nvncdn.com/f2169f-49462/store/20190520_Lmq0Fv79qw3Rvt8AtIDgUOFZ.png"
             alt="Logo"
-            style={{ maxHeight: "100%", maxWidth: "80%" }}
+            style={{ maxHeight: "80%", maxWidth: "50%" }}
           />
         </div>
         <Menu

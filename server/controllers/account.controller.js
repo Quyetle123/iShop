@@ -45,9 +45,9 @@ class AuthController {
   }
 
   static async login(req, res) {
-    const { username, password } = req.body;
+    const { phoneNumber, password } = req.body;
     try {
-      const account = await Account.findOne({ where: { username } });
+      const account = await Account.findOne({ where: { phoneNumber } });
       if (!account || !(await bcrypt.compare(password, account.password))) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
@@ -56,6 +56,29 @@ class AuthController {
         token,
         account: {
           id: account.id,
+          phoneNumber: account.phoneNumber,
+          username: account.username,
+          email: account.email,
+          role: account.role,
+          city: account.city,
+          address: account.address,
+        },
+      });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async loginWithGoogle(req, res) {
+    const { email } = req.body;
+    try {
+      const account = await Account.findOne({ where: { email } });
+      const token = AuthController.generateToken(account);
+      res.status(201).json({
+        token,
+        account: {
+          id: account.id,
+          phoneNumber: account.phoneNumber,
           username: account.username,
           email: account.email,
           role: account.role,

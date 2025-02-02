@@ -1,14 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
+import {getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth"
 import { Form, Input, Button, Checkbox, Typography, Space } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginStart } from "../../reudux/slices/authSlice";
+import { loginStart, loginWithGoogleStart } from "../../reudux/slices/authSlice";
 import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { role } = useSelector((state) => state.auth);
@@ -16,7 +17,7 @@ function Login() {
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
-    dispatch(loginStart({ username, password }));
+    dispatch(loginStart({ phoneNumber, password }));
   };
 
   useEffect(() => {
@@ -26,6 +27,19 @@ function Login() {
       navigate("/admin");
     }
   }, [role, navigate]);
+
+  const auth = getAuth();
+
+  const handleLoginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const email = result.user.email;
+      dispatch(loginWithGoogleStart({email}))
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+  }
 
   return (
     <div
@@ -53,13 +67,13 @@ function Login() {
         </Title>
         <Form layout="vertical" onFinish={handleSubmit}>
           <Form.Item
-            label="Tên đăng nhập"
-            name="username"
-            rules={[{ required: true, message: "Vui lòng nhập tên đăng nhập!" }]}
+            label="Số điện thoại"
+            name="phoneNumber"
+            rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}
           >
             <Input
-              placeholder="Tên đăng nhập"
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Số điện thoại"
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </Form.Item>
           <Form.Item
@@ -114,6 +128,7 @@ function Login() {
               Đăng nhập bằng Facebook
             </Button>
             <Button
+              onClick={handleLoginWithGoogle}
               icon={<GoogleOutlined />}
               style={{
                 backgroundColor: "#db4437",
