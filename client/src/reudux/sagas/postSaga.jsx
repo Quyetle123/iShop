@@ -3,6 +3,9 @@ import {
   addPostError,
   addPostStart,
   addPostSuccess,
+  deletePostError,
+  deletePostStart,
+  deletePostSuccess,
   fetchPostByIdError,
   fetchPostByIdStart,
   fetchPostByIdSuccess,
@@ -19,7 +22,7 @@ function* addPostSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/post/addPost",
+      `${import.meta.env.VITE_LOCALHOST}/post/addPost`,
       action.payload
     );
     yield put(addPostSuccess(response.data));
@@ -30,7 +33,10 @@ function* addPostSaga(action) {
 
 function* fetchPostsSaga() {
   try {
-    const response = yield call(axios.get, "http://localhost:5000/api/post");
+    const response = yield call(
+      axios.get,
+      `${import.meta.env.VITE_LOCALHOST}/post`
+    );
     yield put(fetchPostsSuccess(response.data));
   } catch (error) {
     yield put(fetchPostsError(error.message));
@@ -39,20 +45,40 @@ function* fetchPostsSaga() {
 
 function* fetchPostByIdSaga(action) {
   try {
-    const response = yield call(axios.get, `http://localhost:5000/api/post/${action.payload}`);
+    const response = yield call(
+      axios.get,
+      `${import.meta.env.VITE_LOCALHOST}/post/${action.payload}`
+    );
     yield put(fetchPostByIdSuccess(response.data));
   } catch (error) {
-    yield put(fetchPostByIdError(error.message))
+    yield put(fetchPostByIdError(error.message));
   }
 }
 
 function* updatePostSaga(action) {
   try {
-    yield call(axios.put, `http://localhost:5000/api/post/updatePost/${action.payload.id}`, action.payload);
+    yield call(
+      axios.put,
+      `${import.meta.env.VITE_LOCALHOST}/post/updatePost/${action.payload.id}`,
+      action.payload
+    );
     yield put(updatePostSuccess());
     yield put(fetchPostsStart());
   } catch (error) {
-    yield put(updatePostError(error.message))
+    yield put(updatePostError(error.message));
+  }
+}
+
+function* deletePostSaga(action) {
+  try {
+    yield call(
+      axios.delete,
+      `${import.meta.env.VITE_LOCALHOST}/post/deletePost/${action.payload}`
+    );
+    yield put(deletePostSuccess());
+    yield put(fetchPostsStart());
+  } catch (error) {
+    yield put(deletePostError(error.message));
   }
 }
 
@@ -61,4 +87,5 @@ export default function* postSaga() {
   yield takeLatest(fetchPostsStart, fetchPostsSaga);
   yield takeLatest(fetchPostByIdStart, fetchPostByIdSaga);
   yield takeLatest(updatePostStart, updatePostSaga);
+  yield takeLatest(deletePostStart, deletePostSaga);
 }

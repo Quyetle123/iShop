@@ -57,6 +57,16 @@ const postSilce = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    deletePostStart(state) {
+      state.loading = true;
+    },
+    deletePostSuccess(state) {
+      state.loading = false;
+    },
+    deletePostError(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -72,7 +82,10 @@ export const {
   fetchPostByIdError,
   updatePostStart,
   updatePostSuccess,
-  updatePostError
+  updatePostError,
+  deletePostStart,
+  deletePostSuccess,
+  deletePostError,
 } = postSilce.actions;
 
 export default postSilce.reducer;

@@ -19,7 +19,7 @@ function* addOrderSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/order/addOrder",
+      `${import.meta.env.VITE_LOCALHOST}/order/addOrder`,
       action.payload
     );
     yield put(addOrderSuccess(response.data));
@@ -32,7 +32,7 @@ function* getOrderSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `http://localhost:5000/api/order/getOrderByAccountid/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/order/getOrderByAccountid/${action.payload}`
     );
     yield put(getOrderSuccess(response.data));
   } catch (error) {
@@ -44,7 +44,7 @@ function* getAllOrderSaga() {
   try {
     const response = yield call(
       axios.get,
-      `http://localhost:5000/api/order/getAllOrder`
+      `${import.meta.env.VITE_LOCALHOST}/order/getAllOrder`
     );
     yield put(getAllOrderSuccess(response.data));
   } catch (error) {
@@ -56,7 +56,7 @@ function* updateStatusSaga(action) {
   try {
     yield call(
       axios.put,
-      `http://localhost:5000/api/order/updateStatusOrder/${action.payload.id}`,
+      `${import.meta.env.VITE_LOCALHOST}/order/updateStatusOrder/${action.payload.id}`,
       action.payload
     );
     yield put(updateStatusSuccess());

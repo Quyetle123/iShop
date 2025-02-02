@@ -34,9 +34,10 @@ const productSlice = createSlice({
       state.loading = false;
       state.selectedProduct = action.payload;
     },
-    fetchProductByCateIdStart(state) {
+    fetchProductByCateIdStart(state, action) {
       state.loading = true;
       state.error = null;
+      state.categoryId = action.payload;
     },
     fetchProductByCateIdSuccess(state, action) {
       state.loading = false;

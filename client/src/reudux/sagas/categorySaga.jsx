@@ -18,8 +18,9 @@ function* fetchCategoriesSaga() {
   try {
     const response = yield call(
       axios.get,
-      "http://localhost:5000/api/category/allCategories"
+      `${import.meta.env.VITE_LOCALHOST}/category/allCategories`
     );
+    console.log(import.meta.env.VITE_LOCALHOST)
     yield put(fetchCategoriesSuccess(response.data));
   } catch (error) {
     yield put(setError(error.message));
@@ -30,9 +31,9 @@ function* fetchCategoryByIdSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `http://localhost:5000/api/category/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/category/${action.payload}`
     );
-    yield put(fetchCategoryByIdSuccess(response.data));
+    yield put(fetchCategoryByIdSuccess(response.data.category[0]));
   } catch (error) {
     yield put(setError(error.message));
   }
@@ -42,7 +43,7 @@ function* addCategorySaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/category/addCategory",
+      `${import.meta.env.VITE_LOCALHOST}/category/addCategory`,
       action.payload
     );
     yield put(addCategorySuccess(response.data));
@@ -55,7 +56,7 @@ function* updateCategorySaga(action) {
   try {
     yield call(
       axios.put,
-      `http://localhost:5000/api/category/updateCategory/${action.payload.id}`,
+      `${import.meta.env.VITE_LOCALHOST}/category/updateCategory/${action.payload.id}`,
       action.payload
     );
     yield put(updateCategorySuccess(action.payload));
@@ -68,7 +69,7 @@ function* deleteCategorySaga(action) {
   try {
     yield call(
       axios.delete,
-      `http://localhost:5000/api/category/deleteCategory/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/category/deleteCategory/${action.payload}`
     );
     yield put(deleteCategorySuccess());
     yield put(fetchCategories());

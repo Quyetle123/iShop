@@ -10,6 +10,44 @@ export const CategoryContainer = styled.div`
   padding: 50px 150px;
 `;
 
+export const VoucherContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 50px 150px;
+`;
+
+export const VoucherCard = styled.div`
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 1px 1px 10px #333;
+  width: 24%;
+  height: 140px;
+  display: flex;
+`;
+
+export const VoucherAside = styled.div`
+  width: 25%;
+  background-color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const VoucherContent = styled.div`
+  width: 75%;
+  background-color: #fff;
+  padding: 10px;
+`;
+
+export const VoucherDescription = styled.p`
+  font-weight: bold;
+  color: #333;
+`
+
+export const VoucherP = styled.p`
+  font-size: 13px;
+`
+
 export const CategoryCard = styled.div`
   background-color: #2c2c2e;
   border-radius: 10px;
@@ -20,6 +58,7 @@ export const CategoryCard = styled.div`
 
   &:hover {
     transform: scale(1.05);
+    cursor: pointer;
   }
 
   img {

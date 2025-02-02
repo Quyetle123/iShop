@@ -3,20 +3,29 @@ import Slideshow from "../slideshow";
 import {
   CategoryCard,
   CategoryContainer,
+  VoucherContainer,
   ImgContainer,
   Main,
   ProductCard,
   Title,
   TitleContainer,
+  VoucherCard,
+  VoucherAside,
+  VoucherContent,
+  VoucherDescription,
+  VoucherP,
 } from "./style";
-import { FaApple } from "react-icons/fa";
+import { FaApple, FaShoppingCart, FaClock } from "react-icons/fa";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchCategories } from "../../../reudux/slices/categorySlice";
 import { Carousel, Row, Col } from "antd";
+import { fetchVourchersStart } from "../../../reudux/slices/vourcherSlice";
+import dayjs from "dayjs";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
 
   const { categories } = useSelector((state) => state.categories);
   const categoryList = Array.isArray(categories.categories)
@@ -25,6 +34,17 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(fetchCategories());
+  }, [dispatch]);
+
+  const { vourchers } = useSelector((state) => state.vourchers);
+  const voucherList = Array.isArray(vourchers.vourchers)
+    ? vourchers.vourchers
+    : [];
+
+  console.log(voucherList)
+
+  useEffect(() => {
+    dispatch(fetchVourchersStart());
   }, [dispatch]);
 
   const groupProducts = (products, groupSize) => {
@@ -36,18 +56,56 @@ const Home = () => {
   };
 
   const images = [
-    {id: 1, image: "https://cdnv2.tgdd.vn/mwg-static/common/Banner/da/8e/da8eba2f63bb581e77876158d035764f.png"},
-    {id: 2, image: "https://cdnv2.tgdd.vn/mwg-static/common/Banner/70/07/7007476ab205d1e806b3079d4d3eaceb.png"},
-    {id: 3, image: "https://cdnv2.tgdd.vn/mwg-static/common/Banner/66/b2/66b2b0735f5c40fdab7da671a4056754.png"},
-    {id: 4, image: "https://cdnv2.tgdd.vn/mwg-static/common/Banner/9c/80/9c8001c1c10c2482545a84346cb63846.png"},
+    {
+      id: 1,
+      image:
+        "https://cdnv2.tgdd.vn/mwg-static/common/Banner/da/8e/da8eba2f63bb581e77876158d035764f.png",
+    },
+    {
+      id: 2,
+      image:
+        "https://cdnv2.tgdd.vn/mwg-static/common/Banner/70/07/7007476ab205d1e806b3079d4d3eaceb.png",
+    },
+    {
+      id: 3,
+      image:
+        "https://cdnv2.tgdd.vn/mwg-static/common/Banner/66/b2/66b2b0735f5c40fdab7da671a4056754.png",
+    },
+    {
+      id: 4,
+      image:
+        "https://cdnv2.tgdd.vn/mwg-static/common/Banner/9c/80/9c8001c1c10c2482545a84346cb63846.png",
+    },
   ];
 
   return (
     <Main>
       <Slideshow images={images} />
+      <VoucherContainer>
+        {voucherList.slice(0, 4).map((voucher) => (
+          <VoucherCard key={voucher.id}>
+            <VoucherAside>
+              <FaShoppingCart className="text-[#fff] text-[25px]" />
+            </VoucherAside>
+            <VoucherContent>
+              <VoucherDescription>{voucher.description}</VoucherDescription>
+              <div className="flex items-center mt-2">
+                <FaClock className="text-[20px] mr-1" />{" "}
+                <VoucherP>
+                  Hiệu lực:{" "}
+                  {dayjs(voucher.valid_from).format("DD/MM/YYYY HH:mm")} -{" "}
+                  {dayjs(voucher.valid_to).format("DD/MM/YYYY HH:mm")}
+                </VoucherP>
+              </div>
+              {voucher.VoucherProducts.length >= 1 &&<VoucherP><Link to={`/detail/${voucher.VoucherProducts[0].product_id}`}>Xem sản phẩm</Link></VoucherP>}
+            </VoucherContent>
+          </VoucherCard>
+        ))}
+      </VoucherContainer>
+
       <CategoryContainer>
         {categoryList.map((category) => (
-          <CategoryCard key={category.id}>
+          <CategoryCard key={category.id} onClick={() => navigate(`/${category.id}`)}>
             <img src={category.imageUrl} alt={category.categoryname} />
             <h3>{category.categoryname}</h3>
           </CategoryCard>

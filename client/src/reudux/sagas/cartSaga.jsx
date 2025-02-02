@@ -15,14 +15,14 @@ import {
   updateQuantitySuccess,
 } from "../slices/cartSlice";
 import { getToken } from "../../utils/token";
-
+                                                                                                                                                                       
 const token = getToken();
 
 function* addCartSaga(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/cart/addCart",
+      `${import.meta.env.VITE_LOCALHOST}/cart/addCart`,
       action.payload
     );
     yield put(addCartSuccess(response.data));
@@ -35,7 +35,7 @@ function* fetchCartByAccountidSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `http://localhost:5000/api/cart/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/cart/${action.payload}`
     );
     yield put(fetchCartByAccountidSuccess(response.data));
   } catch (error) {
@@ -47,7 +47,7 @@ function* updateQuantitySaga(action) {
   try {
     yield call(
       axios.put,
-      `http://localhost:5000/api/cart/updateQuantity/${action.payload.id}`,
+      `${import.meta.env.VITE_LOCALHOST}/cart/updateQuantity/${action.payload.id}`,
       action.payload
     );
     yield put(updateQuantitySuccess());
@@ -61,7 +61,7 @@ function* deleteCartSaga(action) {
   try {
     yield call(
       axios.delete,
-      `http://localhost:5000/api/cart/deleteCart/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/cart/deleteCart/${action.payload}`
     );
     yield put(deleteCartSucess());
     yield put(fetchCartByAccountidStart(token.id));

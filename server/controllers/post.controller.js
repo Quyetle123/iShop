@@ -1,4 +1,4 @@
-import Post from "../models/Post.js";
+import { Post } from "../models/index.js";
 
 class PostController {
   static async addPost(req, res) {
@@ -47,6 +47,21 @@ class PostController {
       }
     } catch (error) {
       res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async deletePost(req, res) {
+    const { id } = req.params;
+    try {
+      const post = await Post.findByPk(id);
+      if (post) {
+        await post.destroy();
+        res.status(200).json({ message: "Post deleted successfully"});
+      } else {
+        res.status(404).json({ message: "Post not found"});
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message});
     }
   }
 }
