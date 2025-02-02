@@ -2,6 +2,9 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 import {
+  fetchAccountFailure,
+  fetchAccountsStart,
+  fetchAccountsSuccess,
   loginFailure,
   loginStart,
   loginSuccess,
@@ -14,7 +17,7 @@ function* handleRegister(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/auth/register",
+      `${import.meta.env.VITE_LOCALHOST}/auth/register`,
       action.payload
     );
     if (response && response.data) {
@@ -36,7 +39,7 @@ function* handleLogin(action) {
   try {
     const response = yield call(
       axios.post,
-      "http://localhost:5000/api/auth/login",
+      `${import.meta.env.VITE_LOCALHOST}/auth/login`,
       action.payload
     );
     if (response) {
@@ -54,7 +57,20 @@ function* handleLogin(action) {
   }
 }
 
+function* getAccountsSaga() {
+  try {
+    const response = yield call(
+      axios.get,
+      `${import.meta.env.VITE_LOCALHOST}/auth`
+    );
+    yield put(fetchAccountsSuccess(response.data));
+  } catch (error) {
+    yield put(fetchAccountFailure(error.message));
+  }
+}
+
 export default function* authSaga() {
-  yield takeLatest(registerStart.type, handleRegister);
-  yield takeLatest(loginStart.type, handleLogin);
+  yield takeLatest(registerStart, handleRegister);
+  yield takeLatest(loginStart, handleLogin);
+  yield takeLatest(fetchAccountsStart, getAccountsSaga);
 }

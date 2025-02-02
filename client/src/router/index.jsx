@@ -24,10 +24,13 @@ import UserLoginRoutes from "./userLoginRoutes.jsx";
 import ColorManager from "../components/admin/ColorManager/index.jsx";
 import Login from "../pages/auth/login.jsx";
 import Register from "../pages/auth/resgister.jsx";
+import Shop from "../components/main/FilterCategory/index.jsx";
 import AddPost from "../components/admin/AddPost/index.jsx";
 import AllPost from "../components/admin/AllPosts/index.jsx";
 import UpdatePost from "../components/admin/UpdatePost/index.jsx";
 import WishList from "../components/main/Wishlist/index.jsx";
+import AddVourcher from "../components/admin/AddVourcher/index.jsx";
+import AllVourcher from "../components/admin/AllVourcher/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -48,6 +51,10 @@ export default createBrowserRouter([
           {
             element: <Home />,
             path: "/",
+          },
+          {
+            element: <Shop />,
+            path: "/:id",
           },
           {
             element: <Detail />,
@@ -150,6 +157,14 @@ export default createBrowserRouter([
           {
             element: <UpdatePost />,
             path: "/admin/update-post/:id"
+          },
+          {
+            element: <AddVourcher />,
+            path: "/admin/add-vourcher"
+          },
+          {
+            element: <AllVourcher />,
+            path: "/admin/all-vourchers"
           }
         ],
       },

@@ -5,6 +5,7 @@ const categorySlice = createSlice({
   initialState: {
     categories: [],
     selectedCategory: null,
+    searchResults: [],
     loading: false,
     error: null,
   },

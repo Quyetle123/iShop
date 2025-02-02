@@ -50,6 +50,18 @@ class categoryController {
         },
         include: {
           model: Product,
+          include: {
+            model: ProductColor,
+            separate: true,
+            order: [["createdAt", "ASC"]],
+            include: [
+              {
+                model: ProductImage,
+                separate: true,
+                order: [["createdAt", "ASC"]],
+              },
+            ],
+          },
         },
       });
       if (category) {

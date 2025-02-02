@@ -1,7 +1,7 @@
 import { Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPostsStart } from "../../../reudux/slices/postSlice";
+import { deletePostStart, fetchPostsStart } from "../../../reudux/slices/postSlice";
 import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
@@ -26,6 +26,11 @@ const AllPost = () => {
           <FaEdit className="text-[20px] cursor-pointer" />
         </Link>
         <MdDeleteOutline
+          onClick={() => {
+            if (window.confirm("Bạn thật sự muốn xóa danh mục này ?")) {
+              dispatch(deletePostStart(post.id))
+            }
+          }}
           className="ml-[10px] text-[20px] cursor-pointer hover:text-red-400"
           type="primary"
           danger

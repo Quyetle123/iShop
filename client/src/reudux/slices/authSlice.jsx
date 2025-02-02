@@ -52,6 +52,18 @@ const authSlice = createSlice({
             state.isLoading = false,
             state.error = action.payload
         },
+        fetchAccountsStart(state) {
+            state.loading = true;
+            state.error = null
+        },
+        fetchAccountsSuccess(state, action) {
+            state.loading = false;
+            state.accounts = action.payload;
+        },
+        fetchAccountFailure(state, action) {
+            state.loading = false;
+            state.error = action.payload;
+        }
     } 
 })
 
@@ -64,7 +76,10 @@ export const {
     loginFailure,
     logoutStart,
     logoutSuccess,
-    logoutFailure
+    logoutFailure,
+    fetchAccountsStart,
+    fetchAccountsSuccess,
+    fetchAccountFailure
 } = authSlice.actions
 
 export default authSlice.reducer
