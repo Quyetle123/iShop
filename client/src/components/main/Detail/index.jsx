@@ -20,6 +20,7 @@ import {
   fetchCartByAccountidStart,
   updateQuantityStart,
 } from "../../../reudux/slices/cartSlice";
+import {addWishlistStart} from "../../../reudux/slices/wishlistSlice"
 import { getToken } from "../../../utils/token";
 import dayjs from "dayjs";
 import Slideshow from "../slideshow";
@@ -84,6 +85,11 @@ const Detail = () => {
       setLoading(false);
     }
   };
+
+  const handleAddWishList = () => {
+    console.log('hi');
+    dispatch(addWishlistStart({accountid: token.id, productColorid: product.ProductColors[apiColor].id}))
+  }
 
   const renderStars = (rating) => {
     const stars = [];
@@ -156,7 +162,7 @@ const Detail = () => {
           >
             Hết hàng
           </button>
-          <button>Thêm vào yêu thích</button>
+          <button onClick={() => handleAddWishList()}>Thêm vào yêu thích</button>
         </DetailArticle>
       </DetailContainer>
       <CommentSection>

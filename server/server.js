@@ -19,6 +19,8 @@ import branchRouter from "./routes/branch.route.js";
 import colorRouter from "./routes/color.route.js";
 import productColorRouter from "./routes/productColor.route.js";
 import productImageRouter from "./routes/productImage.route.js";
+import postRouter from "./routes/post.route.js"
+import wishListRouter from "./routes/wishlist.route.js"
 import postRouter from "./routes/post.route.js";
 import VourcherRouter from "./routes/vourcher.route.js";
 import VoucherAccount from "./routes/voucherAccount.route.js";
@@ -55,6 +57,7 @@ app.use("/api/color", colorRouter);
 app.use("/api/productColor", productColorRouter);
 app.use("/api/productImage", productImageRouter);
 app.use("/api/post", postRouter)
+app.use("/api/wishList", wishListRouter)
 app.use("/api/vourcher", VourcherRouter);
 app.use("/api/voucherAccount", VoucherAccount);
 app.use("/api/voucherProduct", VoucherProduct);
