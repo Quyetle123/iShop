@@ -28,6 +28,7 @@ import Shop from "../components/main/FilterCategory/index.jsx";
 import AddPost from "../components/admin/AddPost/index.jsx";
 import AllPost from "../components/admin/AllPosts/index.jsx";
 import UpdatePost from "../components/admin/UpdatePost/index.jsx";
+import WishList from "../components/main/Wishlist/index.jsx";
 import AddVourcher from "../components/admin/AddVourcher/index.jsx";
 import AllVourcher from "../components/admin/AllVourcher/index.jsx";
 
@@ -66,6 +67,14 @@ export default createBrowserRouter([
               </UserLoginRoutes>
             ),
             path: "/cart",
+          },
+          {
+            element: (
+              <UserLoginRoutes>
+                <WishList />
+              </UserLoginRoutes>
+            ),
+            path: "/wishlist",
           },
           {
             element: (

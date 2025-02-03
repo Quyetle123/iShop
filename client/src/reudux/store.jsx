@@ -16,6 +16,7 @@ import colorSlice from "./slices/colorSlice.jsx";
 import productColorSlice from "./slices/productColorSlice.jsx";
 import productImageSlice from "./slices/productImageSlice.jsx";
 import postSlice from "./slices/postSlice.jsx";
+import wishlistSlice from "./slices/wishlistSlice.jsx"
 import vourcherSlice from "./slices/vourcherSlice.jsx";
 import voucherAccountSlice from "./slices/voucherAccountSlice.jsx";
 import voucherProductSlice from "./slices/voucherProductSlice.jsx";
@@ -41,6 +42,7 @@ export const store = configureStore({
     productColors: productColorSlice,
     productImages: productImageSlice,
     posts: postSlice,
+    wishlists: wishlistSlice,
     vourchers: vourcherSlice,
     voucherAccounts: voucherAccountSlice,
     voucherProducts: voucherProductSlice,
