@@ -12,7 +12,7 @@ const Account = sequelize.define("Account", {
     allowNull: false,
   },
   phoneNumber: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: true,
     unique: true
   },

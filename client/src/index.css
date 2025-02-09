@@ -5,3 +5,19 @@
 :where(.css-dev-only-do-not-override-1hpnbz2).ant-carousel .slick-dots-bottom {
     bottom: -15px;
 }
+
+/* .ant-card-head-title{
+    color: #fff;
+}
+
+.ant-table-thead{
+    background-color: #333;
+}
+
+.ant-table-cell{
+    background-color: #333;
+}
+
+:where(.css-dev-only-do-not-override-1hpnbz2).ant-table-wrapper .ant-table-tbody .ant-table-row > .ant-table-cell-row-hover{
+    background-color: #333;
+} */
