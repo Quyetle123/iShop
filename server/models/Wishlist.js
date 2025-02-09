@@ -29,10 +29,10 @@ const Wishlist = sequelize.define(
   {
     tableName: "wishlist",
     timestamps: true,
-    paranoid: true, // Kích hoạt soft delete
+    paranoid: true,
     createdAt: "createdAt",
     updatedAt: "updatedAt",
-    deletedAt: "deletedAt", // Cột deletedAt dùng để lưu xóa mềm
+    deletedAt: "deletedAt",
   }
 );
 

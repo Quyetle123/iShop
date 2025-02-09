@@ -31,6 +31,7 @@ import UpdatePost from "../components/admin/UpdatePost/index.jsx";
 import WishList from "../components/main/Wishlist/index.jsx";
 import AddVourcher from "../components/admin/AddVourcher/index.jsx";
 import AllVourcher from "../components/admin/AllVourcher/index.jsx";
+import CheckoutPage from "../components/main/Pay/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -75,6 +76,14 @@ export default createBrowserRouter([
               </UserLoginRoutes>
             ),
             path: "/wishlist",
+          },
+          {
+            element: (
+              <UserLoginRoutes>
+                <CheckoutPage />
+              </UserLoginRoutes>
+            ),
+            path: "/pay",
           },
           {
             element: (

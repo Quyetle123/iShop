@@ -97,7 +97,7 @@ export {
   Color,
   ProductColor,
   ProductImage,
-  Wishlist
+  Wishlist,
   Post,
   Vourcher,
   VoucherAccount,

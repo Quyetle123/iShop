@@ -19,7 +19,6 @@ import branchRouter from "./routes/branch.route.js";
 import colorRouter from "./routes/color.route.js";
 import productColorRouter from "./routes/productColor.route.js";
 import productImageRouter from "./routes/productImage.route.js";
-import postRouter from "./routes/post.route.js"
 import wishListRouter from "./routes/wishlist.route.js"
 import postRouter from "./routes/post.route.js";
 import VourcherRouter from "./routes/vourcher.route.js";

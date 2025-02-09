@@ -125,7 +125,7 @@ const Header = () => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "15px 100px",
+        padding: "7px 150px",
         backgroundColor: "#1d1d1d",
         borderBottom: "2px solid #282828",
         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
@@ -133,9 +133,9 @@ const Header = () => {
     >
       <Link to="/">
         <img
-          src="https://pos.nvncdn.com/4e732c-26/art/artCT/20161123_21IwG4VaWJ8BScUhd2coxILg.png"
+          src="https://pos.nvncdn.com/f2169f-49462/store/20190520_Lmq0Fv79qw3Rvt8AtIDgUOFZ.png"
           alt="Logo"
-          style={{ height: "50px" }}
+          style={{ height: "25px" }}
         />
       </Link>
 
