@@ -20,6 +20,7 @@ import voucherAccountSaga from "./voucherAccountSaga.jsx";
 import voucherUsageSaga from "./voucherUsageSaga.jsx";
 import voucherProductSaga from "./voucherProductSaga.jsx";
 import addressSaga from "./addressSaga.jsx";
+import draftOderSaga from ".draftOderSaga.jsx"
 
 export default function* rootSaga() {
   yield all([
@@ -43,6 +44,7 @@ export default function* rootSaga() {
     voucherAccountSaga(),
     voucherProductSaga(),
     voucherUsageSaga(),
-    addressSaga()
+    addressSaga(),
+    draftOderSaga()
   ]);
 }
