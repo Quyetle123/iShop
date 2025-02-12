@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { fetchWishlistByAccountidStart } from "../../../reudux/slices/wishlistSlice";
+import { fetchWishlistByAccountidStart } from "../../../redux/slices/wishlistSlice";
 import { getToken } from "../../../utils/token";
 import { Col, Row } from "antd";
 import { ImgContainer, ProductCard, TitleContainer } from "../Home/style";

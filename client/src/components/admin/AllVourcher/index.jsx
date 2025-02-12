@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import dayjs from "dayjs";
 import { MdDeleteOutline } from "react-icons/md";
-import { fetchVourchersStart } from "../../../reudux/slices/vourcherSlice";
+import { fetchVourchersStart } from "../../../redux/slices/vourcherSlice";
 const AllVourcher = () => {
   const dispatch = useDispatch();
 

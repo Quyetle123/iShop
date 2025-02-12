@@ -18,9 +18,9 @@ import {
 import { FaApple, FaShoppingCart, FaClock } from "react-icons/fa";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchCategories } from "../../../reudux/slices/categorySlice";
+import { fetchCategories } from "../../../redux/slices/categorySlice";
 import { Carousel, Row, Col } from "antd";
-import { fetchVourchersStart } from "../../../reudux/slices/vourcherSlice";
+import { fetchVourchersStart } from "../../../redux/slices/vourcherSlice";
 import dayjs from "dayjs";
 
 const Home = () => {

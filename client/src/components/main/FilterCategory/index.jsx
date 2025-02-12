@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { FaApple } from "react-icons/fa";
 import { Carousel, Row, Col, Input, Select } from "antd";
-import { fetchCategoryById } from "../../../reudux/slices/categorySlice";
+import { fetchCategoryById } from "../../../redux/slices/categorySlice";
 import {
   ImgContainer,
   Main,

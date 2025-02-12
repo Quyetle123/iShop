@@ -1,7 +1,7 @@
 import { Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deletePostStart, fetchPostsStart } from "../../../reudux/slices/postSlice";
+import { deletePostStart, fetchPostsStart } from "../../../redux/slices/postSlice";
 import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";

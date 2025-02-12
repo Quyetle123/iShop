@@ -3,7 +3,7 @@ import * as S from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getToken } from "../../../utils/token";
-import { getOrderStart } from "../../../reudux/slices/orderSlice";
+import { getOrderStart } from "../../../redux/slices/orderSlice";
 import { Link } from "react-router-dom";
 
 const { Title } = Typography;
