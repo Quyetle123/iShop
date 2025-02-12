@@ -3,7 +3,7 @@ import {getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth"
 import { Form, Input, Button, Checkbox, Typography, Space } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginStart, loginWithGoogleStart } from "../../reudux/slices/authSlice";
+import { loginStart, loginWithGoogleStart } from "../../redux/slices/authSlice";
 import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;

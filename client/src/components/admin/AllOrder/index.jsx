@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllOrderStart,
   updateStatusStart,
-} from "../../../reudux/slices/orderSlice.jsx";
+} from "../../../redux/slices/orderSlice.jsx";
 
 const { Option } = Select;
 

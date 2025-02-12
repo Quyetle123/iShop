@@ -7,7 +7,7 @@ import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { uploadImageToFirebase } from "../../../firebase/uploadImage";
 import { useDispatch } from "react-redux";
-import { addPostStart } from "../../../reudux/slices/postSlice";
+import { addPostStart } from "../../../redux/slices/postSlice";
 import { useNavigate } from "react-router-dom";
 
 const AddPost = () => {

@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import * as S from "./style";
 import { Button, Card, Form, Input, message, Select, Steps } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { addStoreStart } from "../../../reudux/slices/storeSlice";
+import { addStoreStart } from "../../../redux/slices/storeSlice";
 import { v4 as uuidv4 } from "uuid";
-import { registerStart } from "../../../reudux/slices/authSlice";
-import { addStoreAccountStart } from "../../../reudux/slices/storeAccountSlice";
-import { fetchAllBranchStart } from "../../../reudux/slices/branchSlice";
+import { registerStart } from "../../../redux/slices/authSlice";
+import { addStoreAccountStart } from "../../../redux/slices/storeAccountSlice";
+import { fetchAllBranchStart } from "../../../redux/slices/branchSlice";
 
 const AddStore = () => {
   const dispatch = useDispatch();

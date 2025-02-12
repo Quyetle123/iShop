@@ -3,9 +3,9 @@ import { Rate, Form, Input, Typography } from "antd";
 import * as S from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { addCommentStart } from "../../../reudux/slices/commentSlice";
+import { addCommentStart } from "../../../redux/slices/commentSlice";
 import { getToken } from "../../../utils/token";
-import { fetchProductColorByIdStart } from "../../../reudux/slices/productColorSlice";
+import { fetchProductColorByIdStart } from "../../../redux/slices/productColorSlice";
 
 const { TextArea } = Input;
 const { Title } = Typography;

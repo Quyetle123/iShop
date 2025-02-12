@@ -9,14 +9,14 @@ import {
   Select,
 } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { registerStart } from "../../reudux/slices/authSlice";
+import { registerStart } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import {
   fetchProvincesStart,
   fetchDistrictsStart,
   fetchWardsStart,
-} from "../../reudux/slices/addressSlice";
+} from "../../redux/slices/addressSlice";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
