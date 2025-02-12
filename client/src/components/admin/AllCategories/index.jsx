@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
-import { deleteCategoryStart, fetchCategories } from "../../reudux/slices/categorySlice";
+import { deleteCategoryStart, fetchCategories } from "../../../reudux/slices/categorySlice";
 import { Table } from "antd";
 
 const AllCategories = () => {
