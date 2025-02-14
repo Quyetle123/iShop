@@ -3,7 +3,10 @@ import TextArea from "antd/es/input/TextArea";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchCategoryById, updateCategoryStart } from "../../../reudux/slices/categorySlice";
+import {
+  fetchCategoryById,
+  updateCategoryStart,
+} from "../../../redux/slices/categorySlice";
 
 const UpdateCategory = () => {
   const { id } = useParams();
@@ -16,7 +19,7 @@ const UpdateCategory = () => {
 
   useEffect(() => {
     dispatch(fetchCategoryById(id));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   useEffect(() => {
@@ -31,12 +34,12 @@ const UpdateCategory = () => {
   const handleSubmit = (values) => {
     const categoryname = values.categoryname;
     const description = values.description;
-    dispatch(updateCategoryStart({id, categoryname, description}))
-    navigate('/admin/allCategories');
+    dispatch(updateCategoryStart({ id, categoryname, description }));
+    navigate("/admin/allCategories");
   };
 
   return (
-    <div style={{ width: "100%", marginTop: '100px' }}>
+    <div style={{ width: "100%", marginTop: "100px" }}>
       <Form
         onFinish={handleSubmit}
         form={formUpdate}

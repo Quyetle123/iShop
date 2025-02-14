@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPostByIdStart,
   updatePostStart,
-} from "../../../reudux/slices/postSlice";
+} from "../../../redux/slices/postSlice";
 import { useNavigate, useParams } from "react-router-dom";
 
 const UpdatePost = () => {
@@ -80,9 +80,9 @@ const UpdatePost = () => {
       await dispatch(
         updatePostStart({ id, title: values.title, content: htmlContent })
       );
-      navigate('/admin/all-posts')
+      navigate("/admin/all-posts");
     } catch (error) {
-      console.error("Error:", error)
+      console.error("Error:", error);
     }
   };
 

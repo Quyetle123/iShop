@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addColorStart,
   getAllColorStart,
-} from "../../../reudux/slices/colorSlice";
+} from "../../../redux/slices/colorSlice";
 
 const ColorManager = () => {
   const dispatch = useDispatch();

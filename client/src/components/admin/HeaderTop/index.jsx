@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { removeToken } from "../../../utils/token";
 import { Account, HeaderTopContaier, MenuList } from "./style";
 import { useDispatch } from "react-redux";
-import { logoutStart } from "../../../reudux/slices/authSlice";
+import { logoutStart } from "../../../redux/slices/authSlice";
 
 const HeaderTop = () => {
   const dispatch = useDispatch();

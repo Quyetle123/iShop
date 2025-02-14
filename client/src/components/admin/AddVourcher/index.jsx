@@ -19,11 +19,11 @@ import { DatePicker } from "antd";
 import { useEffect, useState } from "react";
 import { uploadImageToFirebase } from "../../../firebase/uploadImage";
 import { useDispatch, useSelector } from "react-redux";
-import { addVourcherStart } from "../../../reudux/slices/vourcherSlice";
-import { fetchProductesStart } from "../../../reudux/slices/productSlice";
-import { fetchAccountsStart } from "../../../reudux/slices/authSlice";
-import { addVoucherAccountStart } from "../../../reudux/slices/voucherAccountSlice";
-import { addVoucherProductStart } from "../../../reudux/slices/voucherProductSlice";
+import { addVourcherStart } from "../../../redux/slices/vourcherSlice";
+import { fetchProductesStart } from "../../../redux/slices/productSlice";
+import { fetchAccountsStart } from "../../../redux/slices/authSlice";
+import { addVoucherAccountStart } from "../../../redux/slices/voucherAccountSlice";
+import { addVoucherProductStart } from "../../../redux/slices/voucherProductSlice";
 const { RangePicker } = DatePicker;
 
 const AddVourcher = () => {

@@ -9,10 +9,10 @@ import {
   deleteCartStart,
   fetchCartByAccountidStart,
   updateQuantityStart,
-} from "../../../reudux/slices/cartSlice";
+} from "../../../redux/slices/cartSlice";
 import { getToken } from "../../../utils/token";
-import { addOrderStart } from "../../../reudux/slices/orderSlice";
-import { addOrderDetailStart } from "../../../reudux/slices/orderDetailSlice";
+import { addOrderStart } from "../../../redux/slices/orderSlice";
+import { addOrderDetailStart } from "../../../redux/slices/orderDetailSlice";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 
@@ -40,7 +40,6 @@ const Cart = () => {
 
   useEffect(() => {
     dispatch(fetchCartByAccountidStart(token.id));
-    
   }, [dispatch, token.id]);
 
   const [totalArr, setTotalArr] = useState([]);

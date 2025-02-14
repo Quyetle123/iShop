@@ -10,7 +10,7 @@ import { getToken, removeToken } from "../../../utils/token";
 import {
   deleteNotifyStart,
   fetchNotifyStart,
-} from "../../../reudux/slices/notifySlice";
+} from "../../../redux/slices/notifySlice";
 
 const socket = io("http://localhost:5000");
 

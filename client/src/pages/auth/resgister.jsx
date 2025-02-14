@@ -9,14 +9,14 @@ import {
   Select,
 } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { registerStart } from "../../reudux/slices/authSlice";
+import { registerStart } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import {
   fetchProvincesStart,
   fetchDistrictsStart,
   fetchWardsStart,
-} from "../../reudux/slices/addressSlice";
+} from "../../redux/slices/addressSlice";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -51,8 +51,17 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (values) => {
-    const { username, phoneNumber, password, email, city, district, ward, address, agree } =
-      values;
+    const {
+      username,
+      phoneNumber,
+      password,
+      email,
+      city,
+      district,
+      ward,
+      address,
+      agree,
+    } = values;
 
     if (!agree) {
       message.warning("Vui lòng chấp nhận điều khoản để đăng kí.");
@@ -115,9 +124,7 @@ const Register = () => {
           <Form.Item
             label="Họ và tên"
             name="username"
-            rules={[
-              { required: true, message: "Vui lòng nhập họ và tên!" },
-            ]}
+            rules={[{ required: true, message: "Vui lòng nhập họ và tên!" }]}
           >
             <Input placeholder="Họ và tên" />
           </Form.Item>
