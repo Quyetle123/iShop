@@ -3,7 +3,7 @@ import TextArea from "antd/es/input/TextArea";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchCategoryById, updateCategoryStart } from "../../reudux/slices/categorySlice";
+import { fetchCategoryById, updateCategoryStart } from "../../../reudux/slices/categorySlice";
 
 const UpdateCategory = () => {
   const { id } = useParams();
