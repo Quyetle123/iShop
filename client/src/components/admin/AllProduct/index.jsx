@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import {
   deleteProductStart,
   fetchProductesStart,
-} from "../../reudux/slices/productSlice";
+} from "../../../reudux/slices/productSlice";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 
