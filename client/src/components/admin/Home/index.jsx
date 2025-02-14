@@ -1,5 +1,15 @@
 /* eslint-disable react/jsx-key */
-import { Card, Avatar, Button, Statistic, Row, Col, List, Tag, DatePicker } from "antd";
+import {
+  Card,
+  Avatar,
+  Button,
+  Statistic,
+  Row,
+  Col,
+  List,
+  Tag,
+  DatePicker,
+} from "antd";
 import {
   CheckCircleOutlined,
   SyncOutlined,
@@ -21,8 +31,8 @@ import {
 } from "chart.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { orderStatisticStart } from "../../../reudux/slices/orderSlice";
-import { productStatisticStart } from "../../../reudux/slices/categorySlice";
+import { orderStatisticStart } from "../../../redux/slices/orderSlice";
+import { productStatisticStart } from "../../../redux/slices/categorySlice";
 import dayjs from "dayjs";
 
 ChartJS.register(
@@ -176,17 +186,17 @@ const AdminHome = () => {
     if (dates) {
       const startMonth = dayjs(dates[0]).month() + 1;
       const endMonth = dayjs(dates[1]).month() + 1;
-      
+
       const filteredLabels = initialData.labels.filter((label, index) => {
         const monthNumber = index + 1;
         return monthNumber >= startMonth && monthNumber <= endMonth;
       });
-      
-      const filteredDatasets = initialData.datasets.map(dataset => ({
+
+      const filteredDatasets = initialData.datasets.map((dataset) => ({
         ...dataset,
-        data: dataset.data.slice(startMonth - 1, endMonth)
+        data: dataset.data.slice(startMonth - 1, endMonth),
       }));
-      
+
       setOrderData({ labels: filteredLabels, datasets: filteredDatasets });
     }
   };

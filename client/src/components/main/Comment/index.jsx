@@ -3,9 +3,9 @@ import { Rate, Form, Input, Typography } from "antd";
 import * as S from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { addCommentStart } from "../../../reudux/slices/commentSlice";
+import { addCommentStart } from "../../../redux/slices/commentSlice";
 import { getToken } from "../../../utils/token";
-import { fetchProductColorByIdStart } from "../../../reudux/slices/productColorSlice";
+import { fetchProductColorByIdStart } from "../../../redux/slices/productColorSlice";
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -22,16 +22,16 @@ const Comment = () => {
   }, [dispatch, productColorid]);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
     if (rating === 0 || comment.trim() === "") {
       alert("Bạn chưa bình luận và đánh giá sản phẩm");
       return;
     }
-    const productid = productComment.productid
-    dispatch(addCommentStart({rating, comment, productid, accountid}))
-    navigate(`/detail/${productid}`)
+    const productid = productComment.productid;
+    dispatch(addCommentStart({ rating, comment, productid, accountid }));
+    navigate(`/detail/${productid}`);
   };
 
   if (!productColor) {
@@ -42,7 +42,10 @@ const Comment = () => {
     <S.ReviewContainer>
       <S.StyledCard>
         <S.ProductInfo>
-          <S.ProductImage src={productComment.ProductImages[0].image} alt="Sản phẩm" />
+          <S.ProductImage
+            src={productComment.ProductImages[0].image}
+            alt="Sản phẩm"
+          />
           <S.ProductDetails>
             <Title level={4}>{productComment.Product.productname}</Title>
             <p>{productComment.Product.description}</p>

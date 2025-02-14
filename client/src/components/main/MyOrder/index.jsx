@@ -3,7 +3,7 @@ import * as S from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getToken } from "../../../utils/token";
-import { getOrderStart } from "../../../reudux/slices/orderSlice";
+import { getOrderStart } from "../../../redux/slices/orderSlice";
 import { Link } from "react-router-dom";
 
 const { Title } = Typography;
@@ -11,7 +11,7 @@ const { Title } = Typography;
 const MyOrder = () => {
   const token = getToken();
   const dispatch = useDispatch();
-  
+
   const { orders } = useSelector((state) => state.orders);
   const orderList = Array.isArray(orders.orders) ? orders.orders : [];
 
@@ -57,7 +57,9 @@ const MyOrder = () => {
       render: (text, record) =>
         status === "Đã giao hàng" ? (
           <Button type="primary" ghost>
-            <Link to={`/comment/${record.productColorid}`}>Đánh giá sản phẩm</Link>
+            <Link to={`/comment/${record.productColorid}`}>
+              Đánh giá sản phẩm
+            </Link>
           </Button>
         ) : null,
     },
@@ -70,7 +72,8 @@ const MyOrder = () => {
         <S.StyledCard title={`Mã số đơn hàng: ${order.id}`} key={order.id}>
           <Space direction="vertical" size="middle" style={{ width: "100%" }}>
             <p>
-              <strong>Tổng tiền:</strong> {order.total.toLocaleString("vi-VN")} ₫
+              <strong>Tổng tiền:</strong> {order.total.toLocaleString("vi-VN")}{" "}
+              ₫
             </p>
             <p>
               <strong>Địa chỉ:</strong> {order.address}, {order.city}
@@ -82,7 +85,7 @@ const MyOrder = () => {
               columns={orderDetailColumns(order.status)}
               dataSource={order.OrderDetails.map((detail) => ({
                 key: detail.id,
-                productImage: detail.ProductColor.ProductImages[0]?.image || "", 
+                productImage: detail.ProductColor.ProductImages[0]?.image || "",
                 productName: detail.ProductColor.Product.productname,
                 quantity: detail.quantity,
                 price: detail.price.toLocaleString("vi-VN"),

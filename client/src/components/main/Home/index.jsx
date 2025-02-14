@@ -18,14 +18,14 @@ import {
 import { FaApple, FaShoppingCart, FaClock } from "react-icons/fa";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchCategories } from "../../../reudux/slices/categorySlice";
+import { fetchCategories } from "../../../redux/slices/categorySlice";
 import { Carousel, Row, Col } from "antd";
-import { fetchVourchersStart } from "../../../reudux/slices/vourcherSlice";
+import { fetchVourchersStart } from "../../../redux/slices/vourcherSlice";
 import dayjs from "dayjs";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const { categories } = useSelector((state) => state.categories);
   const categoryList = Array.isArray(categories.categories)
@@ -41,7 +41,7 @@ const Home = () => {
     ? vourchers.vourchers
     : [];
 
-  console.log(voucherList)
+  console.log(voucherList);
 
   useEffect(() => {
     dispatch(fetchVourchersStart());
@@ -97,7 +97,13 @@ const Home = () => {
                   {dayjs(voucher.valid_to).format("DD/MM/YYYY HH:mm")}
                 </VoucherP>
               </div>
-              {voucher.VoucherProducts.length >= 1 &&<VoucherP><Link to={`/detail/${voucher.VoucherProducts[0].product_id}`}>Xem sản phẩm</Link></VoucherP>}
+              {voucher.VoucherProducts.length >= 1 && (
+                <VoucherP>
+                  <Link to={`/detail/${voucher.VoucherProducts[0].product_id}`}>
+                    Xem sản phẩm
+                  </Link>
+                </VoucherP>
+              )}
             </VoucherContent>
           </VoucherCard>
         ))}
@@ -105,7 +111,10 @@ const Home = () => {
 
       <CategoryContainer>
         {categoryList.map((category) => (
-          <CategoryCard key={category.id} onClick={() => navigate(`/${category.id}`)}>
+          <CategoryCard
+            key={category.id}
+            onClick={() => navigate(`/${category.id}`)}
+          >
             <img src={category.imageUrl} alt={category.categoryname} />
             <h3>{category.categoryname}</h3>
           </CategoryCard>
