@@ -3,12 +3,11 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import Admin from "../pages/admin/index.jsx";
 import Main from "../pages/main/index.jsx";
-import AddCategory from "../components/admin/addcategory.jsx";
-import AllCategories from "../components/admin/allCategories.jsx";
+import AllCategories from "../components/admin/AllCategories/index.jsx";
 import UpdateCategory from "../components/admin/updateCategory.jsx";
-import AddProduct from "../components/admin/addProduct.jsx";
+import AddProduct from "../components/admin/AddProduct/index.jsx";
 import Allproduct from "../components/admin/allProduct.jsx";
-import UpdateProduct from "../components/admin/updateProduct.jsx";
+import UpdateProduct from "../components/admin/UpdateProduct/index.jsx";
 import Home from "../components/main/Home";
 import Detail from "../components/main/Detail/index.jsx";
 import HomeAdmin from "../components/admin/Home/index.jsx";
@@ -32,6 +31,7 @@ import WishList from "../components/main/Wishlist/index.jsx";
 import AddVourcher from "../components/admin/AddVourcher/index.jsx";
 import AllVourcher from "../components/admin/AllVourcher/index.jsx";
 import CheckoutPage from "../components/main/Pay/index.jsx";
+import AddCategory from "../components/admin/AddCategory/index.jsx"
 import OrderStatus from "../components/admin/OrderStatus/index.jsx";
 
 const MainLayout = () => {
@@ -117,7 +117,7 @@ export default createBrowserRouter([
             index: true,
           },
           {
-            element: <AddCategory />,
+            element: <AddCategory/>,
             path: "/admin/addCategory",
           },
           {

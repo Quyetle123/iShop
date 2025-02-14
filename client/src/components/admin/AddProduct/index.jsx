@@ -3,15 +3,15 @@ import { Button, Card, Form, Input, Select } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { fetchCategories } from "../../reudux/slices/categorySlice";
-import { uploadImageToFirebase } from "../../firebase/uploadImage";
-import { addProductStart } from "../../reudux/slices/productSlice";
+import { fetchCategories } from "../../../reudux/slices/categorySlice";
+import { uploadImageToFirebase } from "../../../firebase/uploadImage";
+import { addProductStart } from "../../../reudux/slices/productSlice";
 import { useNavigate } from "react-router-dom";
 import TextArea from "antd/es/input/TextArea";
 import { TiDelete } from "react-icons/ti";
-import { getAllColorStart } from "../../reudux/slices/colorSlice";
-import { addProductColorStart } from "../../reudux/slices/productColorSlice";
-import { addProductImageStart } from "../../reudux/slices/productImageSlice";
+import { getAllColorStart } from "../../../reudux/slices/colorSlice";
+import { addProductColorStart } from "../../../reudux/slices/productColorSlice";
+import { addProductImageStart } from "../../../reudux/slices/productImageSlice";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
