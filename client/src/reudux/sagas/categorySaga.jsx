@@ -9,6 +9,9 @@ import {
   fetchCategoriesSuccess,
   fetchCategoryById,
   fetchCategoryByIdSuccess,
+  productStatisticError,
+  productStatisticStart,
+  productStatisticSuccess,
   setError,
   updateCategoryStart,
   updateCategorySuccess,
@@ -20,7 +23,6 @@ function* fetchCategoriesSaga() {
       axios.get,
       `${import.meta.env.VITE_LOCALHOST}/category/allCategories`
     );
-    console.log(import.meta.env.VITE_LOCALHOST)
     yield put(fetchCategoriesSuccess(response.data));
   } catch (error) {
     yield put(setError(error.message));
@@ -56,7 +58,9 @@ function* updateCategorySaga(action) {
   try {
     yield call(
       axios.put,
-      `${import.meta.env.VITE_LOCALHOST}/category/updateCategory/${action.payload.id}`,
+      `${import.meta.env.VITE_LOCALHOST}/category/updateCategory/${
+        action.payload.id
+      }`,
       action.payload
     );
     yield put(updateCategorySuccess(action.payload));
@@ -69,12 +73,26 @@ function* deleteCategorySaga(action) {
   try {
     yield call(
       axios.delete,
-      `${import.meta.env.VITE_LOCALHOST}/category/deleteCategory/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/category/deleteCategory/${
+        action.payload
+      }`
     );
     yield put(deleteCategorySuccess());
     yield put(fetchCategories());
   } catch (error) {
     yield put(setError(error.message));
+  }
+}
+
+function* productStatisticSaga() {
+  try {
+    const response = yield call(
+      axios.get,
+      `${import.meta.env.VITE_LOCALHOST}/category`
+    );
+    yield put(productStatisticSuccess(response.data));
+  } catch (error) {
+    yield put(productStatisticError(error.message));
   }
 }
 
@@ -84,4 +102,5 @@ export default function* categorySaga() {
   yield takeLatest(addCategoryStart, addCategorySaga);
   yield takeLatest(updateCategoryStart, updateCategorySaga);
   yield takeLatest(deleteCategoryStart, deleteCategorySaga);
+  yield takeLatest(productStatisticStart, productStatisticSaga)
 }
