@@ -32,6 +32,7 @@ import WishList from "../components/main/Wishlist/index.jsx";
 import AddVourcher from "../components/admin/AddVourcher/index.jsx";
 import AllVourcher from "../components/admin/AllVourcher/index.jsx";
 import CheckoutPage from "../components/main/Pay/index.jsx";
+import OrderStatus from "../components/admin/OrderStatus/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -174,6 +175,10 @@ export default createBrowserRouter([
           {
             element: <AllVourcher />,
             path: "/admin/all-vourchers"
+          },
+          {
+            element: <OrderStatus />,
+            path: "/admin/order/:id"
           }
         ],
       },

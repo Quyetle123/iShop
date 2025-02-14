@@ -4,6 +4,7 @@ const categorySlice = createSlice({
   name: "categories",
   initialState: {
     categories: [],
+    productStatistic: {},
     selectedCategory: null,
     searchResults: [],
     loading: false,
@@ -52,6 +53,19 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    productStatisticStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    productStatisticSuccess(state, action) {
+      state.loading = false;
+      state.productStatistic = action.payload;
+      state.error = null;
+    },
+    productStatisticError(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -67,6 +81,9 @@ export const {
   deleteCategoryStart,
   deleteCategorySuccess,
   setError,
+  productStatisticStart,
+  productStatisticSuccess,
+  productStatisticError
 } = categorySlice.actions;
 
 export default categorySlice.reducer;

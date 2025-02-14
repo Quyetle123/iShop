@@ -10,6 +10,9 @@ import {
   getOrderFailure,
   getOrderStart,
   getOrderSuccess,
+  orderStatisticFailure,
+  orderStatisticStart,
+  orderStatisticSuccess,
   updateStatusFailure,
   updateStatusStart,
   updateStatusSuccess,
@@ -32,7 +35,9 @@ function* getOrderSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `${import.meta.env.VITE_LOCALHOST}/order/getOrderByAccountid/${action.payload}`
+      `${import.meta.env.VITE_LOCALHOST}/order/getOrderByAccountid/${
+        action.payload
+      }`
     );
     yield put(getOrderSuccess(response.data));
   } catch (error) {
@@ -56,7 +61,9 @@ function* updateStatusSaga(action) {
   try {
     yield call(
       axios.put,
-      `${import.meta.env.VITE_LOCALHOST}/order/updateStatusOrder/${action.payload.id}`,
+      `${import.meta.env.VITE_LOCALHOST}/order/updateStatusOrder/${
+        action.payload.id
+      }`,
       action.payload
     );
     yield put(updateStatusSuccess());
@@ -66,9 +73,22 @@ function* updateStatusSaga(action) {
   }
 }
 
+function* orderStatisticSaga() {
+  try {
+    const response = yield call(
+      axios.get,
+      `${import.meta.env.VITE_LOCALHOST}/order/statistics`
+    );
+    yield put(orderStatisticSuccess(response.data));
+  } catch (error) {
+    yield put(orderStatisticFailure(error.message));
+  }
+}
+
 export default function* orderSaga() {
   yield takeLatest(addOrderStart, addOrderSaga);
   yield takeLatest(getOrderStart, getOrderSaga);
   yield takeLatest(getAllOrderStart, getAllOrderSaga);
-  yield takeLatest(updateStatusStart, updateStatusSaga)
+  yield takeLatest(updateStatusStart, updateStatusSaga);
+  yield takeLatest(orderStatisticStart, orderStatisticSaga)
 }
