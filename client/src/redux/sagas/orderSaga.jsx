@@ -10,6 +10,9 @@ import {
   getOrderFailure,
   getOrderStart,
   getOrderSuccess,
+  orderMonthFailure,
+  orderMonthStart,
+  orderMonthSuccess,
   orderStatisticFailure,
   orderStatisticStart,
   orderStatisticSuccess,
@@ -85,10 +88,26 @@ function* orderStatisticSaga() {
   }
 }
 
+function* orderMonthSaga(action) {
+  try {
+    const { startMonth, endMonth, startYear, endYear } = action.payload;
+    const response = yield call(
+      axios.get,
+      `${
+        import.meta.env.VITE_LOCALHOST
+      }/order/month?startMonth=${startMonth}&startYear=${startYear}&endMonth=${endMonth}&endYear=${endYear}`
+    );
+    yield put(orderMonthSuccess(response.data));
+  } catch (error) {
+    yield put(orderMonthFailure(error.message));
+  }
+}
+
 export default function* orderSaga() {
   yield takeLatest(addOrderStart, addOrderSaga);
   yield takeLatest(getOrderStart, getOrderSaga);
   yield takeLatest(getAllOrderStart, getAllOrderSaga);
   yield takeLatest(updateStatusStart, updateStatusSaga);
-  yield takeLatest(orderStatisticStart, orderStatisticSaga)
+  yield takeLatest(orderStatisticStart, orderStatisticSaga);
+  yield takeLatest(orderMonthStart, orderMonthSaga);
 }
