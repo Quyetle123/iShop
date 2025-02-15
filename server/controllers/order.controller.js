@@ -138,10 +138,7 @@ class orderController {
         });
       }
 
-      const statuses = [
-        "Đã giao hàng",
-        "Đã hủy",
-      ];
+      const statuses = ["Đã giao hàng", "Đã hủy"];
       const labels = [];
       let currentMonth = new Date(startYear, startMonth - 1, 1);
       const endDate = new Date(endYear, endMonth, 0);
@@ -167,7 +164,7 @@ class orderController {
               [Op.between]: [new Date(startYear, startMonth - 1, 1), endDate],
             },
           },
-          attributes: ["id", "total", "createdAt"],
+          attributes: ["id", "createdAt"],
         });
 
         orders.forEach((order) => {
@@ -177,7 +174,7 @@ class orderController {
             .padStart(2, "0")}`;
           const index = labels.indexOf(label);
           if (index !== -1) {
-            monthlyData[index] += parseFloat(order.total || 0);
+            monthlyData[index]++;
           }
         });
 

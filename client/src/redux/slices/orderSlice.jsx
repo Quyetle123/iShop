@@ -5,6 +5,7 @@ const orderSlice = createSlice({
   initialState: {
     orders: [],
     orderStatistics: {},
+    orderMonth: {},
     loading: false,
     error: null,
   },
@@ -69,6 +70,19 @@ const orderSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    orderMonthStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    orderMonthSuccess(state, action) {
+      state.loading = false;
+      state.orderMonth = action.payload;
+      state.error = null;
+    },
+    orderMonthFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 export const {
@@ -86,7 +100,10 @@ export const {
   updateStatusFailure,
   orderStatisticStart,
   orderStatisticSuccess,
-  orderStatisticFailure
+  orderStatisticFailure,
+  orderMonthStart,
+  orderMonthSuccess,
+  orderMonthFailure,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;

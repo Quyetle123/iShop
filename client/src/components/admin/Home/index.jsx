@@ -31,7 +31,10 @@ import {
 } from "chart.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { orderStatisticStart } from "../../../redux/slices/orderSlice";
+import {
+  orderMonthStart,
+  orderStatisticStart,
+} from "../../../redux/slices/orderSlice";
 import { productStatisticStart } from "../../../redux/slices/categorySlice";
 import dayjs from "dayjs";
 
@@ -134,32 +137,6 @@ const pendingOrders = [
   },
 ];
 
-const initialData = {
-  labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
-  datasets: [
-    {
-      label: "Đang đóng gói",
-      data: [30, 40, 50, 60, 70, 80],
-      backgroundColor: "#ff7f50",
-    },
-    {
-      label: "Đang vận chuyển",
-      data: [20, 30, 40, 50, 60, 70],
-      backgroundColor: "#6495ed",
-    },
-    {
-      label: "Đã giao hàng",
-      data: [50, 60, 70, 80, 90, 100],
-      backgroundColor: "#32cd32",
-    },
-    {
-      label: "Đã hủy",
-      data: [10, 15, 20, 25, 30, 35],
-      backgroundColor: "#ff0000",
-    },
-  ],
-};
-
 const statusMapping = {
   "Đang đóng gói": { color: "#1890ff", icon: <SyncOutlined /> },
   "Đang vận chuyển": { color: "#ffc107", icon: <ShoppingCartOutlined /> },
@@ -173,33 +150,27 @@ const AdminHome = () => {
   const orderStatisticList = Array.isArray(orderStatistics)
     ? orderStatistics
     : [];
-  console.log(orderStatistics);
   const { productStatistic } = useSelector((state) => state.categories);
+  const { orderMonth } = useSelector((state) => state.orders);
+  const currentDate = dayjs();
 
+  const [dateRange, setDateRange] = useState([
+    currentDate.subtract(6, "month"),
+    currentDate,
+  ]);
   useEffect(() => {
     dispatch(orderStatisticStart());
     dispatch(productStatisticStart());
-  }, [dispatch]);
+    dispatch(
+      orderMonthStart({
+        startMonth: dateRange[0].month() + 1,
+        startYear: dateRange[0].year(),
+        endMonth: dateRange[1].month() + 1,
+        endYear: dateRange[1].year(),
+      })
+    );
+  }, [dispatch, dateRange]);
 
-  const [orderData, setOrderData] = useState(initialData);
-  const handleDateChange = (dates) => {
-    if (dates) {
-      const startMonth = dayjs(dates[0]).month() + 1;
-      const endMonth = dayjs(dates[1]).month() + 1;
-
-      const filteredLabels = initialData.labels.filter((label, index) => {
-        const monthNumber = index + 1;
-        return monthNumber >= startMonth && monthNumber <= endMonth;
-      });
-
-      const filteredDatasets = initialData.datasets.map((dataset) => ({
-        ...dataset,
-        data: dataset.data.slice(startMonth - 1, endMonth),
-      }));
-
-      setOrderData({ labels: filteredLabels, datasets: filteredDatasets });
-    }
-  };
   return (
     <Container>
       <Row gutter={[16, 16]}>
@@ -267,11 +238,24 @@ const AdminHome = () => {
       <h2 style={{ marginTop: 20 }}>Thống kê số đơn hàng theo tháng</h2>
       <RangePicker
         picker="month"
-        onChange={handleDateChange}
+        onChange={(dates) => {
+          if (dates && dates[1].isAfter(currentDate, "month")) {
+            return;
+          }
+          setDateRange(dates);
+        }}
+        value={dateRange}
+        disabledDate={(current) =>
+          current && current.isAfter(currentDate, "month")
+        }
         style={{ marginBottom: 20 }}
       />
       <Card>
-        <Bar data={orderData} options={{ responsive: true }} />
+        {orderMonth && orderMonth.labels && orderMonth.datasets ? (
+          <Bar data={orderMonth} options={{ responsive: true }} />
+        ) : (
+          <p>Loading...</p>
+        )}
       </Card>
 
       {/* <h2 style={{ marginTop: 20 }}>Thống kê doanh thu 6 tháng gần đây</h2>
