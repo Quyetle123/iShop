@@ -7,5 +7,7 @@ router.post("/addOrder", orderController.addOrder);
 router.get("/getOrderByAccountid/:accountid", orderController.getOrderByAccountId);
 router.get("/getAllOrder", orderController.getAllOrder);
 router.put("/updateStatusOrder/:id", orderController.updateStatusOrder);
+router.get("/statistics", orderController.getOrderStatistics);
+router.get("/month", orderController.getOrderStatisticMonth);
 
 export default router;

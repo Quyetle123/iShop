@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { FaApple } from "react-icons/fa";
 import { Carousel, Row, Col, Input, Select } from "antd";
-import { fetchCategoryById } from "../../../reudux/slices/categorySlice";
+import { fetchCategoryById } from "../../../redux/slices/categorySlice";
 import {
   ImgContainer,
   Main,
@@ -73,7 +73,9 @@ const Shop = () => {
     } else if (filter === "priceHighLow") {
       return [...products].sort((a, b) => b.price - a.price);
     } else if (filter === "bestSelling") {
-      return [...products].sort((a, b) => b.ProductColors[0]?.sold - a.ProductColors[0]?.sold);
+      return [...products].sort(
+        (a, b) => b.ProductColors[0]?.sold - a.ProductColors[0]?.sold
+      );
     } else {
       return products;
     }
@@ -97,15 +99,33 @@ const Shop = () => {
             <FaApple />
             {selectedCategory.categoryname}
           </Title>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", gap: "10px", padding: "0px 150px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "20px",
+              gap: "10px",
+              padding: "0px 150px",
+            }}
+          >
             <Input
               placeholder="Search products..."
               onChange={handleSearch}
-              style={{ flex: 1, borderRadius: "8px", padding: "10px", border: "1px solid #ccc" }}
+              style={{
+                flex: 1,
+                borderRadius: "8px",
+                padding: "10px",
+                border: "1px solid #ccc",
+              }}
             />
             <Select
               defaultValue=""
-              style={{ width: "200px", borderRadius: "8px", background: "transparent" }}
+              style={{
+                width: "200px",
+                borderRadius: "8px",
+                background: "transparent",
+              }}
               onChange={handleFilterChange}
               placeholder="Sort by"
             >

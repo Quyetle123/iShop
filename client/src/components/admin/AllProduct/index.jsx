@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import {
   deleteProductStart,
   fetchProductesStart,
-} from "../../reudux/slices/productSlice";
+} from "../../../redux/slices/productSlice";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 
@@ -87,12 +87,11 @@ const AllProduct = () => {
     const colorData = record.ProductColors.map((color) => ({
       key: color.id,
       colorName: color.Color.name,
-      firstImage:
-        color.ProductImages?.[0]?.image || "No Image Available",
+      firstImage: color.ProductImages?.[0]?.image || "No Image Available",
       quantity: color.quantity,
       sold: color.sold,
     }));
-    
+
     const colorColumns = [
       {
         title: "Màu sắc",
@@ -133,7 +132,7 @@ const AllProduct = () => {
   };
 
   return (
-    <div style={{ padding: "20px", marginTop: '70px' }}>
+    <div style={{ padding: "20px", marginTop: "70px" }}>
       <Table
         dataSource={dataSource}
         columns={columns}

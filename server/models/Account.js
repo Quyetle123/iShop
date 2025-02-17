@@ -12,7 +12,7 @@ const Account = sequelize.define("Account", {
     allowNull: false,
   },
   phoneNumber: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: true,
     unique: true
   },
@@ -26,22 +26,6 @@ const Account = sequelize.define("Account", {
     allowNull: true,
   },
   role: {
-    type: DataTypes.STRING(255), 
-    allowNull: true, 
-  },
-  address: {
-    type: DataTypes.STRING(255), 
-    allowNull: true, 
-  },
-  city: {
-    type: DataTypes.STRING(255), 
-    allowNull: true, 
-  },
-  district: {
-    type: DataTypes.STRING(255), 
-    allowNull: true, 
-  },
-  ward: {
     type: DataTypes.STRING(255), 
     allowNull: true, 
   },

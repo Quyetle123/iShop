@@ -104,6 +104,67 @@ class categoryController {
       res.status(400).json({ message: error.message });
     }
   }
+
+  static async producStatistics(req, res) {
+    try {
+      const categories = await Category.findAll({
+        include: [
+          {
+            model: Product,
+            include: [{ model: ProductColor }],
+          },
+        ],
+      });
+
+      if (!categories || categories.length === 0) {
+        return res.status(200).json({ labels: [], datasets: [] });
+      }
+
+      let labels = [];
+      let soldData = [];
+      let stockData = [];
+
+      categories.forEach((category) => {
+        let quantitySold = 0;
+        let quantity = 0;
+
+        if (Array.isArray(category.Products)) {
+          category.Products.forEach((product) => {
+            if (Array.isArray(product.ProductColors)) {
+              product.ProductColors.forEach((color) => {
+                quantitySold += parseFloat(color.sold || 0);
+                quantity += parseFloat(color.quantity || 0);
+              });
+            }
+          });
+        }
+
+        labels.push(category.categoryname);
+        soldData.push(quantitySold);
+        stockData.push(quantity);
+      });
+
+      const productData = {
+        labels,
+        datasets: [
+          {
+            label: "Đã bán",
+            data: soldData,
+            backgroundColor: "#1890ff",
+          },
+          {
+            label: "Tồn kho",
+            data: stockData,
+            backgroundColor: "#ff4d4f",
+          },
+        ],
+      };
+
+      return res.status(200).json(productData);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
 }
 
 export default categoryController;

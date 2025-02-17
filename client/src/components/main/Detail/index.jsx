@@ -13,14 +13,14 @@ import {
   CommentContentP,
 } from "./style";
 import { useEffect, useState } from "react";
-import { fetchProductByIdStart } from "../../../reudux/slices/productSlice";
+import { fetchProductByIdStart } from "../../../redux/slices/productSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   addCartStart,
   fetchCartByAccountidStart,
   updateQuantityStart,
-} from "../../../reudux/slices/cartSlice";
-import {addWishlistStart} from "../../../reudux/slices/wishlistSlice"
+} from "../../../redux/slices/cartSlice";
+import { addWishlistStart } from "../../../redux/slices/wishlistSlice";
 import { getToken } from "../../../utils/token";
 import dayjs from "dayjs";
 import Slideshow from "../slideshow";
@@ -87,9 +87,14 @@ const Detail = () => {
   };
 
   const handleAddWishList = () => {
-    console.log('hi');
-    dispatch(addWishlistStart({accountid: token.id, productColorid: product.ProductColors[apiColor].id}))
-  }
+    console.log("hi");
+    dispatch(
+      addWishlistStart({
+        accountid: token.id,
+        productColorid: product.ProductColors[apiColor].id,
+      })
+    );
+  };
 
   const renderStars = (rating) => {
     const stars = [];
@@ -162,7 +167,9 @@ const Detail = () => {
           >
             Hết hàng
           </button>
-          <button onClick={() => handleAddWishList()}>Thêm vào yêu thích</button>
+          <button onClick={() => handleAddWishList()}>
+            Thêm vào yêu thích
+          </button>
         </DetailArticle>
       </DetailContainer>
       <CommentSection>

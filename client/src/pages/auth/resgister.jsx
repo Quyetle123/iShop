@@ -9,14 +9,16 @@ import {
   Select,
 } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { registerStart } from "../../reudux/slices/authSlice";
+import { registerStart } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import {
   fetchProvincesStart,
   fetchDistrictsStart,
   fetchWardsStart,
-} from "../../reudux/slices/addressSlice";
+} from "../../redux/slices/addressSlice";
+import { addAdditionalAddressStart } from "../../redux/slices/additionalAddressSlice";
+import { findNameAddress } from "../../utils/findAddress";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -51,8 +53,37 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (values) => {
-    const { username, phoneNumber, password, email, city, district, ward, address, agree } =
-      values;
+    const {
+      username,
+      phoneNumber,
+      password,
+      email,
+      city,
+      district,
+      ward,
+      address,
+      agree,
+    } = values;
+
+    const provinceName = findNameAddress(provinceList, city);
+    if (!provinceName) {
+      message.error("Thành phố không hợp lệ.");
+      return;
+    }
+
+    dispatch(fetchDistrictsStart(values.province));
+    const districtName = findNameAddress(districtList, district);
+    if (!districtName) {
+      message.error("Quận huyện không hợp lệ.");
+      return;
+    }
+
+    dispatch(fetchWardsStart(values.district));
+    const wardName = findNameAddress(wardList, ward);
+    if (!wardName) {
+      message.error("Phường xã không hợp lệ.");
+      return;
+    }
 
     if (!agree) {
       message.warning("Vui lòng chấp nhận điều khoản để đăng kí.");
@@ -68,10 +99,17 @@ const Register = () => {
         password,
         email,
         role: "user",
-        city,
-        district,
-        ward,
+      })
+    );
+
+    dispatch(
+      addAdditionalAddressStart({
+        accountid: id,
+        city: provinceName.name,
+        district: districtName.name,
+        ward: wardName.name,
         address,
+        is_default: true,
       })
     );
     message.success("Đăng ký thành công!");
@@ -115,9 +153,7 @@ const Register = () => {
           <Form.Item
             label="Họ và tên"
             name="username"
-            rules={[
-              { required: true, message: "Vui lòng nhập họ và tên!" },
-            ]}
+            rules={[{ required: true, message: "Vui lòng nhập họ và tên!" }]}
           >
             <Input placeholder="Họ và tên" />
           </Form.Item>

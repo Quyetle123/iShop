@@ -6,12 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllOrderStart,
   updateStatusStart,
-} from "../../../reudux/slices/orderSlice.jsx";
+} from "../../../redux/slices/orderSlice.jsx";
 
 const { Option } = Select;
 
 const socket = io("http://localhost:5000");
-
 
 const OrderDetailsTable = ({ details }) => {
   const columns = [
