@@ -29,22 +29,6 @@ const Account = sequelize.define("Account", {
     type: DataTypes.STRING(255), 
     allowNull: true, 
   },
-  address: {
-    type: DataTypes.STRING(255), 
-    allowNull: true, 
-  },
-  city: {
-    type: DataTypes.STRING(255), 
-    allowNull: true, 
-  },
-  district: {
-    type: DataTypes.STRING(255), 
-    allowNull: true, 
-  },
-  ward: {
-    type: DataTypes.STRING(255), 
-    allowNull: true, 
-  },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW, 

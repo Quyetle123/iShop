@@ -10,37 +10,40 @@ const Address = sequelize.define(
       primaryKey: true,
     },
     address: {
-        type: DataTypes.STRING(255), 
-        allowNull: true, 
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    city: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    district: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    ward: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    accountid: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      references: {
+        model: "accounts",
+        key: "id",
       },
-      city: {
-        type: DataTypes.STRING(255), 
-        allowNull: true, 
-      },
-      district: {
-        type: DataTypes.STRING(255), 
-        allowNull: true, 
-      },
-      ward: {
-        type: DataTypes.STRING(255), 
-        allowNull: true, 
-      },
-      accountid: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        references: {
-          model: "accounts",
-          key: "id",
-        },
-      },
+    },
+    is_default: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
-    tableName: "posts",
+    tableName: "addresses",
     timestamps: true,
-    paranoid: true,
     createdAt: "createdAt",
     updatedAt: "updatedAt",
   }
 );
 
-export default Post;
+export default Address;

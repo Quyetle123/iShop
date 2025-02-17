@@ -17,6 +17,8 @@ import {
   fetchDistrictsStart,
   fetchWardsStart,
 } from "../../redux/slices/addressSlice";
+import { addAdditionalAddressStart } from "../../redux/slices/additionalAddressSlice";
+import { findNameAddress } from "../../utils/findAddress";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -63,6 +65,26 @@ const Register = () => {
       agree,
     } = values;
 
+    const provinceName = findNameAddress(provinceList, city);
+    if (!provinceName) {
+      message.error("Thành phố không hợp lệ.");
+      return;
+    }
+
+    dispatch(fetchDistrictsStart(values.province));
+    const districtName = findNameAddress(districtList, district);
+    if (!districtName) {
+      message.error("Quận huyện không hợp lệ.");
+      return;
+    }
+
+    dispatch(fetchWardsStart(values.district));
+    const wardName = findNameAddress(wardList, ward);
+    if (!wardName) {
+      message.error("Phường xã không hợp lệ.");
+      return;
+    }
+
     if (!agree) {
       message.warning("Vui lòng chấp nhận điều khoản để đăng kí.");
       return;
@@ -77,10 +99,17 @@ const Register = () => {
         password,
         email,
         role: "user",
-        city,
-        district,
-        ward,
+      })
+    );
+
+    dispatch(
+      addAdditionalAddressStart({
+        accountid: id,
+        city: provinceName.name,
+        district: districtName.name,
+        ward: wardName.name,
         address,
+        is_default: true,
       })
     );
     message.success("Đăng ký thành công!");
