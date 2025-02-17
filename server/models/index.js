@@ -17,6 +17,7 @@ import Vourcher from "./Vourcher.js";
 import VoucherAccount from "./VoucherAccount.js";
 import VoucherProduct from "./VoucherProduct.js";
 import VoucherUsage from "./VoucherUsage.js";
+import Address from "./Address.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -83,6 +84,9 @@ VoucherProduct.belongsTo(Vourcher, { foreignKey: "voucher_id" });
 Vourcher.hasMany(VoucherUsage, { foreignKey: "voucher_id" });
 VoucherUsage.belongsTo(Vourcher, { foreignKey: "voucher_id" });
 
+Account.hasMany(Address, { foreignKey: "accountid" });
+Address.belongsTo(Account, { foreignKey: "accountid" });
+
 export {
   Account,
   Cart,
@@ -103,4 +107,5 @@ export {
   VoucherAccount,
   VoucherProduct,
   VoucherUsage,
+  Address
 };
