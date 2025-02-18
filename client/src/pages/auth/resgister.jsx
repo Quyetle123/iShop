@@ -6,21 +6,84 @@ import {
   Checkbox,
   Typography,
   message,
+  Select,
 } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { registerStart } from "../../reudux/slices/authSlice";
+import { registerStart } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import {
+  fetchProvincesStart,
+  fetchDistrictsStart,
+  fetchWardsStart,
+} from "../../redux/slices/addressSlice";
+import { addAdditionalAddressStart } from "../../redux/slices/additionalAddressSlice";
+import { findNameAddress } from "../../utils/findAddress";
 
 const { Title, Text } = Typography;
+const { Option } = Select;
 
 const Register = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const { provinces, districts, wards } = useSelector(
+    (state) => state.addresses
+  );
+  const provinceList = Array.isArray(provinces) ? provinces : [];
+  const districtList = Array.isArray(districts.districts)
+    ? districts.districts
+    : [];
+  const wardList = Array.isArray(wards.wards) ? wards.wards : [];
+
+  useEffect(() => {
+    dispatch(fetchProvincesStart());
+  }, [dispatch]);
+
+  const handleProvinceChange = (provinceCode) => {
+    dispatch(fetchDistrictsStart(provinceCode));
+    form.setFieldsValue({ district: undefined, ward: undefined });
+  };
+
+  const handleDistrictChange = (districtCode) => {
+    dispatch(fetchWardsStart(districtCode));
+    form.setFieldsValue({ ward: undefined });
+  };
+
   const { isLoading, error } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const handleSubmit = (values) => {
-    const { username, password, email, city, address, agree } = values;
+    const {
+      username,
+      phoneNumber,
+      password,
+      email,
+      city,
+      district,
+      ward,
+      address,
+      agree,
+    } = values;
+
+    const provinceName = findNameAddress(provinceList, city);
+    if (!provinceName) {
+      message.error("Thành phố không hợp lệ.");
+      return;
+    }
+
+    dispatch(fetchDistrictsStart(values.province));
+    const districtName = findNameAddress(districtList, district);
+    if (!districtName) {
+      message.error("Quận huyện không hợp lệ.");
+      return;
+    }
+
+    dispatch(fetchWardsStart(values.district));
+    const wardName = findNameAddress(wardList, ward);
+    if (!wardName) {
+      message.error("Phường xã không hợp lệ.");
+      return;
+    }
 
     if (!agree) {
       message.warning("Vui lòng chấp nhận điều khoản để đăng kí.");
@@ -28,7 +91,27 @@ const Register = () => {
     }
 
     const id = uuidv4();
-    dispatch(registerStart({ id, username, password, email, role: "user", city, address }));
+    dispatch(
+      registerStart({
+        id,
+        username,
+        phoneNumber,
+        password,
+        email,
+        role: "user",
+      })
+    );
+
+    dispatch(
+      addAdditionalAddressStart({
+        accountid: id,
+        city: provinceName.name,
+        district: districtName.name,
+        ward: wardName.name,
+        address,
+        is_default: true,
+      })
+    );
     message.success("Đăng ký thành công!");
     navigate("/login");
   };
@@ -68,11 +151,20 @@ const Register = () => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            label="Tên đăng nhập"
+            label="Họ và tên"
             name="username"
-            rules={[{ required: true, message: "Vui lòng nhập tên đăng nhập!" }]}
+            rules={[{ required: true, message: "Vui lòng nhập họ và tên!" }]}
           >
-            <Input placeholder="Tên đăng nhập" />
+            <Input placeholder="Họ và tên" />
+          </Form.Item>
+          <Form.Item
+            label="Số điện thoại"
+            name="phoneNumber"
+            rules={[
+              { required: true, message: "Vui lòng nhập số điện thoại!" },
+            ]}
+          >
+            <Input placeholder="Số điện thoại" />
           </Form.Item>
           <Form.Item
             label="Mật khẩu"
@@ -86,16 +178,15 @@ const Register = () => {
             name="confirmPassword"
             dependencies={["password"]}
             rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập lại mật khẩu!",
-              },
+              { required: true, message: "Vui lòng nhập lại mật khẩu!" },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue("password") === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error("Mật khẩu nhập lại không khớp!"));
+                  return Promise.reject(
+                    new Error("Mật khẩu nhập lại không khớp!")
+                  );
                 },
               }),
             ]}
@@ -115,9 +206,47 @@ const Register = () => {
           <Form.Item
             label="Thành phố"
             name="city"
-            rules={[{ required: true, message: "Vui lòng nhập thành phố!" }]}
+            rules={[{ required: true, message: "Vui lòng chọn thành phố!" }]}
           >
-            <Input placeholder="Thành phố" />
+            <Select
+              placeholder="Chọn thành phố"
+              onChange={handleProvinceChange}
+            >
+              {provinceList?.map((province) => (
+                <Option key={province.code} value={province.code}>
+                  {province.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Quận/Huyện"
+            name="district"
+            rules={[{ required: true, message: "Vui lòng chọn quận/huyện!" }]}
+          >
+            <Select
+              placeholder="Chọn quận/huyện"
+              onChange={handleDistrictChange}
+            >
+              {districtList?.map((district) => (
+                <Option key={district.code} value={district.code}>
+                  {district.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Phường/Xã"
+            name="ward"
+            rules={[{ required: true, message: "Vui lòng chọn phường/xã!" }]}
+          >
+            <Select placeholder="Chọn phường/xã">
+              {wardList?.map((ward) => (
+                <Option key={ward.code} value={ward.code}>
+                  {ward.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item
             label="Địa chỉ"
@@ -132,7 +261,9 @@ const Register = () => {
             rules={[
               {
                 validator: (_, value) =>
-                  value ? Promise.resolve() : Promise.reject("Vui lòng chấp nhận điều khoản!"),
+                  value
+                    ? Promise.resolve()
+                    : Promise.reject("Vui lòng chấp nhận điều khoản!"),
               },
             ]}
           >
@@ -153,11 +284,16 @@ const Register = () => {
           </Form.Item>
         </Form>
         {error && (
-          <Text type="danger" style={{ display: "block", textAlign: "center", marginTop: "10px" }}>
+          <Text
+            type="danger"
+            style={{ display: "block", textAlign: "center", marginTop: "10px" }}
+          >
             {error}
           </Text>
         )}
-        <Text style={{ display: "block", textAlign: "center", marginTop: "20px" }}>
+        <Text
+          style={{ display: "block", textAlign: "center", marginTop: "20px" }}
+        >
           Đã có tài khoản?{" "}
           <a href="/login" style={{ color: "#2a2a47" }}>
             Đăng nhập ngay

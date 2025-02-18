@@ -8,6 +8,9 @@ import {
   loginFailure,
   loginStart,
   loginSuccess,
+  loginWithGoogleFailure,
+  loginWithGoogleStart,
+  loginWithGoogleSuccess,
   registerFailure,
   registerStart,
   registerSuccess,
@@ -57,6 +60,28 @@ function* handleLogin(action) {
   }
 }
 
+function* handleLoginWithGoogle(action) {
+  try {
+    const response = yield call(
+      axios.post,
+      `${import.meta.env.VITE_LOCALHOST}/auth/loginWithGoogle`,
+      action.payload
+    );
+    if (response) {
+      localStorage.setItem("token", response.data.token);
+      yield put(
+        loginWithGoogleSuccess({
+          account: response.data.account,
+          token: response.data.token,
+          role: response.data.account.role,
+        })
+      );
+    }
+  } catch (error) {
+    yield put(loginWithGoogleFailure(error.response.data.message));
+  }
+}
+
 function* getAccountsSaga() {
   try {
     const response = yield call(
@@ -73,4 +98,5 @@ export default function* authSaga() {
   yield takeLatest(registerStart, handleRegister);
   yield takeLatest(loginStart, handleLogin);
   yield takeLatest(fetchAccountsStart, getAccountsSaga);
+  yield takeLatest(loginWithGoogleStart, handleLoginWithGoogle)
 }

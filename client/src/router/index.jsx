@@ -3,12 +3,9 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import Admin from "../pages/admin/index.jsx";
 import Main from "../pages/main/index.jsx";
-import AddCategory from "../components/admin/addcategory.jsx";
-import AllCategories from "../components/admin/allCategories.jsx";
-import UpdateCategory from "../components/admin/updateCategory.jsx";
-import AddProduct from "../components/admin/addProduct.jsx";
-import Allproduct from "../components/admin/allProduct.jsx";
-import UpdateProduct from "../components/admin/updateProduct.jsx";
+import AllCategories from "../components/admin/AllCategories/index.jsx";
+import AddProduct from "../components/admin/AddProduct/index.jsx";
+import UpdateProduct from "../components/admin/UpdateProduct/index.jsx";
 import Home from "../components/main/Home";
 import Detail from "../components/main/Detail/index.jsx";
 import HomeAdmin from "../components/admin/Home/index.jsx";
@@ -28,8 +25,14 @@ import Shop from "../components/main/FilterCategory/index.jsx";
 import AddPost from "../components/admin/AddPost/index.jsx";
 import AllPost from "../components/admin/AllPosts/index.jsx";
 import UpdatePost from "../components/admin/UpdatePost/index.jsx";
+import WishList from "../components/main/Wishlist/index.jsx";
 import AddVourcher from "../components/admin/AddVourcher/index.jsx";
 import AllVourcher from "../components/admin/AllVourcher/index.jsx";
+import CheckoutPage from "../components/main/Pay/index.jsx";
+import AddCategory from "../components/admin/AddCategory/index.jsx";
+import OrderStatus from "../components/admin/OrderStatus/index.jsx";
+import AllProduct from "../components/admin/AllProduct/index.jsx";
+import UpdateCategory from "../components/admin/UpdateCategory/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -66,6 +69,22 @@ export default createBrowserRouter([
               </UserLoginRoutes>
             ),
             path: "/cart",
+          },
+          {
+            element: (
+              <UserLoginRoutes>
+                <WishList />
+              </UserLoginRoutes>
+            ),
+            path: "/wishlist",
+          },
+          {
+            element: (
+              <UserLoginRoutes>
+                <CheckoutPage />
+              </UserLoginRoutes>
+            ),
+            path: "/pay",
           },
           {
             element: (
@@ -114,7 +133,7 @@ export default createBrowserRouter([
             path: "/admin/addProduct",
           },
           {
-            element: <Allproduct />,
+            element: <AllProduct />,
             path: "/admin/allProduct",
           },
           {
@@ -139,24 +158,28 @@ export default createBrowserRouter([
           },
           {
             element: <AddPost />,
-            path: "/admin/add-post"
+            path: "/admin/add-post",
           },
           {
             element: <AllPost />,
-            path: "/admin/all-posts"
+            path: "/admin/all-posts",
           },
           {
             element: <UpdatePost />,
-            path: "/admin/update-post/:id"
+            path: "/admin/update-post/:id",
           },
           {
             element: <AddVourcher />,
-            path: "/admin/add-vourcher"
+            path: "/admin/add-vourcher",
           },
           {
             element: <AllVourcher />,
-            path: "/admin/all-vourchers"
-          }
+            path: "/admin/all-vourchers",
+          },
+          {
+            element: <OrderStatus />,
+            path: "/admin/order/:id",
+          },
         ],
       },
       {

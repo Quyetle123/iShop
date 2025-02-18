@@ -13,13 +13,14 @@ import {
   CommentContentP,
 } from "./style";
 import { useEffect, useState } from "react";
-import { fetchProductByIdStart } from "../../../reudux/slices/productSlice";
+import { fetchProductByIdStart } from "../../../redux/slices/productSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   addCartStart,
   fetchCartByAccountidStart,
   updateQuantityStart,
-} from "../../../reudux/slices/cartSlice";
+} from "../../../redux/slices/cartSlice";
+import { addWishlistStart } from "../../../redux/slices/wishlistSlice";
 import { getToken } from "../../../utils/token";
 import dayjs from "dayjs";
 import Slideshow from "../slideshow";
@@ -83,6 +84,16 @@ const Detail = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAddWishList = () => {
+    console.log("hi");
+    dispatch(
+      addWishlistStart({
+        accountid: token.id,
+        productColorid: product.ProductColors[apiColor].id,
+      })
+    );
   };
 
   const renderStars = (rating) => {
@@ -156,7 +167,9 @@ const Detail = () => {
           >
             Hết hàng
           </button>
-          <button>Thêm vào yêu thích</button>
+          <button onClick={() => handleAddWishList()}>
+            Thêm vào yêu thích
+          </button>
         </DetailArticle>
       </DetailContainer>
       <CommentSection>

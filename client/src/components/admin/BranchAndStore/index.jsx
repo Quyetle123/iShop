@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addBranchStart,
   fetchAllBranchStart,
-} from "../../../reudux/slices/branchSlice";
+} from "../../../redux/slices/branchSlice";
 import {
   Bar,
   BarChart,

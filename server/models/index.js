@@ -11,11 +11,13 @@ import Branch from "./Branch.js";
 import Color from "./Color.js";
 import ProductColor from "./ProductColor.js";
 import ProductImage from "./ProductImage.js";
+import Wishlist from "./Wishlist.js";
 import Post from "./Post.js";
 import Vourcher from "./Vourcher.js";
 import VoucherAccount from "./VoucherAccount.js";
 import VoucherProduct from "./VoucherProduct.js";
 import VoucherUsage from "./VoucherUsage.js";
+import Address from "./Address.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -68,6 +70,11 @@ VoucherProduct.belongsTo(Product, { foreignKey: "product_id" });
 ProductColor.hasMany(ProductImage, { foreignKey: "productColorid" });
 ProductImage.belongsTo(ProductColor, { foreignKey: "productColorid" });
 
+Account.hasMany(Wishlist, {foreignKey: "accountid"});
+Wishlist.belongsTo(Account, {foreignKey: "accountid"});
+
+ProductColor.hasMany(Wishlist, {foreignKey: "productColorid"});
+Wishlist.belongsTo(ProductColor, {foreignKey: "productColorid"});
 Vourcher.hasMany(VoucherAccount, { foreignKey: "voucher_id" });
 VoucherAccount.belongsTo(Vourcher, { foreignKey: "voucher_id" });
 
@@ -76,6 +83,9 @@ VoucherProduct.belongsTo(Vourcher, { foreignKey: "voucher_id" });
 
 Vourcher.hasMany(VoucherUsage, { foreignKey: "voucher_id" });
 VoucherUsage.belongsTo(Vourcher, { foreignKey: "voucher_id" });
+
+Account.hasMany(Address, { foreignKey: "accountid" });
+Address.belongsTo(Account, { foreignKey: "accountid" });
 
 export {
   Account,
@@ -91,9 +101,11 @@ export {
   Color,
   ProductColor,
   ProductImage,
+  Wishlist,
   Post,
   Vourcher,
   VoucherAccount,
   VoucherProduct,
   VoucherUsage,
+  Address
 };

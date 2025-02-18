@@ -14,10 +14,13 @@ import colorSaga from "./colorSaga.jsx";
 import productColorSaga from "./productColorSaga.jsx";
 import productImageSaga from "./productImageSaga.jsx";
 import postSaga from "./postSaga.jsx";
+import wishlistSaga  from "./wishlishtSaga.jsx";
 import vourcherSaga from "./vourcherSaga.jsx";
 import voucherAccountSaga from "./voucherAccountSaga.jsx";
 import voucherUsageSaga from "./voucherUsageSaga.jsx";
 import voucherProductSaga from "./voucherProductSaga.jsx";
+import addressSaga from "./addressSaga.jsx";
+import additionalAddressSaga  from "./additionalAddressSaga.jsx";
 
 export default function* rootSaga() {
   yield all([
@@ -36,9 +39,12 @@ export default function* rootSaga() {
     productColorSaga(),
     productImageSaga(),
     postSaga(),
+    wishlistSaga(),
     vourcherSaga(),
     voucherAccountSaga(),
     voucherProductSaga(),
     voucherUsageSaga(),
+    addressSaga(),
+    additionalAddressSaga(),
   ]);
 }

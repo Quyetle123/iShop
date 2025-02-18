@@ -10,25 +10,22 @@ const Account = sequelize.define("Account", {
   username: {
     type: DataTypes.STRING(255),
     allowNull: false,
-    unique: true,
+  },
+  phoneNumber: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    unique: true
   },
   email: {
     type: DataTypes.STRING(255),
     allowNull: false,
+    unique: true
   },
   password: {
     type: DataTypes.STRING(255),
     allowNull: true,
   },
   role: {
-    type: DataTypes.STRING(255), 
-    allowNull: true, 
-  },
-  address: {
-    type: DataTypes.STRING(255), 
-    allowNull: true, 
-  },
-  city: {
     type: DataTypes.STRING(255), 
     allowNull: true, 
   },
