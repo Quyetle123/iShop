@@ -6,7 +6,6 @@ import {
   deleteProductSuccess,
   fetchProductByCateIdStart,
   fetchProductByCateIdSuccess,
-  fetchProductByCateStart,
   fetchProductByIdStart,
   fetchProductByIdSuccess,
   fetchProductesStart,
