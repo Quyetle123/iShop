@@ -20,12 +20,32 @@ class AdressController {
     }
   }
 
+  static async MainAddress(req, res) {
+    const { accountid } = req.params;
+    try {
+      const address = await Address.findOne({
+        where: {
+          accountid,
+          is_default: true,
+        },
+      });
+      if (address) {
+        res.status(200).json({ address });
+      } else {
+        res.status(404).json({ message: "Adress not found" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
   static async AddressByAccountId(req, res) {
     const { accountid } = req.params;
     try {
       const addresses = await Address.findAll({
         where: {
           accountid,
+          is_default: false,
         },
       });
 
@@ -33,6 +53,20 @@ class AdressController {
         res.status(200).json({ addresses });
       } else {
         res.status(404).json({ message: " Adress not found" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async AdressById(req, res) {
+    const { id } = req.params;
+    try {
+      const address = await Address.findByPk(id);
+      if (address) {
+        res.status(200).json({ address });
+      } else {
+        res.status(404).json({ message: "Adress not found" });
       }
     } catch (error) {
       res.status(400).json({ message: error.message });

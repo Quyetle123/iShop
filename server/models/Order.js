@@ -9,17 +9,38 @@ const Order = sequelize.define(
       primaryKey: true,
       allowNull: false,
     },
+    username: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    phoneNumber: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      unique: true,
+    },
     total: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     address: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
     },
     city: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
+    },
+    district: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    ward: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    payMethod: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
     },
     status: {
       type: DataTypes.STRING(255),
