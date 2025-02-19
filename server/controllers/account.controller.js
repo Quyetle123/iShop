@@ -10,6 +10,7 @@ class AuthController {
         id: account.id,
         username: account.username,
         email: account.email,
+        phoneNumber: account.phoneNumber,
         role: account.role,
         city: account.city,
         address: account.address,

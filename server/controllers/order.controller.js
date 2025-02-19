@@ -81,9 +81,84 @@ class orderController {
     }
   }
 
+  static async getOrderDraft(req, res) {
+    try {
+      const { accountid } = req.params;
+      if (!accountid) {
+        return res.status(400).json({ message: "Account ID is required" });
+      }
+
+      const orderDraft = await Order.findOne({
+        where: {
+          accountid,
+          status: "Đơn nháp",
+        },
+        include: {
+          model: OrderDetail,
+          include: {
+            model: ProductColor,
+            include: [
+              {
+                model: Product,
+                paranoid: false,
+              },
+              {
+                model: ProductImage,
+              },
+            ],
+          },
+        },
+      });
+
+      if (orderDraft) {
+        res.status(200).json({ orderDraft });
+      } else {
+        res.status(404).json({ message: "No order draft" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async newOrder(req, res) {
+    const { id } = req.params;
+    const {
+      address,
+      ward,
+      district,
+      city,
+      payMethod,
+      usename,
+      phoneNumber,
+      status,
+    } = req.body;
+  
+    try {
+      const order = await Order.findByPk(id);
+      if (order) {
+        await order.update({
+          address,
+          ward,
+          district,
+          city,
+          payMethod,
+          usename,
+          phoneNumber,
+          status,
+          createdAt: new Date(),
+        });
+  
+        res.status(200).json({ order });
+      } else {
+        res.status(400).json({ message: "Order not found" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
   static async updateStatusOrder(req, res) {
     const { id } = req.params;
-    const { status, accountid } = req.body;
+    const { status } = req.body;
     try {
       const order = await Order.findByPk(id);
       if (order) {

@@ -4,8 +4,10 @@ import orderController from "../controllers/order.controller.js";
 const router = express.Router();
 
 router.post("/addOrder", orderController.addOrder);
+router.get("/orderDraft/:accountid", orderController.getOrderDraft);
 router.get("/getOrderByAccountid/:accountid", orderController.getOrderByAccountId);
 router.get("/getAllOrder", orderController.getAllOrder);
+router.put("/new/:id", orderController.newOrder)
 router.put("/updateStatusOrder/:id", orderController.updateStatusOrder);
 router.get("/statistics", orderController.getOrderStatistics);
 router.get("/month", orderController.getOrderStatisticMonth);

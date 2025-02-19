@@ -144,10 +144,10 @@ const Cart = () => {
 
   const handleConfirm = () => {
     const total = totalArr.reduce((acc, curr) => acc + curr, 0);
-    const status = "Đang đóng gói";
+    const status = "Đơn nháp";
     const accountid = token.id;
     const id = uuidv4();
-    dispatch(addOrderStart({ id, total, address, city, status, accountid }));
+    dispatch(addOrderStart({ id, total, status, accountid }));
     productColoridArr.forEach((item, index) => {
       const productColorid = productColoridArr[index];
       const quantity = quantityArr[index];
@@ -161,7 +161,7 @@ const Cart = () => {
         })
       );
     });
-    navigate("/myOrder");
+    navigate("/pay");
   };
 
   const columns = [
