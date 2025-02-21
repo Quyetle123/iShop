@@ -7,11 +7,17 @@ import {
   getAllOrderFailure,
   getAllOrderStart,
   getAllOrderSuccess,
+  getOrderByIdFailure,
+  getOrderByIdStart,
+  getOrderByIdSuccess,
   getOrderDraftFailure,
   getOrderDraftStart,
   getOrderDraftSuccess,
   getOrderFailure,
   getOrderStart,
+  getOrderStatusFailure,
+  getOrderStatusStart,
+  getOrderStatusSuccess,
   getOrderSuccess,
   newOrderFailure,
   newOrderStart,
@@ -64,6 +70,30 @@ function* getAllOrderSaga() {
   } catch (error) {
     yield put(getAllOrderFailure(error.message));
   }
+}
+
+function* getOrderByIdSaga(action) {
+  try {
+    const response = yield call(
+      axios.get,
+      `${import.meta.env.VITE_LOCALHOST}/order/orderById/${action.payload}`
+    );
+    yield put(getOrderByIdSuccess(response.data));
+  } catch (error) {
+    yield put(getOrderByIdFailure(error.message));
+  }
+}
+
+function* getOrderStatusSaga(action) {
+  try {
+    const response = yield call(
+      axios.get,
+      `${import.meta.env.VITE_LOCALHOST}/order/orderStatus/${action.payload.status}?page=${action.payload.page}&pageSize=${action.payload.pageSize}`
+    );
+    yield put(getOrderStatusSuccess(response.data));
+  } catch (error) {
+    yield put(getOrderStatusFailure(error.message));
+  } 
 }
 
 function* getOrderDraftSaga(action) {
@@ -139,6 +169,8 @@ export default function* orderSaga() {
   yield takeLatest(addOrderStart, addOrderSaga);
   yield takeLatest(getOrderStart, getOrderSaga);
   yield takeLatest(getAllOrderStart, getAllOrderSaga);
+  yield takeLatest(getOrderByIdStart, getOrderByIdSaga);
+  yield takeLatest(getOrderStatusStart, getOrderStatusSaga);
   yield takeLatest(getOrderDraftStart, getOrderDraftSaga);
   yield takeLatest(newOrderStart, newOrderSaga)
   yield takeLatest(updateStatusStart, updateStatusSaga);

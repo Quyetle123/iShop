@@ -4,6 +4,8 @@ const orderSlice = createSlice({
   name: "orders",
   initialState: {
     orders: [],
+    orderById: null,
+    orderStatus: [],
     orderDraft: {},
     orderStatistics: {},
     orderMonth: {},
@@ -44,6 +46,32 @@ const orderSlice = createSlice({
       state.orders = action.payload;
     },
     getAllOrderFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    getOrderByIdStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    getOrderByIdSuccess(state, action) {
+      state.loading = false;
+      state.orderById = action.payload;
+      state.error = null;
+    },
+    getOrderByIdFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    getOrderStatusStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    getOrderStatusSuccess(state, action) {
+      state.loading = false;
+      state.orderStatus = action.payload;
+      state.error = null;
+    },
+    getOrderStatusFailure(state, action) {
       state.loading = false;
       state.error = action.payload;
     },
@@ -120,6 +148,12 @@ export const {
   getAllOrderStart,
   getAllOrderSuccess,
   getAllOrderFailure,
+  getOrderByIdStart,
+  getOrderByIdSuccess,
+  getOrderByIdFailure,
+  getOrderStatusStart,
+  getOrderStatusSuccess,
+  getOrderStatusFailure,
   getOrderDraftStart,
   getOrderDraftSuccess,
   getOrderDraftFailure,

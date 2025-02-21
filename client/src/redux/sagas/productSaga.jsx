@@ -4,11 +4,6 @@ import {
   addProductSuccess,
   deleteProductStart,
   deleteProductSuccess,
-<<<<<<< HEAD:client/src/reudux/sagas/productSaga.jsx
-  fetchProductByCateIdStart,
-  fetchProductByCateIdSuccess,
-=======
->>>>>>> c08a14b2ec8b18310c2ad5bc6c94ab504a208fad:client/src/redux/sagas/productSaga.jsx
   fetchProductByIdStart,
   fetchProductByIdSuccess,
   fetchProductesStart,

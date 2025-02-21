@@ -59,6 +59,7 @@ class orderController {
   static async getAllOrder(req, res) {
     try {
       const orders = await Order.findAll({
+        limit: 5, // Giới hạn 5 đơn hàng
         include: {
           model: OrderDetail,
           include: {
@@ -76,6 +77,74 @@ class orderController {
         },
       });
       res.status(200).json({ orders });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async getOrderById(req, res) {
+    const { id } = req.params;
+    try {
+      const order = await Order.findOne({
+        where: {
+          id,
+        },
+        include: {
+          model: OrderDetail,
+          include: {
+            model: ProductColor,
+            include: [
+              {
+                model: Product,
+                paranoid: false,
+              },
+              {
+                model: ProductImage,
+              },
+            ],
+          },
+        },
+      });
+      if (order) {
+        res.status(200).json({ order });
+      } else {
+        res.status(404).json({ message: "Order not found" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async getOrdersByStatus(req, res) {
+    try {
+      const { status } = req.params;
+      const { page = 1, pageSize = 10 } = req.query;
+      const limit = parseInt(pageSize);
+      const offset = (parseInt(page) - 1) * limit;
+
+      const validStatuses = [
+        "Chờ phê duyệt",
+        "Đang đóng gói",
+        "Đang vận chuyển",
+        "Đã giao hàng",
+        "Đã hủy",
+      ];
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({ message: "Trạng thái không hợp lệ" });
+      }
+
+      const { count, rows: orders } = await Order.findAndCountAll({
+        where: { status },
+        limit,
+        offset,
+      });
+
+      res.status(200).json({
+        orders,
+        totalOrders: count,
+        totalPages: Math.ceil(count / limit),
+        currentPage: parseInt(page),
+      });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
@@ -132,7 +201,7 @@ class orderController {
       phoneNumber,
       status,
     } = req.body;
-  
+
     try {
       const order = await Order.findByPk(id);
       if (order) {
@@ -147,7 +216,7 @@ class orderController {
           status,
           createdAt: new Date(),
         });
-  
+
         res.status(200).json({ order });
       } else {
         res.status(400).json({ message: "Order not found" });
