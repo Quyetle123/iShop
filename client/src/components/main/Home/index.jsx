@@ -3,29 +3,61 @@ import Slideshow from "../slideshow";
 import {
   CategoryCard,
   CategoryContainer,
-  VoucherContainer,
+  // VoucherContainer,
   ImgContainer,
   Main,
   ProductCard,
   Title,
   TitleContainer,
-  VoucherCard,
-  VoucherAside,
-  VoucherContent,
-  VoucherDescription,
-  VoucherP,
+  // VoucherCard,
+  // VoucherAside,
+  // VoucherContent,
+  // VoucherDescription,
+  // VoucherP,
 } from "./style";
-import { FaApple, FaShoppingCart, FaClock } from "react-icons/fa";
-import { useEffect } from "react";
+import {
+  FaApple,
+  // FaShoppingCart, FaClock
+} from "react-icons/fa";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchCategories } from "../../../redux/slices/categorySlice";
-import { Carousel, Row, Col } from "antd";
+import { Carousel, Row, Col, Modal } from "antd";
 import { fetchVourchersStart } from "../../../redux/slices/vourcherSlice";
-import dayjs from "dayjs";
+import { getToken } from "../../../utils/token";
+import { getOrderDraftStart } from "../../../redux/slices/orderSlice";
+// import dayjs from "dayjs";
+
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const token = getToken();
+  const [isDraftOrderModalOpen, setIsDraftOrderModalOpen] = useState(false);
+  const { orderDraft } = useSelector((state) => state.orders);
+
+  useEffect(() => {
+    dispatch(getOrderDraftStart(token?.id));
+  }, [dispatch]);
+
+
+  useEffect(() => {
+    const fetchDraftOrder = async () => {
+      if (token) {
+        try {
+          if (orderDraft) {
+            setIsDraftOrderModalOpen(true);
+          }
+        } catch (error) {
+          console.error("Lỗi lấy đơn hàng nháp:", error);
+        }
+      }
+    };
+
+    fetchDraftOrder();
+  
+  }, []);
 
   const { categories } = useSelector((state) => state.categories);
   const categoryList = Array.isArray(categories.categories)
@@ -80,8 +112,23 @@ const Home = () => {
 
   return (
     <Main>
+      <Modal
+        title="Bạn có đơn hàng chưa thanh toán"
+        open={isDraftOrderModalOpen}
+        onCancel={() => setIsDraftOrderModalOpen(false)}
+        onOk={() => {
+          setIsDraftOrderModalOpen(false);
+          navigate(`/pay`);
+        }}
+      >
+        <p>
+          Bạn có một đơn hàng chưa thanh toán. Bạn có muốn tiếp tục thanh toán
+          không?
+        </p>
+      </Modal>
+
       <Slideshow images={images} />
-      <VoucherContainer>
+      {/* <VoucherContainer>
         {voucherList.slice(0, 4).map((voucher) => (
           <VoucherCard key={voucher.id}>
             <VoucherAside>
@@ -107,7 +154,7 @@ const Home = () => {
             </VoucherContent>
           </VoucherCard>
         ))}
-      </VoucherContainer>
+      </VoucherContainer> */}
 
       <CategoryContainer>
         {categoryList.map((category) => (

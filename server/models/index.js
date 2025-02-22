@@ -18,6 +18,7 @@ import VoucherAccount from "./VoucherAccount.js";
 import VoucherProduct from "./VoucherProduct.js";
 import VoucherUsage from "./VoucherUsage.js";
 import Address from "./Address.js";
+import UserSocket from "./UserSocket.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -107,5 +108,6 @@ export {
   VoucherAccount,
   VoucherProduct,
   VoucherUsage,
-  Address
+  Address,
+  UserSocket
 };

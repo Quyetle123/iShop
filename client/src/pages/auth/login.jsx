@@ -5,14 +5,16 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginStart, loginWithGoogleStart } from "../../redux/slices/authSlice";
 import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
+import { socket } from "../../utils/socket";
 
 const { Title, Text } = Typography;
+
 
 function Login() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { role } = useSelector((state) => state.auth);
+  const { account } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
@@ -21,12 +23,15 @@ function Login() {
   };
 
   useEffect(() => {
-    if (role === "user") {
-      navigate("/");
-    } else if (role === "admin") {
-      navigate("/admin");
+    if(account) {
+      socket.emit("login", {accountId: account?.id});
+      if (account?.role === "user") {
+        navigate("/");
+      } else if (account?.role === "admin") {
+        navigate("/admin");
+      }
     }
-  }, [role, navigate]);
+  }, [navigate, account]);
 
   const auth = getAuth();
 

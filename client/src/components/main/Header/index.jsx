@@ -4,15 +4,14 @@ import { Menu, Dropdown, Avatar, Badge, Button, List, Popover } from "antd";
 import { IoIosNotifications } from "react-icons/io";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { getToken, removeToken } from "../../../utils/token";
 import {
   deleteNotifyStart,
   fetchNotifyStart,
 } from "../../../redux/slices/notifySlice";
+import { socket } from "../../../utils/socket";
 
-const socket = io("http://localhost:5000");
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -27,19 +26,19 @@ const Header = () => {
 
   useEffect(() => {
     if (!token) return;
+  
     socket.on("connect", () => console.log("Socket connected: ", socket.id));
     socket.on("newMessage", (notify) => {
-      if (notify.accountid === token.id) {
-        setNotifyList((prev) => [...prev, notify]);
-        setHasNewNotifications(true);
-      }
+      setNotifyList((prev) => [...prev, notify]);
+      setHasNewNotifications(true);
     });
-
+  
     return () => {
       socket.off("newMessage");
       socket.off("connect");
     };
   }, [token]);
+  
 
   const { notifies } = useSelector((state) => state.notifies) || { notify: [] };
   const arrList = Array.isArray(notifies.notify) ? notifies.notify : [];
