@@ -20,7 +20,8 @@ import {
   CreditCardOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrderByIdStart } from "../../../redux/slices/orderSlice";
+import { getOrderByIdStart, updateStatusStart } from "../../../redux/slices/orderSlice";
+import { socket } from "../../../utils/socket";
 
 const { Title, Text } = Typography;
 
@@ -62,6 +63,19 @@ const OrderStatus = () => {
   const confirmChange = () => {
     setCurrentStatus(newStatus);
     setIsModalOpen(false);
+    dispatch(updateStatusStart({id, status: statusSteps[newStatus]}));
+    if (statusSteps[newStatus] === "Đang vận chuyển") {
+      socket.emit("sendMessage", {
+        message: `Đơn hàng ${id} của bạn đã được bàn giao cho đơn vị vận chuyển`,
+        accountid: order.accountid,
+      });
+    } else if (statusSteps[newStatus] === "Đã giao hàng") {
+      socket.emit("sendMessage", {
+        message:
+          "Đơn hàng của bạn đã được giao. Hãy viết bình luận đánh giá về sản phẩm",
+        accountid: order.accountid,
+      });
+    }
   };
 
   const columns = [
