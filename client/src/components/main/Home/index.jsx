@@ -28,6 +28,7 @@ import { getToken } from "../../../utils/token";
 import { getOrderDraftStart } from "../../../redux/slices/orderSlice";
 // import dayjs from "dayjs";
 
+
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ const Home = () => {
     };
 
     fetchDraftOrder();
+  
   }, []);
 
   const { categories } = useSelector((state) => state.categories);
@@ -115,7 +117,7 @@ const Home = () => {
         open={isDraftOrderModalOpen}
         onCancel={() => setIsDraftOrderModalOpen(false)}
         onOk={() => {
-          setIsDraftOrderModalOpen(false); // Đóng Modal
+          setIsDraftOrderModalOpen(false);
           navigate(`/pay`);
         }}
       >
