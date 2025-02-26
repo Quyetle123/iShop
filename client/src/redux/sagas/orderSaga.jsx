@@ -88,7 +88,7 @@ function* getOrderStatusSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `${import.meta.env.VITE_LOCALHOST}/order/orderStatus/${action.payload.status}?page=${action.payload.page}&pageSize=${action.payload.pageSize}`
+      `${import.meta.env.VITE_LOCALHOST}/order/orderStatus/${action.payload.storeid}?status=${action.payload.status}&page=${action.payload.page}&pageSize=${action.payload.pageSize}`
     );
     yield put(getOrderStatusSuccess(response.data));
   } catch (error) {
@@ -138,11 +138,11 @@ function* updateStatusSaga(action) {
   }
 }
 
-function* orderStatisticSaga() {
+function* orderStatisticSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `${import.meta.env.VITE_LOCALHOST}/order/statistics`
+      `${import.meta.env.VITE_LOCALHOST}/order/statistics/${action.payload}`
     );
     yield put(orderStatisticSuccess(response.data));
   } catch (error) {
@@ -152,12 +152,12 @@ function* orderStatisticSaga() {
 
 function* orderMonthSaga(action) {
   try {
-    const { startMonth, endMonth, startYear, endYear } = action.payload;
+    const { storeid, startMonth, endMonth, startYear, endYear } = action.payload;
     const response = yield call(
       axios.get,
       `${
         import.meta.env.VITE_LOCALHOST
-      }/order/month?startMonth=${startMonth}&startYear=${startYear}&endMonth=${endMonth}&endYear=${endYear}`
+      }/order/month/${storeid}?startMonth=${startMonth}&startYear=${startYear}&endMonth=${endMonth}&endYear=${endYear}`
     );
     yield put(orderMonthSuccess(response.data));
   } catch (error) {

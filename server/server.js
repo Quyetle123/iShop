@@ -26,6 +26,7 @@ import VoucherAccount from "./routes/voucherAccount.route.js";
 import VoucherProduct from "./routes/voucherProduct.route.js";
 import VoucherUsage from "./routes/voucherUsage.route.js";
 import AddressRouter from "./routes/address.route.js";
+import storeStockRouter from "./routes/storeStock.router.js";
 import setupSocket from "./socket/socket.js";
 
 const app = express();
@@ -63,6 +64,7 @@ app.use("/api/voucherAccount", VoucherAccount);
 app.use("/api/voucherProduct", VoucherProduct);
 app.use("/api/voucherUsage", VoucherUsage);
 app.use("/api/address", AddressRouter);
+app.use("/api/storeStock", storeStockRouter);
 
 setupSocket(io);
 

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderStatusStart } from "../../../redux/slices/orderSlice.jsx";
 import { useNavigate } from "react-router-dom";
+import { getToken } from "../../../utils/token.jsx";
+import { getAccountStorebyAccountIdStart } from "../../../redux/slices/storeAccountSlice.jsx";
 
 const statuses = [
   "Chờ phê duyệt",
@@ -63,6 +65,11 @@ const statuses = [
 const AllOrder = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {storeAccount} = useSelector((state) => state.storeAccounts);
+  
+    useEffect(() => {
+      dispatch(getAccountStorebyAccountIdStart(getToken().id));
+    }, [dispatch]);
   const { orderStatus } = useSelector((state) => state?.orders);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,12 +79,13 @@ const AllOrder = () => {
   useEffect(() => {
     dispatch(
       getOrderStatusStart({
+        storeid: storeAccount?.accountStore?.Store?.id,
         status: selectedStatus,
         page: currentPage,
         pageSize,
       })
     );
-  }, [dispatch, selectedStatus, currentPage, pageSize]);
+  }, [dispatch, selectedStatus, currentPage, pageSize, storeAccount]);
 
   const handlePageChange = (page, pageSize) => {
     setCurrentPage(page);

@@ -54,6 +54,14 @@ const Order = sequelize.define(
         key: "id",
       },
     },
+    storeid: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      references: {
+        model: "stores",
+        key: "id",
+      },
+    },
   },
   {
     tableName: "orders",

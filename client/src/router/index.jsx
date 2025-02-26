@@ -33,6 +33,10 @@ import AddCategory from "../components/admin/AddCategory/index.jsx";
 import OrderStatus from "../components/admin/OrderStatus/index.jsx";
 import AllProduct from "../components/admin/AllProduct/index.jsx";
 import UpdateCategory from "../components/admin/UpdateCategory/index.jsx";
+import Administrator from "../pages/administrator/index.jsx";
+import AdministatorRoute from "./administratorRouter.jsx";
+import AdminStratorHome from "../components/administrator/Home/Home.jsx";
+import StockStore from "../components/admin/StockStore/index.jsx";
 
 const MainLayout = () => {
   return <Outlet />;
@@ -117,68 +121,86 @@ export default createBrowserRouter([
             index: true,
           },
           {
-            element: <AddCategory />,
-            path: "/admin/addCategory",
-          },
-          {
-            element: <AllCategories />,
-            path: "/admin/allCategories",
-          },
-          {
-            element: <UpdateCategory />,
-            path: "/admin/updateCategory/:id",
-          },
-          {
-            element: <AddProduct />,
-            path: "/admin/addProduct",
-          },
-          {
-            element: <AllProduct />,
-            path: "/admin/allProduct",
-          },
-          {
-            element: <UpdateProduct />,
-            path: "/admin/updateProduct/:id",
-          },
-          {
             element: <AllOrder />,
             path: "/admin/allOrder",
           },
           {
+            element: <OrderStatus />,
+            path: "/admin/order/:id",
+          },
+          {
+            element: <StockStore />,
+            path: "/admin/storeStock",
+          }
+        ],
+      },
+      {
+        element: (
+          <AdministatorRoute>
+            <Administrator />
+          </AdministatorRoute>
+        ),
+        path: "/administrator",
+        children: [
+          {
+            element: <AdminStratorHome />,
+            index: true,
+          },
+          {
+            element: <AddCategory />,
+            path: "/administrator/addCategory",
+          },
+          {
+            element: <AllCategories />,
+            path: "/administrator/allCategories",
+          },
+          {
+            element: <UpdateCategory />,
+            path: "/administrator/updateCategory/:id",
+          },
+          {
+            element: <AddProduct />,
+            path: "/administrator/addProduct",
+          },
+          {
+            element: <AllProduct />,
+            path: "/administrator/allProduct",
+          },
+          {
+            element: <UpdateProduct />,
+            path: "/administrator/updateProduct/:id",
+          },
+          {
             element: <AddStore />,
-            path: "/admin/addStore",
+            path: "/administrator/addStore",
           },
           {
             element: <BranchAndStore />,
-            path: "/admin/branch-store",
+            path: "/administrator/branch-store",
           },
           {
             element: <ColorManager />,
-            path: "/admin/colorManager",
+            path: "/administrator/colorManager",
           },
           {
             element: <AddPost />,
-            path: "/admin/add-post",
+            path: "/administrator/add-post",
           },
           {
             element: <AllPost />,
-            path: "/admin/all-posts",
+            path: "/administrator/all-posts",
           },
           {
             element: <UpdatePost />,
-            path: "/admin/update-post/:id",
+            path: "/administrator/update-post/:id",
           },
           {
             element: <AddVourcher />,
-            path: "/admin/add-vourcher",
+            path: "/administrator/add-vourcher",
           },
           {
             element: <AllVourcher />,
-            path: "/admin/all-vourchers",
-          },
-          {
-            element: <OrderStatus />,
-            path: "/admin/order/:id",
+            path: "/administrator/all-vourchers",
           },
         ],
       },

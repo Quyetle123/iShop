@@ -29,6 +29,8 @@ function Login() {
         navigate("/");
       } else if (account?.role === "admin") {
         navigate("/admin");
+      } else if (account?.role === "administrator") {
+        navigate("/administrator");
       }
     }
   }, [navigate, account]);

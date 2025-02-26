@@ -1,4 +1,4 @@
-import { Card, Form, Input, Modal, Table, Tooltip } from "antd";
+import { Card, Form, Modal, Select, Table, Tooltip } from "antd";
 import * as S from "./style";
 import { useEffect, useState } from "react";
 import TextArea from "antd/es/input/TextArea";
@@ -17,9 +17,18 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { fetchProvincesStart } from "../../../redux/slices/addressSlice";
 
 const BranchAndStore = () => {
   const dispatch = useDispatch();
+  const { provinces } = useSelector(
+    (state) => state.addresses
+  );
+  const provinceList = Array.isArray(provinces) ? provinces : [];
+
+  useEffect(() => {
+    dispatch(fetchProvincesStart());
+  }, [dispatch]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
@@ -36,9 +45,10 @@ const BranchAndStore = () => {
   };
 
   const onFinish = (values) => {
+    console.log(values)
     dispatch(
       addBranchStart({
-        branchname: values.branchname,
+        branchname: values.province,
         description: values.description,
       })
     );
@@ -92,19 +102,28 @@ const BranchAndStore = () => {
       >
         <Form layout="vertical" form={form} onFinish={onFinish}>
           <Form.Item
-            label="Tên chi nhánh"
-            name="branchname"
+            label="Thành phố"
+            name="province"
             rules={[
               {
                 required: true,
-                message: "Chưa điền tên chi nhánh!",
+                message: "Vui lòng chọn thành phố",
               },
             ]}
           >
-            <Input />
+            <Select
+              placeholder="Chọn thành phố"
+              // onChange={handleProvinceChange}
+            >
+              {provinceList.map((province) => (
+                <Select.Option key={province.code} value={province.code}>
+                  {province.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item
-            label="Giới thiệu"
+            label="Ghi chú"
             name="description"
             rules={[
               {

@@ -7,6 +7,12 @@ import { v4 as uuidv4 } from "uuid";
 import { registerStart } from "../../../redux/slices/authSlice";
 import { addStoreAccountStart } from "../../../redux/slices/storeAccountSlice";
 import { fetchAllBranchStart } from "../../../redux/slices/branchSlice";
+import {
+  fetchDistrictsStart,
+  fetchProvincesStart,
+  fetchWardsStart,
+} from "../../../redux/slices/addressSlice";
+import { findNameAddress } from "../../../utils/findAddress";
 
 const AddStore = () => {
   const dispatch = useDispatch();
@@ -20,7 +26,30 @@ const AddStore = () => {
     dispatch(fetchAllBranchStart());
   }, [dispatch]);
 
-  console.log(branchList);
+  const { provinces, districts, wards } = useSelector(
+    (state) => state.addresses
+  );
+
+    useEffect(() => {
+      dispatch(fetchProvincesStart());
+    }, [dispatch]);
+
+  const provinceList = Array.isArray(provinces) ? provinces : [];
+  const districtList = Array.isArray(districts.districts)
+    ? districts.districts
+    : [];
+  const wardList = Array.isArray(wards.wards) ? wards.wards : [];
+
+  const handleBranchChange = (provinceCode) => {
+    console.log(provinceCode)
+    dispatch(fetchDistrictsStart(provinceCode));
+    form.setFieldsValue({ district: undefined, ward: undefined });
+  };
+
+  const handleDistrictChange = (districtCode) => {
+    dispatch(fetchWardsStart(districtCode));
+    form.setFieldsValue({ ward: undefined });
+  };
 
   const steps = [
     {
@@ -35,9 +64,79 @@ const AddStore = () => {
             <Input />
           </Form.Item>
           <Form.Item
+            label="Chi nhánh"
+            name="branchid"
+            rules={[
+              { required: true, message: "Vui lòng nhập tên chi nhánh!" },
+            ]}
+          >
+            <Select placeholder="Chọn chi nhánh" onChange={handleBranchChange}>
+              {branchList.map((branch) => (
+                <Select.Option key={branch.branchname} value={branch.branchname}>
+                  {findNameAddress(provinceList, branch.branchname)?.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Quận huyện"
+            name="district"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng chọn quận huyện",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Chọn quận huyện"
+              onChange={handleDistrictChange}
+            >
+              {districtList.map((district) => (
+                <Select.Option key={district.code} value={district.code}>
+                  {district.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Phường xã"
+            name="ward"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng chọn phường xã",
+              },
+            ]}
+          >
+            <Select placeholder="Chọn phường xã">
+              {wardList.map((ward) => (
+                <Select.Option key={ward.code} value={ward.code}>
+                  {ward.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
             label="Địa chỉ"
             name="address"
             rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      ),
+    },
+    {
+      title: "Tạo tài khoản quản lí",
+      content: (
+        <Form form={form} layout="vertical" name="managerForm">
+        <Form.Item
+            label="Họ và tên"
+            name="username"
+            rules={[
+              { required: true, message: "Vui lòng nhập họ và tên!" },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -51,76 +150,15 @@ const AddStore = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="Chi nhánh"
-            name="branchid"
-            rules={[
-              { required: true, message: "Vui lòng nhập tên chi nhánh!" },
-            ]}
-          >
-            <Select placeholder="Chọn chi nhánh">
-              {branchList.map((branch) => (
-                <Select.Option key={branch.id}>
-                  {branch.branchname}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Form>
-      ),
-    },
-    {
-      title: "Tạo tài khoản quản lí",
-      content: (
-        <Form form={form} layout="vertical" name="managerForm">
-          <Form.Item
-            label="Tên tài khoản"
-            name="managerUsername"
-            rules={[
-              { required: true, message: "Vui lòng nhập tên tài khoản!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
             label="Mật khẩu"
-            name="managerPassword"
+            name="password"
             rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
           >
             <Input.Password />
           </Form.Item>
           <Form.Item
             label="Email"
-            name="managerEmail"
-            rules={[{ required: true, message: "Vui lòng nhập email!" }]}
-          >
-            <Input />
-          </Form.Item>
-        </Form>
-      ),
-    },
-    {
-      title: "Tạo tài khoản nhân viên xử lí đơn hàng",
-      content: (
-        <Form form={form} layout="vertical" name="supportForm">
-          <Form.Item
-            label="Tên tài khoản"
-            name="supportUsername"
-            rules={[
-              { required: true, message: "Vui lòng nhập tên tài khoản!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Mật khẩu"
-            name="supportPassword"
-            rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item
-            label="Email"
-            name="supportEmail"
+            name="email"
             rules={[{ required: true, message: "Vui lòng nhập email!" }]}
           >
             <Input />
@@ -151,53 +189,37 @@ const AddStore = () => {
       .validateFields()
       .then((values) => {
         const storeid = uuidv4();
-        const managerid = uuidv4();
-        const supportid = uuidv4();
+        const adminid = uuidv4();
         const allData = { ...formData, ...values };
         dispatch(
           addStoreStart({
             id: storeid,
             storename: allData.storename,
-            address: allData.address,
-            phoneNumber: allData.phoneNumber,
             branchid: allData.branchid,
+            district: allData.district,
+            ward: allData.ward,
+            address: allData.address,
+            status: "Cần khởi tạo",
           })
         );
 
         dispatch(
           registerStart({
-            id: managerid,
-            username: allData.managerUsername,
-            email: allData.managerEmail,
-            password: allData.managerPassword,
-            role: "Manager",
-          })
-        );
-
-        dispatch(
-          registerStart({
-            id: supportid,
-            username: allData.supportUsername,
-            email: allData.supportEmail,
-            password: allData.supportPassword,
-            role: "Support",
+            id: adminid,
+            username: allData.username,
+            phoneNumber: allData.phoneNumber,
+            email: allData.email,
+            password: allData.password,
+            role: "admin",
           })
         );
 
         dispatch(
           addStoreAccountStart({
             storeid,
-            accountid: managerid,
+            accountid: adminid,
           })
         );
-
-        dispatch(
-          addStoreAccountStart({
-            storeid,
-            accountid: supportid,
-          })
-        );
-
         message.success("Đã hoàn thành tạo cửa hàng!");
       })
       .catch(() => {
