@@ -10,7 +10,7 @@ const Branch = sequelize.define(
       primaryKey: true,
     },
     branchname: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     description: {

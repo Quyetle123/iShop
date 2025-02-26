@@ -18,7 +18,7 @@ import VoucherAccount from "./VoucherAccount.js";
 import VoucherProduct from "./VoucherProduct.js";
 import VoucherUsage from "./VoucherUsage.js";
 import Address from "./Address.js";
-import UserSocket from "./UserSocket.js";
+import StoreStock from "./StoreStock.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -88,6 +88,14 @@ VoucherUsage.belongsTo(Vourcher, { foreignKey: "voucher_id" });
 Account.hasMany(Address, { foreignKey: "accountid" });
 Address.belongsTo(Account, { foreignKey: "accountid" });
 
+Store.hasMany(StoreStock, {foreignKey: "storeid"});
+StoreStock.belongsTo(Store, {foreignKey: "storeid"});
+
+ProductColor.hasMany(StoreStock, {foreignKey: "productColorid"});
+StoreStock.belongsTo(ProductColor, {foreignKey: "productColorid"});
+
+
+
 export {
   Account,
   Cart,
@@ -109,5 +117,5 @@ export {
   VoucherProduct,
   VoucherUsage,
   Address,
-  UserSocket
+  StoreStock
 };

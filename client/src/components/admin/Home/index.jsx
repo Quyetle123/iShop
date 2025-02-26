@@ -37,6 +37,8 @@ import {
 } from "../../../redux/slices/orderSlice";
 import { productStatisticStart } from "../../../redux/slices/categorySlice";
 import dayjs from "dayjs";
+import { getToken } from "../../../utils/token";
+import { getAccountStorebyAccountIdStart } from "../../../redux/slices/storeAccountSlice";
 
 ChartJS.register(
   CategoryScale,
@@ -146,6 +148,11 @@ const statusMapping = {
 
 const AdminHome = () => {
   const dispatch = useDispatch();
+  const {storeAccount} = useSelector((state) => state.storeAccounts);
+
+  useEffect(() => {
+    dispatch(getAccountStorebyAccountIdStart(getToken().id));
+  }, [dispatch]);
   const { orderStatistics } = useSelector((state) => state.orders);
   const orderStatisticList = Array.isArray(orderStatistics)
     ? orderStatistics
@@ -159,17 +166,18 @@ const AdminHome = () => {
     currentDate,
   ]);
   useEffect(() => {
-    dispatch(orderStatisticStart());
+    dispatch(orderStatisticStart(storeAccount?.accountStore?.Store?.id));
     dispatch(productStatisticStart());
     dispatch(
       orderMonthStart({
+        storeid: storeAccount?.accountStore?.Store?.id,
         startMonth: dateRange[0].month() + 1,
         startYear: dateRange[0].year(),
         endMonth: dateRange[1].month() + 1,
         endYear: dateRange[1].year(),
       })
     );
-  }, [dispatch, dateRange]);
+  }, [dispatch, dateRange, storeAccount]);
 
   return (
     <Container>

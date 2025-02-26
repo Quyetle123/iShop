@@ -23,6 +23,7 @@ import voucherProductSlice from "./slices/voucherProductSlice.jsx";
 import voucherUsageSlice from "./slices/voucherUsageSlice.jsx";
 import addressSlice from "./slices/addressSlice.jsx"
 import additionalAddressSlice from "./slices/additionalAddressSlice.jsx"
+import storeStockSlice from "./slices/storeStockSlice.jsx"
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -49,7 +50,8 @@ export const store = configureStore({
     voucherProducts: voucherProductSlice,
     voucherUsages: voucherUsageSlice,
     addresses: addressSlice,
-    additionalAddresses: additionalAddressSlice
+    additionalAddresses: additionalAddressSlice,
+    storeStocks: storeStockSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware),

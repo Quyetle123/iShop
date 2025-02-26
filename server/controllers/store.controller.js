@@ -10,6 +10,22 @@ class storeController {
       res.status(400).json({ message: error.message });
     }
   }
+
+  static async updateStatusStore(req, res) {
+    const { id } = req.params;
+    const { status } = req.body;
+    try {
+      const store = await Store.findByPk(id);
+      if (store) {
+        await store.update({ status });
+        res.status(200).json({ store });
+      } else {
+        res.status(400).json({ message: "Store not found" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
 }
 
 export default storeController;

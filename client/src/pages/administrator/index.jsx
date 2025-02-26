@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-import Header from "../../components/admin/Header";
 import HeaderTop from "../../components/admin/HeaderTop";
 import { GlobalStyle, MainContainer, MenuContainer } from "../Style/style";
+import Header from "../../components/administrator/Header";
 
-const Admin = () => {  
+const Administrator = () => {
   return (
     <>
       <GlobalStyle />
@@ -18,4 +18,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default Administrator;

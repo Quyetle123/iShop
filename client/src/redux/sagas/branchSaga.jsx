@@ -9,7 +9,8 @@ function* addBranchSaga(action) {
       `${import.meta.env.VITE_LOCALHOST}/branch/addBranch`,
       action.payload
     );
-    yield put(addBranchSuccess(response.data))
+    yield put(addBranchSuccess(response.data));
+    yield put(fetchAllBranchStart());
   } catch (error) {
     yield put(addBranchFailure(error.message));
   }

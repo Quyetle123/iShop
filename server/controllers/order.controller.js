@@ -59,7 +59,7 @@ class orderController {
   static async getAllOrder(req, res) {
     try {
       const orders = await Order.findAll({
-        limit: 5, // Giới hạn 5 đơn hàng
+        limit: 5, 
         include: {
           model: OrderDetail,
           include: {
@@ -117,8 +117,8 @@ class orderController {
 
   static async getOrdersByStatus(req, res) {
     try {
-      const { status } = req.params;
-      const { page = 1, pageSize = 10 } = req.query;
+      const { storeid } = req.params;
+      const { page = 1, pageSize = 10, status } = req.query;
       const limit = parseInt(pageSize);
       const offset = (parseInt(page) - 1) * limit;
 
@@ -134,7 +134,7 @@ class orderController {
       }
 
       const { count, rows: orders } = await Order.findAndCountAll({
-        where: { status },
+        where: { status, storeid },
         limit,
         offset,
       });
@@ -243,6 +243,7 @@ class orderController {
   }
 
   static async getOrderStatistics(req, res) {
+    const {storeid} = req.params;
     try {
       const statuses = [
         "Đang đóng gói",
@@ -254,7 +255,7 @@ class orderController {
 
       for (const status of statuses) {
         const orders = await Order.findAll({
-          where: { status },
+          where: { status, storeid },
           attributes: ["id", "total"],
         });
 
@@ -274,6 +275,7 @@ class orderController {
   }
 
   static async getOrderStatisticMonth(req, res) {
+    const {storeid} = req.params;
     try {
       const { startMonth, startYear, endMonth, endYear } = req.query;
       if (!startMonth || !startYear || !endMonth || !endYear) {
@@ -304,6 +306,7 @@ class orderController {
         const orders = await Order.findAll({
           where: {
             status,
+            storeid,
             createdAt: {
               [Op.between]: [new Date(startYear, startMonth - 1, 1), endDate],
             },
