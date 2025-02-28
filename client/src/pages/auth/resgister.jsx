@@ -12,13 +12,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerStart } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import {
-  fetchProvincesStart,
-  fetchDistrictsStart,
-  fetchWardsStart,
-} from "../../redux/slices/addressSlice";
 import { addAdditionalAddressStart } from "../../redux/slices/additionalAddressSlice";
-import { findNameAddress } from "../../utils/findAddress";
+import { fetchProvincesStart } from "../../redux/slices/provinceSlice";
+import { fetchDistrictByProvinceIdStart } from "../../redux/slices/districtSlice";
+import { fetchWardsByDistrictIdStart } from "../../redux/slices/wardSlice";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -26,12 +23,15 @@ const { Option } = Select;
 const Register = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const { provinces, districts, wards } = useSelector(
-    (state) => state.addresses
-  );
-  const provinceList = Array.isArray(provinces) ? provinces : [];
-  const districtList = Array.isArray(districts.districts)
-    ? districts.districts
+  const { provinces } = useSelector((state) => state.provinces);
+  const { districts } = useSelector((state) => state.districts);
+  const { wards } = useSelector((state) => state.wards);
+
+  const provinceList = Array.isArray(provinces.province)
+    ? provinces.province
+    : [];
+  const districtList = Array.isArray(districts.district)
+    ? districts.district
     : [];
   const wardList = Array.isArray(wards.wards) ? wards.wards : [];
 
@@ -40,12 +40,12 @@ const Register = () => {
   }, [dispatch]);
 
   const handleProvinceChange = (provinceCode) => {
-    dispatch(fetchDistrictsStart(provinceCode));
+    dispatch(fetchDistrictByProvinceIdStart(provinceCode));
     form.setFieldsValue({ district: undefined, ward: undefined });
   };
 
   const handleDistrictChange = (districtCode) => {
-    dispatch(fetchWardsStart(districtCode));
+    dispatch(fetchWardsByDistrictIdStart(districtCode));
     form.setFieldsValue({ ward: undefined });
   };
 
@@ -64,26 +64,6 @@ const Register = () => {
       address,
       agree,
     } = values;
-
-    const provinceName = findNameAddress(provinceList, city);
-    if (!provinceName) {
-      message.error("Thành phố không hợp lệ.");
-      return;
-    }
-
-    dispatch(fetchDistrictsStart(values.province));
-    const districtName = findNameAddress(districtList, district);
-    if (!districtName) {
-      message.error("Quận huyện không hợp lệ.");
-      return;
-    }
-
-    dispatch(fetchWardsStart(values.district));
-    const wardName = findNameAddress(wardList, ward);
-    if (!wardName) {
-      message.error("Phường xã không hợp lệ.");
-      return;
-    }
 
     if (!agree) {
       message.warning("Vui lòng chấp nhận điều khoản để đăng kí.");
@@ -105,9 +85,9 @@ const Register = () => {
     dispatch(
       addAdditionalAddressStart({
         accountid: id,
-        city: provinceName.name,
-        district: districtName.name,
-        ward: wardName.name,
+        province_id:city,
+        district_id: district,
+        wards_id: ward,
         address,
         is_default: true,
       })
@@ -213,7 +193,7 @@ const Register = () => {
               onChange={handleProvinceChange}
             >
               {provinceList?.map((province) => (
-                <Option key={province.code} value={province.code}>
+                <Option key={province.province_id} value={province.province_id}>
                   {province.name}
                 </Option>
               ))}
@@ -229,7 +209,7 @@ const Register = () => {
               onChange={handleDistrictChange}
             >
               {districtList?.map((district) => (
-                <Option key={district.code} value={district.code}>
+                <Option key={district.district_id} value={district.district_id}>
                   {district.name}
                 </Option>
               ))}
@@ -242,7 +222,7 @@ const Register = () => {
           >
             <Select placeholder="Chọn phường/xã">
               {wardList?.map((ward) => (
-                <Option key={ward.code} value={ward.code}>
+                <Option key={ward.wards_id} value={ward.wards_id}>
                   {ward.name}
                 </Option>
               ))}

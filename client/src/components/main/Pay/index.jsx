@@ -18,34 +18,33 @@ import {
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchDistrictsStart,
-  fetchMainAddressStart,
-  fetchProvincesStart,
-  fetchWardsStart,
-} from "../../../redux/slices/addressSlice";
-import {
   addAdditionalAddressStart,
   fetchAdditionalAddressByIdStart,
   fetchAdditionalAddressesStart,
 } from "../../../redux/slices/additionalAddressSlice";
 import { getToken } from "../../../utils/token";
-import { findNameAddress } from "../../../utils/findAddress";
 import {
   getOrderDraftStart,
   newOrderStart,
 } from "../../../redux/slices/orderSlice";
+import { fetchProvincesStart } from "../../../redux/slices/provinceSlice";
+import { fetchDistrictByProvinceIdStart } from "../../../redux/slices/districtSlice";
+import { fetchWardsByDistrictIdStart } from "../../../redux/slices/wardSlice";
+import {fetchMainAddressStart} from "../../../redux/slices/addressSlice";
 
 const CheckoutPage = () => {
   const [form] = Form.useForm();
   const [paymentMethod, setPaymentMethod] = useState("momo");
 
   const dispatch = useDispatch();
-  const { provinces, districts, wards } = useSelector(
-    (state) => state.addresses
-  );
-  const provinceList = Array.isArray(provinces) ? provinces : [];
-  const districtList = Array.isArray(districts.districts)
-    ? districts.districts
+  const { provinces } = useSelector((state) => state.provinces);
+  const { districts } = useSelector((state) => state.districts);
+  const { wards } = useSelector((state) => state.wards);
+  const provinceList = Array.isArray(provinces.province)
+    ? provinces.province
+    : [];
+  const districtList = Array.isArray(districts.district)
+    ? districts.district
     : [];
   const wardList = Array.isArray(wards.wards) ? wards.wards : [];
 
@@ -54,12 +53,12 @@ const CheckoutPage = () => {
   }, [dispatch]);
 
   const handleProvinceChange = (provinceCode) => {
-    dispatch(fetchDistrictsStart(provinceCode));
+    dispatch(fetchDistrictByProvinceIdStart(provinceCode));
     form.setFieldsValue({ district: undefined, ward: undefined });
   };
 
   const handleDistrictChange = (districtCode) => {
-    dispatch(fetchWardsStart(districtCode));
+    dispatch(fetchWardsByDistrictIdStart(districtCode));
     form.setFieldsValue({ ward: undefined });
   };
 
@@ -75,7 +74,6 @@ const CheckoutPage = () => {
   const additionalAddressList = Array.isArray(additionalAddresses)
     ? additionalAddresses
     : [];
-
   useEffect(() => {
     dispatch(fetchAdditionalAddressesStart(getToken().id));
   }, [dispatch]);
@@ -92,6 +90,7 @@ const CheckoutPage = () => {
 
   const { selectAddress } = useSelector((state) => state.additionalAddresses);
 
+  console.log(selectAddress);
   useEffect(() => {
     dispatch(fetchAdditionalAddressByIdStart(selectedAddress));
   }, [dispatch, selectedAddress]);
@@ -124,16 +123,11 @@ const CheckoutPage = () => {
   };
 
   const handleAddAddress = (values) => {
-    const provinceName = findNameAddress(provinceList, values.province);
-    dispatch(fetchDistrictsStart(values.province));
-    const districtName = findNameAddress(districtList, values.district);
-    dispatch(fetchWardsStart(values.district));
-    const wardName = findNameAddress(wardList, values.ward);
     dispatch(
       addAdditionalAddressStart({
-        city: provinceName.name,
-        district: districtName.name,
-        ward: wardName.name,
+        province_id: values.province,
+        district_id: values.district,
+        wards_id: values.ward,
         address: values.address,
         accountid: getToken().id,
       })
@@ -145,13 +139,13 @@ const CheckoutPage = () => {
       newOrderStart({
         id: orderDraft?.id,
         address: selectAddress?.address.address,
-        ward: selectAddress?.address.ward,
-        district: selectAddress?.address.district,
-        city: selectAddress?.address.city,
+        ward: selectAddress?.address.Ward.wards_id,
+        district: selectAddress?.address.Ward.District.district_id,
+        city: selectAddress?.address.Ward.District.Province.province_id,
         payMethod: paymentMethod,
         usename: getToken().username,
         phoneNumber: getToken().phoneNumber,
-        status: 'Chờ phê duyệt'
+        status: "Chờ phê duyệt",
       })
     );
   };
@@ -186,10 +180,10 @@ const CheckoutPage = () => {
                   value={mainAddress?.address.id}
                   style={{ display: "block" }}
                 >
-                  {mainAddress?.address.address} - {mainAddress?.address.ward} -{" "}
-                  {mainAddress?.address.district}
+                  {mainAddress?.address.address} - {mainAddress?.address.Ward.name} -{" "}
+                  {mainAddress?.address.Ward.District.name}
                   <br />
-                  {mainAddress?.address.city}
+                  {mainAddress?.address.Ward.District.Province.name}
                 </Radio>
               </Card>
               {additionalAddressList[0]?.addresses?.map((addr) => (
@@ -208,9 +202,9 @@ const CheckoutPage = () => {
                   }}
                 >
                   <Radio value={addr.id} style={{ display: "block" }}>
-                    {addr.address} - {addr.ward} - {addr.district}
+                    {addr.address} - {addr?.Ward.name} - {addr?.Ward?.District.name}
                     <br />
-                    {addr.city}
+                    {addr?.Ward?.District?.Province.name}
                   </Radio>
                 </Card>
               ))}
@@ -256,7 +250,10 @@ const CheckoutPage = () => {
                 onChange={handleProvinceChange}
               >
                 {provinceList.map((province) => (
-                  <Select.Option key={province.code} value={province.code}>
+                  <Select.Option
+                    key={province.province_id}
+                    value={province.province_id}
+                  >
                     {province.name}
                   </Select.Option>
                 ))}
@@ -277,7 +274,10 @@ const CheckoutPage = () => {
                 onChange={handleDistrictChange}
               >
                 {districtList.map((district) => (
-                  <Select.Option key={district.code} value={district.code}>
+                  <Select.Option
+                    key={district.district_id}
+                    value={district.district_id}
+                  >
                     {district.name}
                   </Select.Option>
                 ))}
@@ -295,7 +295,7 @@ const CheckoutPage = () => {
             >
               <Select placeholder="Chọn phường xã">
                 {wardList.map((ward) => (
-                  <Select.Option key={ward.code} value={ward.code}>
+                  <Select.Option key={ward.wards_id} value={ward.wards_id}>
                     {ward.name}
                   </Select.Option>
                 ))}
@@ -366,8 +366,8 @@ const CheckoutPage = () => {
           </p>
           <p className="mb-3">
             <strong>Địa chỉ:</strong> {selectAddress?.address.address} -{" "}
-            {selectAddress?.address.ward} - {selectAddress?.address.district} -{" "}
-            {selectAddress?.address.city}
+            {selectAddress?.address.Ward.name} - {selectAddress?.address.Ward.District.name} -{" "}
+            {selectAddress?.address.Ward.District.Province.name}
           </p>
         </Card>
 

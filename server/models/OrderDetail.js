@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import Order from "./Order.js";
 
 const OrderDetail = sequelize.define(
   "OrderDetail",
@@ -29,7 +30,7 @@ const OrderDetail = sequelize.define(
       type: DataTypes.STRING(50),
       allowNull: false,
       references: {
-        model: "orders",
+        model: Order,
         key: "id",
       },
     },

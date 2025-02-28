@@ -147,7 +147,9 @@ const Cart = () => {
     const status = "Đơn nháp";
     const accountid = token.id;
     const id = uuidv4();
-    dispatch(addOrderStart({ id, total, status, accountid }));
+    dispatch(
+      addOrderStart({ id, total, status, accountid, storeid: "default" })
+    );
     productColoridArr.forEach((item, index) => {
       const productColorid = productColoridArr[index];
       const quantity = quantityArr[index];

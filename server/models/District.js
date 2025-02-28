@@ -1,12 +1,14 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import Province from "./Province.js";
-const Branch = sequelize.define(
-  "Branch",
+import { Province } from "./index.js";
+
+const District = sequelize.define(
+  "District",
   {
-    id: {
+    district_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
     },
     province_id: {
       type: DataTypes.INTEGER,
@@ -16,15 +18,15 @@ const Branch = sequelize.define(
         key: "province_id",
       },
     },
-    description: {
-      type: DataTypes.STRING(255),
+    name: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
   {
-    tableName: "branches",
-    timestamps: true,
+    tableName: "district",
+    timestamps: false,
   }
 );
 
-export default Branch;
+export default District;

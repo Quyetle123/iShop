@@ -22,6 +22,9 @@ import voucherProductSaga from "./voucherProductSaga.jsx";
 import addressSaga from "./addressSaga.jsx";
 import additionalAddressSaga  from "./additionalAddressSaga.jsx";
 import storeStockSaga from "./storeStockSaga.jsx";
+import provinceSaga from "./provinceSaga.jsx";
+import districtSaga from "./districtSaga.jsx";
+import wardSaga from "./wardSaga.jsx";
 
 export default function* rootSaga() {
   yield all([
@@ -48,5 +51,8 @@ export default function* rootSaga() {
     addressSaga(),
     additionalAddressSaga(),
     storeStockSaga(),
+    provinceSaga(),
+    districtSaga(),
+    wardSaga(),
   ]);
 }

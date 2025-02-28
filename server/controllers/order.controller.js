@@ -1,10 +1,12 @@
 import { where, Op } from "sequelize";
 import {
+  Branch,
   Order,
   OrderDetail,
   Product,
   ProductColor,
   ProductImage,
+  Store,
 } from "../models/index.js";
 function getColorForStatus(status) {
   const colors = {
@@ -59,7 +61,7 @@ class orderController {
   static async getAllOrder(req, res) {
     try {
       const orders = await Order.findAll({
-        limit: 5, 
+        limit: 5,
         include: {
           model: OrderDetail,
           include: {
@@ -204,27 +206,73 @@ class orderController {
 
     try {
       const order = await Order.findByPk(id);
-      if (order) {
-        await order.update({
-          address,
-          ward,
-          district,
-          city,
-          payMethod,
-          usename,
-          phoneNumber,
-          status,
-          createdAt: new Date(),
+      if (!order) {
+        return res.status(400).json({ message: "Order not found" });
+      }
+
+      const branches = await Branch.findAll();
+      let selectedBranch;
+      let selectedStore;
+
+      const cityBranch = branches.find((branch) => branch.province_id === city);
+      if (cityBranch) {
+        const stores = await Store.findAll({
+          where: { branchid: cityBranch.id },
         });
 
-        res.status(200).json({ order });
+        selectedStore = stores.find((store) => store.district === district);
+
+        if (!selectedStore && stores.length > 0) {
+          selectedStore = stores.reduce((prev, curr) => {
+            return Math.abs(curr.district - district) <
+              Math.abs(prev.district - district)
+              ? curr
+              : prev;
+          });
+        }
+
+        selectedBranch = cityBranch;
       } else {
-        res.status(400).json({ message: "Order not found" });
+        selectedBranch = branches.reduce((prev, curr) => {
+          return Math.abs(curr.province_id - city) <
+            Math.abs(prev.province_id - city)
+            ? curr
+            : prev;
+        });
+
+        const storesInBranch = await Store.findAll({
+          where: { branchid: selectedBranch.id },
+        });
+
+        if (storesInBranch.length > 0) {
+          selectedStore =
+            storesInBranch[Math.floor(Math.random() * storesInBranch.length)];
+        }
       }
+
+      if (!selectedBranch || !selectedStore) {
+        return res.status(400).json({ message: "No suitable store found" });
+      }
+
+      await order.update({
+        address,
+        ward,
+        district,
+        city,
+        payMethod,
+        usename,
+        phoneNumber,
+        status,
+        storeid: selectedStore.id,
+        createdAt: new Date(),
+      });
+
+      res.status(200).json({ order, store: selectedStore });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
   }
+
   static async updateStatusOrder(req, res) {
     const { id } = req.params;
     const { status } = req.body;
@@ -243,7 +291,7 @@ class orderController {
   }
 
   static async getOrderStatistics(req, res) {
-    const {storeid} = req.params;
+    const { storeid } = req.params;
     try {
       const statuses = [
         "Đang đóng gói",
@@ -275,7 +323,7 @@ class orderController {
   }
 
   static async getOrderStatisticMonth(req, res) {
-    const {storeid} = req.params;
+    const { storeid } = req.params;
     try {
       const { startMonth, startYear, endMonth, endYear } = req.query;
       if (!startMonth || !startYear || !endMonth || !endYear) {
