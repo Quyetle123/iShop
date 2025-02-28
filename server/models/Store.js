@@ -14,11 +14,11 @@ const Store = sequelize.define(
       allowNull: false,
     },
     district: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     ward: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     address: {

@@ -7,12 +7,9 @@ import { v4 as uuidv4 } from "uuid";
 import { registerStart } from "../../../redux/slices/authSlice";
 import { addStoreAccountStart } from "../../../redux/slices/storeAccountSlice";
 import { fetchAllBranchStart } from "../../../redux/slices/branchSlice";
-import {
-  fetchDistrictsStart,
-  fetchProvincesStart,
-  fetchWardsStart,
-} from "../../../redux/slices/addressSlice";
-import { findNameAddress } from "../../../utils/findAddress";
+import { fetchProvincesStart } from "../../../redux/slices/provinceSlice";
+import { fetchDistrictByProvinceIdStart } from "../../../redux/slices/districtSlice";
+import { fetchWardsByDistrictIdStart } from "../../../redux/slices/wardSlice";
 
 const AddStore = () => {
   const dispatch = useDispatch();
@@ -26,28 +23,24 @@ const AddStore = () => {
     dispatch(fetchAllBranchStart());
   }, [dispatch]);
 
-  const { provinces, districts, wards } = useSelector(
-    (state) => state.addresses
-  );
+  const { districts } = useSelector((state) => state.districts);
+  const { wards } = useSelector((state) => state.wards);
+  useEffect(() => {
+    dispatch(fetchProvincesStart());
+  }, [dispatch]);
 
-    useEffect(() => {
-      dispatch(fetchProvincesStart());
-    }, [dispatch]);
-
-  const provinceList = Array.isArray(provinces) ? provinces : [];
-  const districtList = Array.isArray(districts.districts)
-    ? districts.districts
+  const districtList = Array.isArray(districts.district)
+    ? districts.district
     : [];
   const wardList = Array.isArray(wards.wards) ? wards.wards : [];
 
   const handleBranchChange = (provinceCode) => {
-    console.log(provinceCode)
-    dispatch(fetchDistrictsStart(provinceCode));
+    dispatch(fetchDistrictByProvinceIdStart(provinceCode));
     form.setFieldsValue({ district: undefined, ward: undefined });
   };
 
   const handleDistrictChange = (districtCode) => {
-    dispatch(fetchWardsStart(districtCode));
+    dispatch(fetchWardsByDistrictIdStart(districtCode));
     form.setFieldsValue({ ward: undefined });
   };
 
@@ -71,11 +64,16 @@ const AddStore = () => {
             ]}
           >
             <Select placeholder="Chọn chi nhánh" onChange={handleBranchChange}>
-              {branchList.map((branch) => (
-                <Select.Option key={branch.branchname} value={branch.branchname}>
-                  {findNameAddress(provinceList, branch.branchname)?.name}
-                </Select.Option>
-              ))}
+              {branchList.map((branch) =>
+                branch.Province ? (
+                  <Select.Option
+                    key={branch.Province.province_id}
+                    value={branch.Province.province_id}
+                  >
+                    {branch.Province.name}
+                  </Select.Option>
+                ) : null
+              )}
             </Select>
           </Form.Item>
           <Form.Item
@@ -93,7 +91,10 @@ const AddStore = () => {
               onChange={handleDistrictChange}
             >
               {districtList.map((district) => (
-                <Select.Option key={district.code} value={district.code}>
+                <Select.Option
+                  key={district.district_id}
+                  value={district.district_id}
+                >
                   {district.name}
                 </Select.Option>
               ))}
@@ -111,7 +112,7 @@ const AddStore = () => {
           >
             <Select placeholder="Chọn phường xã">
               {wardList.map((ward) => (
-                <Select.Option key={ward.code} value={ward.code}>
+                <Select.Option key={ward.wards_id} value={ward.wards_id}>
                   {ward.name}
                 </Select.Option>
               ))}
@@ -131,12 +132,10 @@ const AddStore = () => {
       title: "Tạo tài khoản quản lí",
       content: (
         <Form form={form} layout="vertical" name="managerForm">
-        <Form.Item
+          <Form.Item
             label="Họ và tên"
             name="username"
-            rules={[
-              { required: true, message: "Vui lòng nhập họ và tên!" },
-            ]}
+            rules={[{ required: true, message: "Vui lòng nhập họ và tên!" }]}
           >
             <Input />
           </Form.Item>

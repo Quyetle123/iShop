@@ -19,6 +19,9 @@ import VoucherProduct from "./VoucherProduct.js";
 import VoucherUsage from "./VoucherUsage.js";
 import Address from "./Address.js";
 import StoreStock from "./StoreStock.js";
+import Province from "./Province.js";
+import District from "./District.js";
+import Wards from "./Ward.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -71,11 +74,11 @@ VoucherProduct.belongsTo(Product, { foreignKey: "product_id" });
 ProductColor.hasMany(ProductImage, { foreignKey: "productColorid" });
 ProductImage.belongsTo(ProductColor, { foreignKey: "productColorid" });
 
-Account.hasMany(Wishlist, {foreignKey: "accountid"});
-Wishlist.belongsTo(Account, {foreignKey: "accountid"});
+Account.hasMany(Wishlist, { foreignKey: "accountid" });
+Wishlist.belongsTo(Account, { foreignKey: "accountid" });
 
-ProductColor.hasMany(Wishlist, {foreignKey: "productColorid"});
-Wishlist.belongsTo(ProductColor, {foreignKey: "productColorid"});
+ProductColor.hasMany(Wishlist, { foreignKey: "productColorid" });
+Wishlist.belongsTo(ProductColor, { foreignKey: "productColorid" });
 Vourcher.hasMany(VoucherAccount, { foreignKey: "voucher_id" });
 VoucherAccount.belongsTo(Vourcher, { foreignKey: "voucher_id" });
 
@@ -88,13 +91,29 @@ VoucherUsage.belongsTo(Vourcher, { foreignKey: "voucher_id" });
 Account.hasMany(Address, { foreignKey: "accountid" });
 Address.belongsTo(Account, { foreignKey: "accountid" });
 
-Store.hasMany(StoreStock, {foreignKey: "storeid"});
-StoreStock.belongsTo(Store, {foreignKey: "storeid"});
+Store.hasMany(StoreStock, { foreignKey: "storeid" });
+StoreStock.belongsTo(Store, { foreignKey: "storeid" });
 
-ProductColor.hasMany(StoreStock, {foreignKey: "productColorid"});
-StoreStock.belongsTo(ProductColor, {foreignKey: "productColorid"});
+ProductColor.hasMany(StoreStock, { foreignKey: "productColorid" });
+StoreStock.belongsTo(ProductColor, { foreignKey: "productColorid" });
 
+Province.hasMany(District, { foreignKey: "province_id" });
+District.belongsTo(Province, { foreignKey: "province_id" });
 
+Province.hasMany(Branch, { foreignKey: "province_id" });
+Branch.belongsTo(Province, { foreignKey: "province_id" });
+
+District.hasMany(Wards, { foreignKey: "district_id" });
+Wards.belongsTo(District, { foreignKey: "district_id" });
+
+Wards.hasMany(Address, { foreignKey: "wards_id" });
+Address.belongsTo(Wards, { foreignKey: "wards_id" });
+
+District.hasMany(Address, { foreignKey: "district_id" });
+Address.belongsTo(District, { foreignKey: "district_id" });
+
+Province.hasMany(Address, { foreignKey: "province_id" });
+Address.belongsTo(Province, { foreignKey: "province_id" });
 
 export {
   Account,
@@ -117,5 +136,8 @@ export {
   VoucherProduct,
   VoucherUsage,
   Address,
-  StoreStock
+  StoreStock,
+  Province,
+  District,
+  Wards,
 };

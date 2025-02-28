@@ -1,4 +1,4 @@
-import { Address } from "../models/index.js";
+import { Address, District, Province, Wards } from "../models/index.js";
 
 class AdressController {
   static async addAdress(req, res) {
@@ -28,11 +28,27 @@ class AdressController {
           accountid,
           is_default: true,
         },
+        include: [
+          {
+            model: Wards,
+            include: [
+              {
+                model: District,
+                include: [
+                  {
+                    model: Province,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       });
+
       if (address) {
         res.status(200).json({ address });
       } else {
-        res.status(404).json({ message: "Adress not found" });
+        res.status(404).json({ message: "Address not found" });
       }
     } catch (error) {
       res.status(400).json({ message: error.message });
@@ -47,6 +63,21 @@ class AdressController {
           accountid,
           is_default: false,
         },
+        include: [
+          {
+            model: Wards,
+            include: [
+              {
+                model: District,
+                include: [
+                  {
+                    model: Province,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       });
 
       if (addresses) {
@@ -62,7 +93,24 @@ class AdressController {
   static async AdressById(req, res) {
     const { id } = req.params;
     try {
-      const address = await Address.findByPk(id);
+      const address = await Address.findOne({
+        where: { id },
+        include: [
+          {
+            model: Wards,
+            include: [
+              {
+                model: District,
+                include: [
+                  {
+                    model: Province,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
       if (address) {
         res.status(200).json({ address });
       } else {

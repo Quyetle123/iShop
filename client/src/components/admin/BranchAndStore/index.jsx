@@ -17,14 +17,14 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { fetchProvincesStart } from "../../../redux/slices/addressSlice";
+import { fetchProvincesStart } from "../../../redux/slices/provinceSlice";
 
 const BranchAndStore = () => {
   const dispatch = useDispatch();
   const { provinces } = useSelector(
-    (state) => state.addresses
+    state => state.provinces
   );
-  const provinceList = Array.isArray(provinces) ? provinces : [];
+  const provinceList = Array.isArray(provinces.province) ? provinces.province : [];
 
   useEffect(() => {
     dispatch(fetchProvincesStart());
@@ -48,7 +48,7 @@ const BranchAndStore = () => {
     console.log(values)
     dispatch(
       addBranchStart({
-        branchname: values.province,
+        province_id: values.province,
         description: values.description,
       })
     );
@@ -61,10 +61,9 @@ const BranchAndStore = () => {
   useEffect(() => {
     dispatch(fetchAllBranchStart());
   }, [dispatch]);
-  console.log(branchList);
 
   const data = branchList.map((branch) => ({
-    branch: branch.branchname,
+    branch: branch.Province.name,
     storeCount: branch.Stores.length,
   }));
 
@@ -116,7 +115,7 @@ const BranchAndStore = () => {
               // onChange={handleProvinceChange}
             >
               {provinceList.map((province) => (
-                <Select.Option key={province.code} value={province.code}>
+                <Select.Option key={province.province_id} value={province.province_id}>
                   {province.name}
                 </Select.Option>
               ))}
