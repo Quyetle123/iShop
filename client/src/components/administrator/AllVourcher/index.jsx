@@ -27,7 +27,7 @@ const AllVourcher = () => {
     valid_to: dayjs(voucher.valid_to).format("DD/MM/YYYY HH:mm:ss"),
     updateAnddelete: (
       <div className="flex">
-        <Link to={`/admin/update-post/${voucher.id}`}>
+        <Link to={`/administrator/update-post/${voucher.id}`}>
           <FaEdit className="text-[20px] cursor-pointer" />
         </Link>
         <MdDeleteOutline

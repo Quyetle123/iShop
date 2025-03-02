@@ -11,6 +11,38 @@ class AdressController {
     }
   }
 
+  static async addMainAddress(req, res) {
+    const {address, province_id, district_id, wards_id, accountid, oldMainAddress} = req.body;
+    try {
+      const oldAddress = await Address.findByPk(oldMainAddress);
+      if (oldAddress) {
+        const mainAddress = await Address.create({address, province_id, district_id, wards_id, accountid, is_default: true});
+        await oldAddress.update({ is_default: false });
+        res.status(200).json({ mainAddress });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async updateMainAddress(req, res) {
+    const { id } = req.params;
+    const {oldMainAddress} = req.body;
+    try {
+      const address = await Address.findByPk(id);
+      const oldAddress = await Address.findByPk(oldMainAddress);
+      if (address && oldAddress) {
+        await address.update({ is_default: true });
+        await oldAddress.update({ is_default: false });
+        res.status(200).json({ address });
+      } else {
+        res.status(404).json({ message: "Adress not found" });
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
   static async AllAdresses(req, res) {
     try {
       const addresses = await Address.findAll();
@@ -23,7 +55,7 @@ class AdressController {
   static async MainAddress(req, res) {
     const { accountid } = req.params;
     try {
-      const address = await Address.findOne({
+      const mainAddress = await Address.findOne({
         where: {
           accountid,
           is_default: true,
@@ -45,8 +77,8 @@ class AdressController {
         ],
       });
 
-      if (address) {
-        res.status(200).json({ address });
+      if (mainAddress) {
+        res.status(200).json({ mainAddress });
       } else {
         res.status(404).json({ message: "Address not found" });
       }

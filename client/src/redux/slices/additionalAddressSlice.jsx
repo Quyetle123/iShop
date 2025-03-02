@@ -29,7 +29,7 @@ const additionalAddressSlice = createSlice({
         },
         addAdditionalAddressSuccess: (state, action) => {
             state.loading = false;
-            state.additionalAddresses.push(action.payload);
+            state.additionalAddresses = action.payload;
             state.error = null;
         },
         addAdditionalAddressError: (state, action) => {
