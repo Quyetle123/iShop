@@ -86,7 +86,7 @@ const AddProduct = () => {
         );
       });
 
-      navigate("/admin/allProduct");
+      navigate("/administrator/allProduct");
     } catch (error) {
       console.error("Error:", error);
     }

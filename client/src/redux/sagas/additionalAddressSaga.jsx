@@ -1,16 +1,18 @@
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { addAdditionalAddressError, addAdditionalAddressStart, addAdditionalAddressSuccess, fetchAdditionalAddressByIdError, fetchAdditionalAddressByIdStart, fetchAdditionalAddressByIdSuccess, fetchAdditionalAddressesStart } from "../slices/additionalAddressSlice";
+import { addAdditionalAddressError, addAdditionalAddressStart, addAdditionalAddressSuccess, fetchAdditionalAddressByIdError, fetchAdditionalAddressByIdStart, fetchAdditionalAddressByIdSuccess, fetchAdditionalAddressesError, fetchAdditionalAddressesStart, fetchAdditionalAddressesSuccess } from "../slices/additionalAddressSlice";
 import { fetchMainAddressError, fetchMainAddressStart, fetchMainAddressSuccess } from "../slices/addressSlice";
+import { getToken } from "../../utils/token";
 
 function* addAdditionalAddressSaga(action) {
     try {
-        yield call(
+        const response = yield call(
             axios.post,
             `${import.meta.env.VITE_LOCALHOST}/address/addAdress`,
             action.payload
         );
-        yield put(addAdditionalAddressSuccess());
+        yield put(addAdditionalAddressSuccess(response.data));
+        yield put(fetchAdditionalAddressesStart(getToken().id));
     } catch (error) {
         yield put(addAdditionalAddressError(error.message));
     }
@@ -22,9 +24,10 @@ function* fetchAdditionalAddressSaga(action) {
             axios.get,
             `${import.meta.env.VITE_LOCALHOST}/address/user/${action.payload}`
         )
-        yield put(addAdditionalAddressSuccess(response.data));
+        yield put(fetchAdditionalAddressesSuccess(response.data));
+        console.log('response', response.data);
     } catch (error) {
-        yield put(addAdditionalAddressError(error.message));
+        yield put(fetchAdditionalAddressesError(error.message));
     }
 }
 

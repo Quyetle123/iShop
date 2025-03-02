@@ -16,7 +16,7 @@ const AddCategory = () => {
       const categoryname = value.categoryname;
       const description = value.description;
       await dispatch(addCategoryStart({ categoryname, description, imageUrl }));
-      navigate("/admin/allCategories");
+      navigate("/administrator/allCategories");
     } catch (error) {
       console.error("Error:", error);
     }

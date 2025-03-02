@@ -26,7 +26,7 @@ const AddPost = () => {
       await dispatch(
         addPostStart({ title: values.title, image, content: htmlContent })
       );
-      navigate("/admin/all-posts");
+      navigate("/administrator/all-posts");
     } catch (error) {
       console.error("Error:", error);
     }

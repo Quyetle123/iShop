@@ -28,7 +28,7 @@ const AllCategories = () => {
     description: category.description,
     updateAnddelete: (
       <div className="flex">
-        <Link to={`/admin/updateCategory/${category.id}`}>
+        <Link to={`/administrator/updateCategory/${category.id}`}>
           <FaEdit className="text-[20px] cursor-pointer" />
         </Link>
         <MdDeleteOutline

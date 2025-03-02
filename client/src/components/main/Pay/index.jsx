@@ -9,6 +9,7 @@ import {
   Radio,
   Modal,
   Select,
+  Checkbox,
 } from "antd";
 import {
   PlusOutlined,
@@ -30,7 +31,11 @@ import {
 import { fetchProvincesStart } from "../../../redux/slices/provinceSlice";
 import { fetchDistrictByProvinceIdStart } from "../../../redux/slices/districtSlice";
 import { fetchWardsByDistrictIdStart } from "../../../redux/slices/wardSlice";
-import {fetchMainAddressStart} from "../../../redux/slices/addressSlice";
+import {
+  addMainAddressStart,
+  fetchMainAddressStart,
+  updateMainAddressStart,
+} from "../../../redux/slices/addressSlice";
 
 const CheckoutPage = () => {
   const [form] = Form.useForm();
@@ -64,6 +69,7 @@ const CheckoutPage = () => {
 
   const { mainAddress } = useSelector((state) => state.addresses);
 
+  console.log('mainAddress', mainAddress)
   useEffect(() => {
     dispatch(fetchMainAddressStart(getToken().id));
   }, [dispatch]);
@@ -71,20 +77,21 @@ const CheckoutPage = () => {
   const { additionalAddresses } = useSelector(
     (state) => state.additionalAddresses
   );
-  const additionalAddressList = Array.isArray(additionalAddresses)
-    ? additionalAddresses
+  console.log('additionalAddresses', additionalAddresses);
+  const additionalAddressList = Array.isArray(additionalAddresses.addresses)
+    ? additionalAddresses.addresses
     : [];
   useEffect(() => {
     dispatch(fetchAdditionalAddressesStart(getToken().id));
   }, [dispatch]);
 
   const [selectedAddress, setSelectedAddress] = useState(
-    mainAddress?.address.id
+    mainAddress?.address?.id
   );
   useEffect(() => {
-    if (mainAddress?.address) {
-      setSelectedAddress(mainAddress.address.id);
-      form.setFieldsValue({ address: mainAddress.address.id });
+    if (mainAddress?.mainAddress) {
+      setSelectedAddress(mainAddress.mainAddress.id);
+      form.setFieldsValue({ address: mainAddress.mainAddress.id });
     }
   }, [mainAddress, form]);
 
@@ -115,6 +122,12 @@ const CheckoutPage = () => {
 
   const handleConfirmAddressChange = () => {
     setSelectedAddress(newSelectedAddress);
+    dispatch(
+      updateMainAddressStart({
+        id: newSelectedAddress,
+        oldMainAddress: mainAddress?.mainAddress.id,
+      })
+    );
     setIsConfirmModalOpen(false);
   };
 
@@ -123,15 +136,30 @@ const CheckoutPage = () => {
   };
 
   const handleAddAddress = (values) => {
-    dispatch(
-      addAdditionalAddressStart({
-        province_id: values.province,
-        district_id: values.district,
-        wards_id: values.ward,
-        address: values.address,
-        accountid: getToken().id,
-      })
-    );
+    if (values.defaultAddress) {
+      dispatch(
+        addMainAddressStart({
+          province_id: values.province,
+          district_id: values.district,
+          wards_id: values.ward,
+          address: values.address,
+          accountid: getToken().id,
+          oldMainAddress: mainAddress?.mainAddress.id,
+        })
+      );
+    } else {
+      dispatch(
+        addAdditionalAddressStart({
+          province_id: values.province,
+          district_id: values.district,
+          wards_id: values.ward,
+          address: values.address,
+          accountid: getToken().id,
+        })
+      );
+      
+    }
+    setIsModalOpen(false);
   };
 
   const handlePay = () => {
@@ -161,32 +189,33 @@ const CheckoutPage = () => {
               value={selectedAddress}
             >
               <Card
-                key={mainAddress?.address.id}
+                key={mainAddress?.mainAddress?.id}
                 className={`mb-2 ${
-                  selectedAddress === mainAddress?.address.id
+                  selectedAddress === mainAddress?.mainAddress?.id
                     ? "border-primary"
                     : ""
                 }`}
-                onClick={() => setSelectedAddress(mainAddress?.address.id)}
+                onClick={() => setSelectedAddress(mainAddress?.mainAddress?.id)}
                 style={{
                   cursor: "pointer",
                   border:
-                    selectedAddress === mainAddress?.address.id
+                    selectedAddress === mainAddress?.mainAddress?.id
                       ? "2px solid #1890ff"
                       : "1px solid #d9d9d9",
                 }}
               >
                 <Radio
-                  value={mainAddress?.address.id}
+                  value={mainAddress?.mainAddress?.id}
                   style={{ display: "block" }}
                 >
-                  {mainAddress?.address.address} - {mainAddress?.address.Ward.name} -{" "}
-                  {mainAddress?.address.Ward.District.name}
+                  {mainAddress?.mainAddress.address} -{" "}
+                  {mainAddress?.mainAddress.Ward.name} -{" "}
+                  {mainAddress?.mainAddress.Ward.District.name}
                   <br />
-                  {mainAddress?.address.Ward.District.Province.name}
+                  {mainAddress?.mainAddress.Ward.District.Province.name}
                 </Radio>
               </Card>
-              {additionalAddressList[0]?.addresses?.map((addr) => (
+              {additionalAddressList.map((addr) => (
                 <Card
                   key={addr.id}
                   className={`mb-2 ${
@@ -202,7 +231,8 @@ const CheckoutPage = () => {
                   }}
                 >
                   <Radio value={addr.id} style={{ display: "block" }}>
-                    {addr.address} - {addr?.Ward.name} - {addr?.Ward?.District.name}
+                    {addr.address} - {addr?.Ward.name} -{" "}
+                    {addr?.Ward?.District.name}
                     <br />
                     {addr?.Ward?.District?.Province.name}
                   </Radio>
@@ -238,12 +268,7 @@ const CheckoutPage = () => {
             <Form.Item
               label="Thành phố"
               name="province"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng chọn thành phố",
-                },
-              ]}
+              rules={[{ required: true, message: "Vui lòng chọn thành phố" }]}
             >
               <Select
                 placeholder="Chọn thành phố"
@@ -262,12 +287,7 @@ const CheckoutPage = () => {
             <Form.Item
               label="Quận huyện"
               name="district"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng chọn quận huyện",
-                },
-              ]}
+              rules={[{ required: true, message: "Vui lòng chọn quận huyện" }]}
             >
               <Select
                 placeholder="Chọn quận huyện"
@@ -286,12 +306,7 @@ const CheckoutPage = () => {
             <Form.Item
               label="Phường xã"
               name="ward"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng chọn phường xã",
-                },
-              ]}
+              rules={[{ required: true, message: "Vui lòng chọn phường xã" }]}
             >
               <Select placeholder="Chọn phường xã">
                 {wardList.map((ward) => (
@@ -304,14 +319,12 @@ const CheckoutPage = () => {
             <Form.Item
               label="Địa chỉ"
               name="address"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập địa chỉ",
-                },
-              ]}
+              rules={[{ required: true, message: "Vui lòng nhập địa chỉ" }]}
             >
               <Input />
+            </Form.Item>
+            <Form.Item name="defaultAddress" valuePropName="checked">
+              <Checkbox>Chọn làm địa chỉ mặc định</Checkbox>
             </Form.Item>
             <Button type="primary" htmlType="submit" block>
               Lưu địa chỉ
@@ -366,7 +379,8 @@ const CheckoutPage = () => {
           </p>
           <p className="mb-3">
             <strong>Địa chỉ:</strong> {selectAddress?.address.address} -{" "}
-            {selectAddress?.address.Ward.name} - {selectAddress?.address.Ward.District.name} -{" "}
+            {selectAddress?.address.Ward.name} -{" "}
+            {selectAddress?.address.Ward.District.name} -{" "}
             {selectAddress?.address.Ward.District.Province.name}
           </p>
         </Card>

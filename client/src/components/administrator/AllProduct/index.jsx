@@ -39,7 +39,7 @@ const AllProduct = () => {
     description: product.description,
     updateAndDelete: (
       <div style={{ display: "flex" }}>
-        <Link to={`/admin/updateProduct/${product.id}`}>
+        <Link to={`/administrator/updateProduct/${product.id}`}>
           <FaEdit className="text-[20px] cursor-pointer" />
         </Link>
         <MdDeleteOutline
