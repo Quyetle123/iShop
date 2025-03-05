@@ -42,18 +42,21 @@ const Cart = () => {
     dispatch(fetchCartByAccountidStart(token.id));
   }, [dispatch, token.id]);
 
+  const [cartIdArr, setCartIdArr] = useState([]);
   const [totalArr, setTotalArr] = useState([]);
   const [productColoridArr, setProductColoridArr] = useState([]);
   const [quantityArr, setQuantityArr] = useState([]);
   const [priceArr, setPriceArr] = useState([]);
 
-  const handleChecked = (e, total, productColorid, quantity, price) => {
+  const handleChecked = (e, cartid, total, productColorid, quantity, price) => {
     if (e.target.checked) {
+      setCartIdArr((prev) => [...prev, cartid]);
       setTotalArr((prev) => [...prev, total]);
       setProductColoridArr((prev) => [...prev, productColorid]);
       setQuantityArr((prev) => [...prev, quantity]);
       setPriceArr((prev) => [...prev, price]);
     } else {
+      setCartIdArr((prev) => prev.filter((item) => item !== cartid));
       setTotalArr((prev) => prev.filter((item) => item !== total));
       setProductColoridArr((prev) =>
         prev.filter((item) => item !== productColorid)
@@ -73,6 +76,7 @@ const Cart = () => {
           onChange={(e) =>
             handleChecked(
               e,
+              cart.id,
               cart.ProductColor.Product.price * cart.quantity,
               cart.ProductColor.id,
               cart.quantity,
@@ -151,6 +155,7 @@ const Cart = () => {
       addOrderStart({ id, total, status, accountid, storeid: "default" })
     );
     productColoridArr.forEach((item, index) => {
+      const cartid = cartIdArr[index];
       const productColorid = productColoridArr[index];
       const quantity = quantityArr[index];
       const price = priceArr[index];
@@ -162,6 +167,7 @@ const Cart = () => {
           orderid: id,
         })
       );
+      dispatch(deleteCartStart(cartid));
     });
     navigate("/pay");
   };

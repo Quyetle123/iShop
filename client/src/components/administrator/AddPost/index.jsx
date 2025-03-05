@@ -42,7 +42,7 @@ const AddPost = () => {
   };
 
   return (
-    <Card className="m-[90px] p-[50px] bg-[#fff] rounded-[10px] min-h-[600px]">
+    <Card className="my-[20px] mx-[90px] p-[50px] bg-[#fff] rounded-[10px] min-h-[600px]">
       <Form
         form={form}
         layout="vertical"

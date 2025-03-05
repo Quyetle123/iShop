@@ -119,7 +119,7 @@ const OrderStatus = () => {
         maxWidth: 900,
         margin: "auto",
         boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.15)",
-        marginTop: "100px",
+        marginTop: "50px",
         padding: "30px",
         borderRadius: "12px",
       }}

@@ -7,8 +7,9 @@ import {
   HomeOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { SidebarContext } from "../../../context/SidebarContext";
 
 const { Sider } = Layout;
 
@@ -31,6 +32,7 @@ const items = [
 ];
 
 const Header = () => {
+  const { collapsed, setCollapsed } = useContext(SidebarContext);
   const [current, setCurrent] = useState("1");
 
   const onClick = (e) => {
@@ -42,6 +44,8 @@ const Header = () => {
       <Sider
         theme="dark"
         collapsible
+        collapsed={collapsed}
+        onCollapse={() => setCollapsed(!collapsed)}
         width={250}
         style={{
           overflow: "auto",
@@ -61,7 +65,7 @@ const Header = () => {
           <img
             src="https://pos.nvncdn.com/f2169f-49462/store/20190520_Lmq0Fv79qw3Rvt8AtIDgUOFZ.png"
             alt="Logo"
-            style={{ maxHeight: "80%", maxWidth: "50%" }}
+            style={{ maxWidth: "40%", marginLeft: '16px' }}
           />
         </div>
         <Menu

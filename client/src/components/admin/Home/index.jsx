@@ -55,7 +55,6 @@ const { RangePicker } = DatePicker;
 
 const Container = styled.div`
   padding: 20px;
-  margin-top: 80px;
 `;
 
 const ScrollableList = styled.div`

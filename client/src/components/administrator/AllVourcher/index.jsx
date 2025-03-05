@@ -78,7 +78,7 @@ const AllVourcher = () => {
   ];
 
   return (
-    <div className="p-[20px] mt-[70px]">
+    <div className="p-[20px]">
       <Table dataSource={dataSource} columns={columns} pagination={false} />
     </div>
   );

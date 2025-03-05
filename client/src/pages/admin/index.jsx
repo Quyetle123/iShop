@@ -1,20 +1,21 @@
 import { Outlet } from "react-router-dom";
 import Header from "../../components/admin/Header";
 import HeaderTop from "../../components/admin/HeaderTop";
-import { GlobalStyle, MainContainer, MenuContainer } from "../Style/style";
+import { GlobalStyle, MainContainerWithContext, MenuContainer } from "../Style/style";
+import { SidebarProvider } from "../../context/SidebarContext";
 
 const Admin = () => {  
   return (
-    <>
+    <SidebarProvider>
       <GlobalStyle />
       <MenuContainer>
         <Header />
-        <MainContainer>
+        <MainContainerWithContext>
           <HeaderTop />
           <Outlet />
-        </MainContainer>
+        </MainContainerWithContext>
       </MenuContainer>
-    </>
+    </SidebarProvider>
   );
 };
 

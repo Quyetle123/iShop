@@ -9,8 +9,9 @@ import {
     ShopOutlined,
     FileTextOutlined,
   } from "@ant-design/icons";
-  import { useState } from "react";
+  import { useContext, useState } from "react";
   import { Link } from "react-router-dom";
+import { SidebarContext } from "../../../context/SidebarContext";
   
   const { Sider } = Layout;
   
@@ -69,6 +70,7 @@ import {
   ];
   
   const Header = () => {
+    const { collapsed, setCollapsed } = useContext(SidebarContext);
     const [current, setCurrent] = useState("1");
   
     const onClick = (e) => {
@@ -80,6 +82,8 @@ import {
         <Sider
           theme="dark"
           collapsible
+          collapsed={collapsed}
+        onCollapse={() => setCollapsed(!collapsed)}
           width={250}
           style={{
             overflow: "auto",

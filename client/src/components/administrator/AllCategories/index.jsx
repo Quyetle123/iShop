@@ -73,7 +73,7 @@ const AllCategories = () => {
     },
   ];
   return (
-    <div style={{ padding: "20px", marginTop: "70px" }}>
+    <div style={{ padding: "20px"}}>
       <Table dataSource={dataSource} columns={columns} pagination={false} />
     </div>
   );
