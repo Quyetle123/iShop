@@ -10,12 +10,14 @@ import {
   Modal,
   Select,
   Checkbox,
+  Empty,
 } from "antd";
 import {
   PlusOutlined,
   WalletOutlined,
   BankOutlined,
   DollarCircleOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -69,7 +71,6 @@ const CheckoutPage = () => {
 
   const { mainAddress } = useSelector((state) => state.addresses);
 
-  console.log('mainAddress', mainAddress)
   useEffect(() => {
     dispatch(fetchMainAddressStart(getToken().id));
   }, [dispatch]);
@@ -77,7 +78,6 @@ const CheckoutPage = () => {
   const { additionalAddresses } = useSelector(
     (state) => state.additionalAddresses
   );
-  console.log('additionalAddresses', additionalAddresses);
   const additionalAddressList = Array.isArray(additionalAddresses.addresses)
     ? additionalAddresses.addresses
     : [];
@@ -97,7 +97,6 @@ const CheckoutPage = () => {
 
   const { selectAddress } = useSelector((state) => state.additionalAddresses);
 
-  console.log(selectAddress);
   useEffect(() => {
     dispatch(fetchAdditionalAddressByIdStart(selectedAddress));
   }, [dispatch, selectedAddress]);
@@ -179,7 +178,7 @@ const CheckoutPage = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "#fff", padding: "40px 150px" }}>
+    orderDraft?<div style={{ backgroundColor: "#fff", padding: "40px 150px" }}>
       <Card title="Địa chỉ người nhận" className="mb-4">
         <Form form={form} layout="vertical">
           <Form.Item name="address">
@@ -436,6 +435,25 @@ const CheckoutPage = () => {
           style={{ backgroundColor: "#ff6f00" }}
         >
           Đặt hàng
+        </Button>
+      </Card>
+    </div>
+     :<div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      backgroundColor: '#f5f5f5'
+    }}>
+      <Card style={{ textAlign: 'center', padding: '30px', borderRadius: '12px', boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}>
+        <Empty description={<span>Không có đơn hàng nào cần thanh toán</span>} />
+        <Button 
+          type="primary" 
+          icon={<HomeOutlined />} 
+          style={{ marginTop: '20px' }}
+          onClick={() => window.location.href = '/'}
+        >
+          Quay lại trang chủ
         </Button>
       </Card>
     </div>

@@ -13,54 +13,7 @@ const statuses = [
   "Đã giao hàng",
   "Đã hủy",
 ];
-//   const columns = [
-//     {
-//       title: "Image",
-//       dataIndex: "ProductColor",
-//       key: "image",
-//       render: (ProductColor) => {
-//         const firstImageUrl =
-//           ProductColor.ProductImages && ProductColor.ProductImages.length > 0
-//             ? ProductColor.ProductImages[0].image
-//             : "";
-//         return firstImageUrl ? (
-//           <img
-//             src={firstImageUrl}
-//             alt="Product"
-//             style={{ width: 50, height: 50, objectFit: "cover" }}
-//           />
-//         ) : (
-//           "No image"
-//         );
-//       },
-//     },
-//     {
-//       title: "Product Name",
-//       dataIndex: ["ProductColor", "Product", "productname"],
-//       key: "productname",
-//     },
-//     {
-//       title: "Quantity",
-//       dataIndex: "quantity",
-//       key: "quantity",
-//     },
-//     {
-//       title: "Price",
-//       dataIndex: "price",
-//       key: "price",
-//       render: (price) => `${price.toLocaleString("vi-VN")} ₫`,
-//     },
-//   ];
 
-//   return (
-//     <Table
-//       columns={columns}
-//       dataSource={details}
-//       pagination={false}
-//       rowKey="id"
-//     />
-//   );
-// };
 
 const AllOrder = () => {
   const navigate = useNavigate();
@@ -151,7 +104,7 @@ const AllOrder = () => {
   ];
 
   return (
-    <div style={{ padding: "25px", marginTop: "80px", position: "relative" }}>
+    <div style={{ padding: "25px", position: "relative" }}>
       <div
         style={{
           display: "flex",

@@ -148,7 +148,7 @@ const AddProduct = () => {
   ));
 
   return (
-    <div style={{ padding: "100px 100px 20px 100px" }}>
+    <div style={{ padding: "20px 100px" }}>
       <Card style={{ padding: "20px" }}>
         <Form
           onFinish={(value) => handleSubmit(value)}
