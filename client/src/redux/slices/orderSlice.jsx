@@ -4,6 +4,9 @@ const orderSlice = createSlice({
   name: "orders",
   initialState: {
     orders: [],
+    orderById: null,
+    orderStatus: [],
+    orderDraft: {},
     orderStatistics: {},
     orderMonth: {},
     loading: false,
@@ -43,6 +46,56 @@ const orderSlice = createSlice({
       state.orders = action.payload;
     },
     getAllOrderFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    getOrderByIdStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    getOrderByIdSuccess(state, action) {
+      state.loading = false;
+      state.orderById = action.payload;
+      state.error = null;
+    },
+    getOrderByIdFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    getOrderStatusStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    getOrderStatusSuccess(state, action) {
+      state.loading = false;
+      state.orderStatus = action.payload;
+      state.error = null;
+    },
+    getOrderStatusFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    getOrderDraftStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    getOrderDraftSuccess(state, action) {
+      state.loading = false;
+      state.orderDraft = action.payload;
+      state.error = null;
+    },
+    getOrderDraftFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    newOrderStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    newOrderSuccess(state) {
+      state.loading = false;
+    },
+    newOrderFailure(state, action) {
       state.loading = false;
       state.error = action.payload;
     },
@@ -95,6 +148,18 @@ export const {
   getAllOrderStart,
   getAllOrderSuccess,
   getAllOrderFailure,
+  getOrderByIdStart,
+  getOrderByIdSuccess,
+  getOrderByIdFailure,
+  getOrderStatusStart,
+  getOrderStatusSuccess,
+  getOrderStatusFailure,
+  getOrderDraftStart,
+  getOrderDraftSuccess,
+  getOrderDraftFailure,
+  newOrderStart,
+  newOrderSuccess,
+  newOrderFailure,
   updateStatusStart,
   updateStatusSuccess,
   updateStatusFailure,

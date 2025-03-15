@@ -3,29 +3,34 @@ import Slideshow from "../slideshow";
 import {
   CategoryCard,
   CategoryContainer,
-  VoucherContainer,
+  // VoucherContainer,
   ImgContainer,
   Main,
   ProductCard,
   Title,
   TitleContainer,
-  VoucherCard,
-  VoucherAside,
-  VoucherContent,
-  VoucherDescription,
-  VoucherP,
+  // VoucherCard,
+  // VoucherAside,
+  // VoucherContent,
+  // VoucherDescription,
+  // VoucherP,
 } from "./style";
-import { FaApple, FaShoppingCart, FaClock } from "react-icons/fa";
+import {
+  FaApple,
+  // FaShoppingCart, FaClock
+} from "react-icons/fa";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchCategories } from "../../../redux/slices/categorySlice";
 import { Carousel, Row, Col } from "antd";
 import { fetchVourchersStart } from "../../../redux/slices/vourcherSlice";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
+
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
 
   const { categories } = useSelector((state) => state.categories);
   const categoryList = Array.isArray(categories.categories)
@@ -80,8 +85,9 @@ const Home = () => {
 
   return (
     <Main>
+
       <Slideshow images={images} />
-      <VoucherContainer>
+      {/* <VoucherContainer>
         {voucherList.slice(0, 4).map((voucher) => (
           <VoucherCard key={voucher.id}>
             <VoucherAside>
@@ -107,7 +113,7 @@ const Home = () => {
             </VoucherContent>
           </VoucherCard>
         ))}
-      </VoucherContainer>
+      </VoucherContainer> */}
 
       <CategoryContainer>
         {categoryList.map((category) => (

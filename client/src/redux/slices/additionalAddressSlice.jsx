@@ -4,6 +4,7 @@ const additionalAddressSlice = createSlice({
     name: "additionalAddresses",
     initialState: {
         additionalAddresses: [],
+        selectAddress: null,
         loading: false,
         error: null
     },
@@ -28,13 +29,26 @@ const additionalAddressSlice = createSlice({
         },
         addAdditionalAddressSuccess: (state, action) => {
             state.loading = false;
-            state.additionalAddresses.push(action.payload);
+            state.additionalAddresses = action.payload;
             state.error = null;
         },
         addAdditionalAddressError: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
+        fetchAdditionalAddressByIdStart: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        fetchAdditionalAddressByIdSuccess: (state, action) => {
+            state.loading = false;
+            state.selectAddress = action.payload;
+            state.error = null;
+        },
+        fetchAdditionalAddressByIdError: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        }
     }
 });
 
@@ -44,7 +58,10 @@ export const {
     fetchAdditionalAddressesError,
     addAdditionalAddressStart,
     addAdditionalAddressSuccess,
-    addAdditionalAddressError
+    addAdditionalAddressError,
+    fetchAdditionalAddressByIdStart,
+    fetchAdditionalAddressByIdSuccess,
+    fetchAdditionalAddressByIdError
 } = additionalAddressSlice.actions;
 
 export default additionalAddressSlice.reducer;

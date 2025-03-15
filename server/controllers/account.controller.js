@@ -11,8 +11,6 @@ class AuthController {
         username: account.username,
         email: account.email,
         role: account.role,
-        city: account.city,
-        address: account.address,
       },
       "quyetledeptrai",
       { expiresIn: "1h" }
@@ -35,8 +33,6 @@ class AuthController {
           username: account.username,
           email: account.email,
           role: account.role,
-          city: account.city,
-          address: account.address,
         },
       });
     } catch (error) {

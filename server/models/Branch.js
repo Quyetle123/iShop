@@ -1,17 +1,20 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-
+import Province from "./Province.js";
 const Branch = sequelize.define(
   "Branch",
   {
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
       primaryKey: true,
     },
-    branchname: {
-      type: DataTypes.STRING(50),
+    province_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: Province,
+        key: "province_id",
+      },
     },
     description: {
       type: DataTypes.STRING(255),

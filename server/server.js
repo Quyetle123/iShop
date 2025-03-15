@@ -26,6 +26,10 @@ import VoucherAccount from "./routes/voucherAccount.route.js";
 import VoucherProduct from "./routes/voucherProduct.route.js";
 import VoucherUsage from "./routes/voucherUsage.route.js";
 import AddressRouter from "./routes/address.route.js";
+import storeStockRouter from "./routes/storeStock.router.js";
+import ProvinceRouter from "./routes/province.route.js";
+import DistrictRouter from "./routes/district.route.js";
+import WardRouter from "./routes/ward.route.js";
 import setupSocket from "./socket/socket.js";
 
 const app = express();
@@ -63,6 +67,10 @@ app.use("/api/voucherAccount", VoucherAccount);
 app.use("/api/voucherProduct", VoucherProduct);
 app.use("/api/voucherUsage", VoucherUsage);
 app.use("/api/address", AddressRouter);
+app.use("/api/storeStock", storeStockRouter);
+app.use("/api/province", ProvinceRouter);
+app.use("/api/district", DistrictRouter);
+app.use("/api/ward", WardRouter);
 
 setupSocket(io);
 

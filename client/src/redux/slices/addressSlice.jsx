@@ -6,6 +6,7 @@ const addressSlice = createSlice({
     provinces: [],
     districts: [],
     wards: [],
+    mainAddress: null,
     loading: false,
     error: null,
   },
@@ -49,6 +50,44 @@ const addressSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    fetchMainAddressStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchMainAddressSuccess(state, action) {
+      state.loading = false;
+      state.mainAddress = action.payload;
+      state.error = null;
+    },
+    fetchMainAddressError(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    addMainAddressStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    addMainAddressSuccess(state, action) {
+      state.loading = false;
+      state.mainAddress = action.payload;
+      state.error = null;
+    },
+    addMainAddressError(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    updateMainAddressStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    updateMainAddressSuccess(state) {
+      state.loading = false;
+      state.error = null;
+    },
+    updateMainAddressError(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -62,5 +101,14 @@ export const {
   fetchWardsStart,
   fetchWardsSuccess,
   fetchWardsError,
+  fetchMainAddressStart,
+  fetchMainAddressSuccess,
+  fetchMainAddressError,
+  addMainAddressStart,
+  addMainAddressSuccess,
+  addMainAddressError,
+  updateMainAddressStart,
+  updateMainAddressSuccess,
+  updateMainAddressError,
 } = addressSlice.actions;
 export default addressSlice.reducer;

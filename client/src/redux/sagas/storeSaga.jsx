@@ -1,6 +1,8 @@
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { addStoreFailure, addStoreStart, addStoreSuccess } from "../slices/storeSlice";
+import { addStoreFailure, addStoreStart, addStoreSuccess, updateStatusStoreFailure, updateStatusStoreStart, updateStatusStoreSuccess } from "../slices/storeSlice";
+import { getAccountStorebyAccountIdStart } from "../slices/storeAccountSlice";
+import { getToken } from "../../utils/token";
 
 function* addStoreSaga(action) {
   try {
@@ -15,6 +17,21 @@ function* addStoreSaga(action) {
   }
 }
 
+function* updateStatusStoreSaga(action) {
+  try {
+    const response = yield call(
+      axios.put,
+      `${import.meta.env.VITE_LOCALHOST}/store/status/${action.payload.id}`,
+      action.payload
+    );
+    yield put(updateStatusStoreSuccess(response.data));
+    yield put(getAccountStorebyAccountIdStart(getToken().id))
+  } catch (error) {
+    yield put(updateStatusStoreFailure(error.message));
+  }
+}
+
 export default function* storeSaga() {
     yield takeLatest(addStoreStart, addStoreSaga);
+    yield takeLatest(updateStatusStoreStart, updateStatusStoreSaga);
 }

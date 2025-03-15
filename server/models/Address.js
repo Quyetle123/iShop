@@ -1,5 +1,9 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import Province from "./Province.js";
+import District from "./District.js";
+import Wards from "./Ward.js";
+import Account from "./Account.js";
 
 const Address = sequelize.define(
   "Address",
@@ -13,23 +17,35 @@ const Address = sequelize.define(
       type: DataTypes.STRING(255),
       allowNull: true,
     },
-    city: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
+    province_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Province,
+        key: "province_id",
+      },
     },
-    district: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
+    district_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: District,
+        key: "district_id",
+      },
     },
-    ward: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
+    wards_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Wards,
+        key: "wards_id",
+      },
     },
     accountid: {
       type: DataTypes.STRING(50),
       allowNull: false,
       references: {
-        model: "accounts",
+        model: Account,
         key: "id",
       },
     },

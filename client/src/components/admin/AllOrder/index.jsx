@@ -1,162 +1,159 @@
-/* eslint-disable react/prop-types */
-import { Table, Select } from "antd";
+import { Table, Space, Button, Input } from "antd";
 import { useEffect, useState } from "react";
-import io from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllOrderStart,
-  updateStatusStart,
-} from "../../../redux/slices/orderSlice.jsx";
+import { getOrderStatusStart } from "../../../redux/slices/orderSlice.jsx";
+import { useNavigate } from "react-router-dom";
+import { getToken } from "../../../utils/token.jsx";
+import { getAccountStorebyAccountIdStart } from "../../../redux/slices/storeAccountSlice.jsx";
 
-const { Option } = Select;
+const statuses = [
+  "Chờ phê duyệt",
+  "Đang đóng gói",
+  "Đang vận chuyển",
+  "Đã giao hàng",
+  "Đã hủy",
+];
 
-const socket = io("http://localhost:5000");
-
-const OrderDetailsTable = ({ details }) => {
-  const columns = [
-    {
-      title: "Image",
-      dataIndex: "ProductColor",
-      key: "image",
-      render: (ProductColor) => {
-        const firstImageUrl =
-          ProductColor.ProductImages && ProductColor.ProductImages.length > 0
-            ? ProductColor.ProductImages[0].image
-            : "";
-        return firstImageUrl ? (
-          <img
-            src={firstImageUrl}
-            alt="Product"
-            style={{ width: 50, height: 50, objectFit: "cover" }}
-          />
-        ) : (
-          "No image"
-        );
-      },
-    },
-    {
-      title: "Product Name",
-      dataIndex: ["ProductColor", "Product", "productname"],
-      key: "productname",
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-      render: (price) => `${price.toLocaleString("vi-VN")} ₫`,
-    },
-  ];
-
-  return (
-    <Table
-      columns={columns}
-      dataSource={details}
-      pagination={false}
-      rowKey="id"
-    />
-  );
-};
 
 const AllOrder = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { orders } = useSelector((state) => state.orders);
+  const {storeAccount} = useSelector((state) => state.storeAccounts);
+  
+    useEffect(() => {
+      dispatch(getAccountStorebyAccountIdStart(getToken().id));
+    }, [dispatch]);
+  const { orderStatus } = useSelector((state) => state?.orders);
 
-  const orderList = Array.isArray(orders.orders) ? orders.orders : [];
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [selectedStatus, setSelectedStatus] = useState("Đang đóng gói");
 
   useEffect(() => {
-    dispatch(getAllOrderStart());
-  }, [dispatch]);
+    dispatch(
+      getOrderStatusStart({
+        storeid: storeAccount?.accountStore?.Store?.id,
+        status: selectedStatus,
+        page: currentPage,
+        pageSize,
+      })
+    );
+  }, [dispatch, selectedStatus, currentPage, pageSize, storeAccount]);
 
-  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
 
-  const handleStatusChange = (status, id, accountid) => {
-    dispatch(updateStatusStart({ id, status }));
-    if (status === "Đang vận chuyển") {
-      socket.emit("sendMessage", {
-        message: `Đơn hàng ${id} của bạn đã được bàn giao cho đơn vị vận chuyển`,
-        accountid,
-      });
-    } else if (status === "Đã giao hàng") {
-      socket.emit("sendMessage", {
-        message:
-          "Đơn hàng của bạn đã được giao. Hãy viết bình luận đánh giá về sản phẩm",
-        accountid,
-      });
-    }
+  const handleClick = (status) => {
+    setCurrentPage(1);
+    setSelectedStatus(status);
   };
 
   const orderColumns = [
     {
-      title: "Order ID",
-      dataIndex: "id",
-      key: "id",
+      title: "STT",
+      key: "stt",
+      render: (_, __, index) => index + 1,
     },
     {
-      title: "Total",
+      title: "Họ và tên",
+      dataIndex: "username",
+      key: "username",
+    },
+    {
+      title: "Số điện thoại",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+    },
+    {
+      title: "Tổng đơn",
       dataIndex: "total",
       key: "total",
       render: (total) => `${total.toLocaleString("vi-VN")} ₫`,
     },
     {
-      title: "Address",
+      title: "Địa chỉ",
       dataIndex: "address",
       key: "address",
     },
     {
-      title: "City",
+      title: "Xã/ phường",
+      dataIndex: "ward",
+      key: "ward",
+    },
+    {
+      title: "Quận/ huyện",
+      dataIndex: "district",
+      key: "district",
+    },
+    {
+      title: "Tỉnh/ thành phố",
       dataIndex: "city",
       key: "city",
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status, record) => (
-        <Select
-          defaultValue={status}
-          style={{ width: 200 }}
-          onChange={(value) =>
-            handleStatusChange(value, record.id, record.accountid)
-          }
-        >
-          <Option value="Đang đóng gói">Đang đóng gói</Option>
-          <Option value="Đang vận chuyển">Đang vận chuyển</Option>
-          <Option value="Đã giao hàng">Đã giao hàng</Option>
-        </Select>
+      title: "",
+      key: "action",
+      render: (_, record) => (
+        <Button type="link" onClick={() => navigate(`/admin/order/${record.id}`)}>
+          Xem chi tiết
+        </Button>
       ),
     },
   ];
 
-  const expandedRowRender = (record) => {
-    const orderDetails = record.OrderDetails || [];
-    return <OrderDetailsTable details={orderDetails} />;
-  };
-
-  const onExpand = (expanded, record) => {
-    if (expanded) {
-      setExpandedRowKeys([record.id]);
-    } else {
-      setExpandedRowKeys([]);
-    }
-  };
-
   return (
-    <div style={{ padding: "25px", marginTop: "80px" }}>
-      <Table
-        columns={orderColumns}
-        dataSource={orderList}
-        expandable={{
-          expandedRowRender,
-          expandedRowKeys,
-          onExpand,
+    <div style={{ padding: "25px", position: "relative" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: 20,
+          background: "#f5f5f5",
+          borderRadius: 8,
         }}
+      >
+        <Input.Search
+          placeholder="Tìm kiếm đơn hàng..."
+          style={{ width: 300, height: 40 }}
+        />
+
+        <Space size="middle">
+          {statuses.map((status) => (
+            <Button
+              key={status}
+              type={selectedStatus === status ? "primary" : "default"}
+              onClick={() => handleClick(status)}
+              style={{
+                minWidth: 130,
+                height: 40,
+                fontWeight: "bold",
+                borderColor: selectedStatus === status ? "#1890ff" : "#d9d9d9",
+                color: selectedStatus === status ? "#fff" : "#1890ff",
+                background: selectedStatus === status ? "#1890ff" : "white",
+                transition: "0.3s",
+              }}
+            >
+              {status}
+            </Button>
+          ))}
+        </Space>
+      </div>
+      <Table
+        className="mt-[50px]"
+        columns={orderColumns}
+        dataSource={orderStatus?.orders}
         rowKey="id"
-        pagination={false}
+        pagination={{
+          current: currentPage,
+          pageSize: pageSize,
+          total: orderStatus?.totalOrders,
+          onChange: handlePageChange,
+          showSizeChanger: true,
+          pageSizeOptions: ["5", "10", "20"],
+        }}
       />
     </div>
   );
