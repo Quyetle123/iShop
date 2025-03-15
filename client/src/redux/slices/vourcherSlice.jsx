@@ -56,6 +56,17 @@ const vourcherSlice = createSlice({
     updateVourcherError(state, action) {
         state.loading = false;
         state.error = action.payload
+    },
+    deleteVourcherStart(state) {
+        state.loading = true;
+        state.error = null;
+    },
+    deleteVourcherSuccess(state) {
+        state.loading = false;
+    },
+    deleteVourcherError(state, action) {
+        state.loading = false;
+        state.error = action.payload
     }
   },
 });
@@ -72,7 +83,10 @@ export const {
     fetchVourcherByIdError,
     updateVourcherStart,
     updateVourcherSuccess,
-    updateVourcherError
+    updateVourcherError,
+    deleteVourcherStart,
+    deleteVourcherSuccess,
+    deleteVourcherError
 } = vourcherSlice.actions;
 
 export default vourcherSlice.reducer;

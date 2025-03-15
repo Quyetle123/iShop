@@ -5,7 +5,6 @@ import {
   Input,
   message,
   Select,
-  Space,
   Steps,
   Switch,
   Upload,
@@ -30,7 +29,6 @@ const AddVourcher = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
   const productList = Array.isArray(products.products) ? products.products : [];
-  console.log(productList);
 
   const { accounts } = useSelector((state) => state.auth);
   const accountList = Array.isArray(accounts.accounts) ? accounts.accounts : [];
@@ -50,7 +48,7 @@ const AddVourcher = () => {
 
   const [chooseProduct, setChooseProduct] = useState("Tất cả");
   const [chooseAccount, setChooseAccount] = useState("Tất cả");
-  const [quantityUse, setQuantityUse] = useState("Mỗi người tối đa 1 lần");
+  const [quantityUse, setQuantityUse] = useState("Không giới hạn số lượng");
 
   const handleImageUpload = ({ file }) => {
     if (file.type.startsWith("image/")) {
@@ -64,11 +62,13 @@ const AddVourcher = () => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [selectedAccount, setSelectedAccount] = useState("");
 
+  console.log(selectedProduct);
+  console.log(selectedAccount)
+
   const handleChooseProduct = (value) => {
     setSelectedProduct(value);
   };
 
-  console.log(selectedProduct);
   const handleChooseAccount = (value) => {
     setSelectedAccount(value);
   };
@@ -110,8 +110,8 @@ const AddVourcher = () => {
                 onChange={(value) => setQuantityUse(value)}
                 options={[
                   {
-                    value: "Mỗi người tối đa 1 lần",
-                    label: "Mỗi người tối đa 1 lần",
+                    value: "Không giới hạn số lượng",
+                    label: "Không giới hạn số lượng",
                   },
                   {
                     value: "Giới hạn số lượng",
@@ -240,27 +240,21 @@ const AddVourcher = () => {
         <div>
           <Select
             id="account"
-            mode="multiple"
             style={{
               width: "100%",
               padding: "2px",
             }}
-            placeholder="Chọn sản phẩm"
+            placeholder="Chọn tài khoản"
             onChange={handleChooseAccount}
             options={accountList.map((account) => ({
               value: account.id,
-              label: (
-                <Space>
-                  <p>{account.username} - </p>
-                  <p>Địa chỉ: {account.address}</p>
-                  <p>Thành phố: {account.city}</p>
-                </Space>
-              ),
+              label: `${account.username} - Địa chỉ: ${account.address} - Thành phố: ${account.city}`,
             }))}
           />
         </div>
       ),
     },
+    
     quantityUse === "Giới hạn số lượng" && {
       title: "Số lượng giới hạn",
       content: (
@@ -296,8 +290,6 @@ const AddVourcher = () => {
   const prev = () => {
     setCurrent(current - 1);
   };
-
-  console.log(selectedProduct);
 
   const onFinish = async () => {
     const image = await uploadImageToFirebase(imageFile);
@@ -347,7 +339,7 @@ const AddVourcher = () => {
           valid_to: formatDate.valid_to,
           quantity: allData.quantity && Number(allData.quantity),
           is_single_use:
-            quantityUse === "Mỗi người tối đa 1 lần" ? true : false,
+            quantityUse === "Không giới hạn số lượng" ? true : false,
           status,
         })
       );
