@@ -1,10 +1,14 @@
 import { Outlet } from "react-router-dom";
-import Header from "../../components/admin/Header";
-import HeaderTop from "../../components/admin/HeaderTop";
-import { GlobalStyle, MainContainerWithContext, MenuContainer } from "../Style/style";
+import Header from "../../layout/admin/Header";
+import HeaderTop from "../../layout/admin/HeaderTop";
+import {
+  GlobalStyle,
+  MainContainerWithContext,
+  MenuContainer,
+} from "../Style/style";
 import { SidebarProvider } from "../../context/SidebarContext";
 
-const Admin = () => {  
+const Admin = () => {
   return (
     <SidebarProvider>
       <GlobalStyle />
