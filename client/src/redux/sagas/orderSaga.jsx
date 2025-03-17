@@ -88,12 +88,16 @@ function* getOrderStatusSaga(action) {
   try {
     const response = yield call(
       axios.get,
-      `${import.meta.env.VITE_LOCALHOST}/order/orderStatus/${action.payload.storeid}?status=${action.payload.status}&page=${action.payload.page}&pageSize=${action.payload.pageSize}`
+      `${import.meta.env.VITE_LOCALHOST}/order/orderStatus/${
+        action.payload.storeid
+      }?status=${action.payload.status}&page=${action.payload.page}&pageSize=${
+        action.payload.pageSize
+      }`
     );
     yield put(getOrderStatusSuccess(response.data));
   } catch (error) {
     yield put(getOrderStatusFailure(error.message));
-  } 
+  }
 }
 
 function* getOrderDraftSaga(action) {
@@ -152,7 +156,8 @@ function* orderStatisticSaga(action) {
 
 function* orderMonthSaga(action) {
   try {
-    const { storeid, startMonth, endMonth, startYear, endYear } = action.payload;
+    const { storeid, startMonth, endMonth, startYear, endYear } =
+      action.payload;
     const response = yield call(
       axios.get,
       `${
@@ -171,8 +176,10 @@ export default function* orderSaga() {
   yield takeLatest(getAllOrderStart, getAllOrderSaga);
   yield takeLatest(getOrderByIdStart, getOrderByIdSaga);
   yield takeLatest(getOrderStatusStart, getOrderStatusSaga);
+  // Put the response data into the order month success action
   yield takeLatest(getOrderDraftStart, getOrderDraftSaga);
-  yield takeLatest(newOrderStart, newOrderSaga)
+  yield takeLatest(newOrderStart, newOrderSaga);
+  // Put the error message into the order month failure action
   yield takeLatest(updateStatusStart, updateStatusSaga);
   yield takeLatest(orderStatisticStart, orderStatisticSaga);
   yield takeLatest(orderMonthStart, orderMonthSaga);

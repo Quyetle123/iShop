@@ -34,7 +34,7 @@ import AllProduct from "../components/administrator/AllProduct/index.jsx";
 import UpdateCategory from "../components/administrator/UpdateCategory/index.jsx";
 import Administrator from "../pages/administrator/index.jsx";
 import AdministatorRoute from "./administratorRouter.jsx";
-import AdminStratorHome from "../components/administrator/Home/Home.jsx";
+import AdminStratorHome from "../components/administrator/Home/index.jsx";
 import StockStore from "../components/admin/StockStore/index.jsx";
 import AddCategory from "../components/administrator/AddCategory/index.jsx";
 
