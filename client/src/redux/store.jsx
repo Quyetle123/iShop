@@ -29,6 +29,7 @@ import districtSlice from "./slices/districtSlice.jsx";
 import wardSlice from "./slices/wardSlice.jsx";
 import adminstratorStatiscalSlice from "./slices/administratorStatisticalSlice.jsx";
 import inventoryHistorySlice from "./slices/inventoryHistorySlice.jsx";
+import locationStoreSlice from "./slices/locationStoreSlice.jsx";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -62,6 +63,7 @@ export const store = configureStore({
     wards: wardSlice,
     administratorStatisticals: adminstratorStatiscalSlice,
     inventoryHistories: inventoryHistorySlice,
+    locationStores: locationStoreSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware),
