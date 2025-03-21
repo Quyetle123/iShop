@@ -27,6 +27,7 @@ import districtSaga from "./districtSaga.jsx";
 import wardSaga from "./wardSaga.jsx";
 import administratorStatisticalSaga from "./administratorStatisticalSaga.jsx";
 import inventoryHistorySaga from "./inventoryHistorySaga.jsx";
+import locationStoreSaga from "./locationStoreSaga.jsx";
 
 export default function* rootSaga() {
   yield all([
@@ -58,5 +59,6 @@ export default function* rootSaga() {
     wardSaga(),
     administratorStatisticalSaga(),
     inventoryHistorySaga(),
+    locationStoreSaga(),
   ]);
 }

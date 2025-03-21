@@ -32,6 +32,7 @@ import DistrictRouter from "./routes/district.route.js";
 import WardRouter from "./routes/ward.route.js";
 import administratorStatiscalRouter from "./routes/administrator.statistical.route.js";
 import InventoryHistoryRouter from "./routes/inventoryHistory.route.js";
+import LocationStoreRouter from "./routes/locationStore.route.js";
 import setupSocket from "./socket/socket.js";
 
 const app = express();
@@ -75,6 +76,7 @@ app.use("/api/district", DistrictRouter);
 app.use("/api/ward", WardRouter);
 app.use("/api/administratorStatistical", administratorStatiscalRouter);
 app.use("/api/inventoryHistory", InventoryHistoryRouter);
+app.use("/api/locationStore", LocationStoreRouter);
 
 setupSocket(io);
 

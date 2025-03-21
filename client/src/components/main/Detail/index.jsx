@@ -25,6 +25,7 @@ import { getToken } from "../../../utils/token";
 import dayjs from "dayjs";
 import Slideshow from "../slideshow";
 import { message } from "antd";
+import MapComponent from "../../../utils/mapComponent";
 
 const Detail = () => {
   const token = getToken();
@@ -146,6 +147,7 @@ const Detail = () => {
               />
             ))}
           </div>
+          {/* <MapComponent /> */}
           <button>Đặt mua</button>
           <button
             style={{
