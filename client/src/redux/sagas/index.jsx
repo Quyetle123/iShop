@@ -14,18 +14,19 @@ import colorSaga from "./colorSaga.jsx";
 import productColorSaga from "./productColorSaga.jsx";
 import productImageSaga from "./productImageSaga.jsx";
 import postSaga from "./postSaga.jsx";
-import wishlistSaga  from "./wishlishtSaga.jsx";
+import wishlistSaga from "./wishlishtSaga.jsx";
 import vourcherSaga from "./vourcherSaga.jsx";
 import voucherAccountSaga from "./voucherAccountSaga.jsx";
 import voucherUsageSaga from "./voucherUsageSaga.jsx";
 import voucherProductSaga from "./voucherProductSaga.jsx";
 import addressSaga from "./addressSaga.jsx";
-import additionalAddressSaga  from "./additionalAddressSaga.jsx";
+import additionalAddressSaga from "./additionalAddressSaga.jsx";
 import storeStockSaga from "./storeStockSaga.jsx";
 import provinceSaga from "./provinceSaga.jsx";
 import districtSaga from "./districtSaga.jsx";
 import wardSaga from "./wardSaga.jsx";
 import administratorStatisticalSaga from "./administratorStatisticalSaga.jsx";
+import inventoryHistorySaga from "./inventoryHistorySaga.jsx";
 
 export default function* rootSaga() {
   yield all([
@@ -55,6 +56,7 @@ export default function* rootSaga() {
     provinceSaga(),
     districtSaga(),
     wardSaga(),
-    administratorStatisticalSaga()
+    administratorStatisticalSaga(),
+    inventoryHistorySaga(),
   ]);
 }

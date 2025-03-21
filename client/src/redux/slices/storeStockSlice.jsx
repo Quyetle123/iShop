@@ -35,7 +35,19 @@ const storeStockSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-  }
+    updateQuantityStoreStockStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    updateQuantityStoreStockSuccess(state) {
+      state.loading = false;
+      state.error = null;
+    },
+    updateQuantityStoreStockError(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+  },
 });
 
 export const {
@@ -45,6 +57,9 @@ export const {
   getStoreStockStart,
   getStoreStockSuccess,
   getStoreStockError,
+  updateQuantityStoreStockStart,
+  updateQuantityStoreStockSuccess,
+  updateQuantityStoreStockError,
 } = storeStockSlice.actions;
 
 export default storeStockSlice.reducer;

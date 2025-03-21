@@ -54,12 +54,35 @@ class StoreStockController {
               },
               {
                 model: ProductImage,
-              }
+              },
             ],
           },
         ],
       });
       res.status(200).json({ storeStocks });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async updateQuantityStoreStock(req, res) {
+    try {
+      const { storeid } = req.params;
+      const { productColorid, quantity } = req.body;
+
+      const storeStock = await StoreStock.findOne({
+        where: { storeid, productColorid },
+      });
+
+      if (!storeStock) {
+        return res.status(404).json({ message: "store stock not found" });
+      }
+
+      await storeStock.update({ quantity: storeStock.quantity + quantity });
+
+      res.status(200).json({
+        message: "update quantity store stock successfully",
+      });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
