@@ -1,7 +1,4 @@
-import {
-  Layout,
-  Menu,
-} from "antd";
+import { Layout, Menu } from "antd";
 import {
   BankOutlined,
   HomeOutlined,
@@ -27,6 +24,11 @@ const items = [
   {
     key: "sub3",
     label: <Link to="/admin/storeStock">Kho hàng</Link>,
+    icon: <BankOutlined />,
+  },
+  {
+    key: "sub4",
+    label: <Link to="/admin/stockHistory">Lịch sử kho hàng</Link>,
     icon: <BankOutlined />,
   },
 ];
@@ -65,7 +67,7 @@ const Header = () => {
           <img
             src="https://pos.nvncdn.com/f2169f-49462/store/20190520_Lmq0Fv79qw3Rvt8AtIDgUOFZ.png"
             alt="Logo"
-            style={{ maxWidth: "40%", marginLeft: '16px' }}
+            style={{ maxWidth: "40%", marginLeft: "16px" }}
           />
         </div>
         <Menu

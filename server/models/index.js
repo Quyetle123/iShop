@@ -22,6 +22,7 @@ import StoreStock from "./StoreStock.js";
 import Province from "./Province.js";
 import District from "./District.js";
 import Wards from "./Ward.js";
+import InventoryHistory from "./InventoryHistory.js";
 
 Account.hasMany(Cart, { foreignKey: "accountid" });
 Cart.belongsTo(Account, { foreignKey: "accountid" });
@@ -115,6 +116,12 @@ Address.belongsTo(District, { foreignKey: "district_id" });
 Province.hasMany(Address, { foreignKey: "province_id" });
 Address.belongsTo(Province, { foreignKey: "province_id" });
 
+Store.hasMany(InventoryHistory, { foreignKey: "storeid" });
+InventoryHistory.belongsTo(Store, { foreignKey: "storeid" });
+
+ProductColor.hasMany(InventoryHistory, { foreignKey: "productColorid" });
+InventoryHistory.belongsTo(ProductColor, { foreignKey: "productColorid" });
+
 export {
   Account,
   Cart,
@@ -140,4 +147,5 @@ export {
   Province,
   District,
   Wards,
+  InventoryHistory,
 };
