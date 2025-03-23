@@ -38,6 +38,7 @@ import {
   fetchMainAddressStart,
   updateMainAddressStart,
 } from "../../../redux/slices/addressSlice";
+import { addPaymentStart } from "../../../redux/slices/paymentSlice";
 
 const CheckoutPage = () => {
   const [form] = Form.useForm();
@@ -156,29 +157,37 @@ const CheckoutPage = () => {
           accountid: getToken().id,
         })
       );
-      
     }
     setIsModalOpen(false);
   };
 
   const handlePay = () => {
-    dispatch(
-      newOrderStart({
-        id: orderDraft?.id,
-        address: selectAddress?.address.address,
-        ward: selectAddress?.address.Ward.wards_id,
-        district: selectAddress?.address.Ward.District.district_id,
-        city: selectAddress?.address.Ward.District.Province.province_id,
-        payMethod: paymentMethod,
-        usename: getToken().username,
-        phoneNumber: getToken().phoneNumber,
-        status: "Chờ phê duyệt",
-      })
-    );
+    if (paymentMethod === "vnpay") {
+      dispatch(
+        addPaymentStart({ orderId: orderDraft?.id, amount: orderDraft?.total })
+      );
+      console.log("vnpay");
+    } else if (paymentMethod === "momo") {
+      console.log("momo");
+    } else {
+      dispatch(
+        newOrderStart({
+          id: orderDraft?.id,
+          address: selectAddress?.address.address,
+          ward: selectAddress?.address.Ward.wards_id,
+          district: selectAddress?.address.Ward.District.district_id,
+          city: selectAddress?.address.Ward.District.Province.province_id,
+          payMethod: paymentMethod,
+          usename: getToken().username,
+          phoneNumber: getToken().phoneNumber,
+          status: "Chờ phê duyệt",
+        })
+      );
+    }
   };
 
-  return (
-    orderDraft?<div style={{ backgroundColor: "#fff", padding: "40px 150px" }}>
+  return orderDraft ? (
+    <div style={{ backgroundColor: "#fff", padding: "40px 150px" }}>
       <Card title="Địa chỉ người nhận" className="mb-4">
         <Form form={form} layout="vertical">
           <Form.Item name="address">
@@ -438,20 +447,32 @@ const CheckoutPage = () => {
         </Button>
       </Card>
     </div>
-     :<div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-      backgroundColor: '#f5f5f5'
-    }}>
-      <Card style={{ textAlign: 'center', padding: '30px', borderRadius: '12px', boxShadow: '0px 4px 12px rgba(0,0,0,0.1)' }}>
-        <Empty description={<span>Không có đơn hàng nào cần thanh toán</span>} />
-        <Button 
-          type="primary" 
-          icon={<HomeOutlined />} 
-          style={{ marginTop: '20px' }}
-          onClick={() => window.location.href = '/'}
+  ) : (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        backgroundColor: "#f5f5f5",
+      }}
+    >
+      <Card
+        style={{
+          textAlign: "center",
+          padding: "30px",
+          borderRadius: "12px",
+          boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+        }}
+      >
+        <Empty
+          description={<span>Không có đơn hàng nào cần thanh toán</span>}
+        />
+        <Button
+          type="primary"
+          icon={<HomeOutlined />}
+          style={{ marginTop: "20px" }}
+          onClick={() => (window.location.href = "/")}
         >
           Quay lại trang chủ
         </Button>

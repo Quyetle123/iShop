@@ -28,6 +28,7 @@ import wardSaga from "./wardSaga.jsx";
 import administratorStatisticalSaga from "./administratorStatisticalSaga.jsx";
 import inventoryHistorySaga from "./inventoryHistorySaga.jsx";
 import locationStoreSaga from "./locationStoreSaga.jsx";
+import paymentSaga from "./paymentSaga.jsx";
 
 export default function* rootSaga() {
   yield all([
@@ -60,5 +61,6 @@ export default function* rootSaga() {
     administratorStatisticalSaga(),
     inventoryHistorySaga(),
     locationStoreSaga(),
+    paymentSaga(),
   ]);
 }
