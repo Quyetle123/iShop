@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Main = styled.div`
-  padding: 50px 150px;
+  padding: 0 150px 50px 150px;
   background-color: #3e3e3f;
   color: #fff;
 `;
@@ -12,6 +12,7 @@ export const DetailContainer = styled.main`
 
 export const DetailAside = styled.aside`
   width: 50%;
+  margin-top: 80px;
   display: flex;
   justify-content: center;
   border-radius: 10px;
@@ -138,4 +139,4 @@ export const CommentContent = styled.div`
 
 export const CommentContentP = styled.p`
   color: #333;
-`
+`;

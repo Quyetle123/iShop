@@ -1,14 +1,26 @@
-import { Button, Card, Table, Tag, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Checkbox,
+  InputNumber,
+  message,
+  Modal,
+  Table,
+  Tag,
+  Typography,
+} from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getStoreStockStart,
   initializeStoreStockStart,
+  updateQuantityStoreStockStart,
 } from "../../../redux/slices/storeStockSlice";
 import { getToken } from "../../../utils/token";
 import { getAccountStorebyAccountIdStart } from "../../../redux/slices/storeAccountSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { updateStatusStoreStart } from "../../../redux/slices/storeSlice";
+import { addInventoryHistoryStart } from "../../../redux/slices/inventoryHistorySlice";
 
 const { Title, Text } = Typography;
 const StockStore = () => {
@@ -23,7 +35,6 @@ const StockStore = () => {
   const storeStockList = Array.isArray(storeStocks.storeStocks)
     ? storeStocks.storeStocks
     : [];
-  console.log(storeStockList);
   useEffect(() => {
     dispatch(getStoreStockStart(storeAccount?.accountStore?.Store?.id));
   }, [dispatch, storeAccount]);
@@ -42,6 +53,56 @@ const StockStore = () => {
     );
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [importQuantity, setImportQuantity] = useState(0);
+
+  const openImportModal = (product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const closeImportModal = () => {
+    setSelectedProduct(null);
+    setIsModalOpen(false);
+    setIsConfirmed(false);
+    setImportQuantity(0);
+  };
+
+  const handleImportStock = () => {
+    if (!importQuantity || importQuantity <= 0) {
+      message.error("Vui lòng nhập số lượng hợp lệ!");
+      return;
+    }
+
+    if (!isConfirmed) {
+      message.warning("Vui lòng xác nhận trước khi nhập kho!");
+      return;
+    }
+    if (isConfirmed) {
+      dispatch(
+        updateQuantityStoreStockStart({
+          storeid: storeAccount?.accountStore?.Store?.id,
+          productColorid: selectedProduct.productColorId,
+          quantity: importQuantity,
+        })
+      );
+      dispatch(
+        addInventoryHistoryStart({
+          productColorid: selectedProduct.productColorId,
+          quantity: importQuantity,
+          type: "Import",
+          storeid: storeAccount?.accountStore?.Store?.id,
+        })
+      );
+      setImportQuantity(0);
+      setSelectedProduct(null);
+      setIsConfirmed(false);
+      setIsModalOpen(false);
+    }
+  };
+
   const dataSource = storeStockList.map((item) => ({
     key: item.id,
     id: item.id,
@@ -49,6 +110,7 @@ const StockStore = () => {
     image: item.ProductColor?.ProductImages?.[0]?.image,
     quantity: item.quantity,
     sold: item.sold,
+    productColorId: item.ProductColor?.id,
   }));
 
   const columns = [
@@ -82,9 +144,40 @@ const StockStore = () => {
       key: "sold",
       render: (text) => <Tag color="blue">{text}</Tag>,
     },
+    {
+      title: "Nhập kho",
+      key: "import",
+      render: (_, record) => (
+        <Button type="primary" onClick={() => openImportModal(record)}>
+          Nhập kho
+        </Button>
+      ),
+    },
   ];
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+      <Modal
+        title="Nhập kho"
+        open={isModalOpen}
+        onCancel={closeImportModal}
+        onOk={handleImportStock}
+      >
+        <p>Sản phẩm: {selectedProduct?.productname}</p>
+        <InputNumber
+          min={1}
+          value={importQuantity}
+          onChange={setImportQuantity}
+          placeholder="Nhập số lượng"
+        />
+        <Checkbox
+          checked={isConfirmed}
+          onChange={(e) => setIsConfirmed(e.target.checked)}
+        >
+          Tôi xác nhận số lượng nhập vào là chính xác và chịu trách nhiệm nếu có
+          sai sót.
+        </Checkbox>
+      </Modal>
+
       {storeAccount?.accountStore?.Store?.status !== "Hoạt động" ? (
         <Card className="shadow-lg p-6 w-96 text-center">
           {storeAccount?.accountStore?.Store?.status === "Cần khởi tạo" && (

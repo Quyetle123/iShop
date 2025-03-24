@@ -7,7 +7,10 @@ import {
   initializeStoreStockError,
   initializeStoreStockStart,
   initializeStoreStockSuccess,
+  updateQuantityStoreStockStart,
+  updateQuantityStoreStockSuccess,
 } from "../slices/storeStockSlice";
+import { updateStatusStoreFailure } from "../slices/storeSlice";
 
 function* initializeStoreStockSaga(action) {
   try {
@@ -35,7 +38,22 @@ function* getAllStoreStockSaga(action) {
   }
 }
 
+function* updateQuantityStoreStockSaga(action) {
+  try {
+    const response = yield call(
+      axios.put,
+      `${import.meta.env.VITE_LOCALHOST}/storeStock/${action.payload.storeid}`,
+      action.payload
+    );
+    yield put(updateQuantityStoreStockSuccess(response.data));
+    yield put(getStoreStockStart(action.payload.storeid));
+  } catch (error) {
+    yield put(updateStatusStoreFailure(error.message));
+  }
+}
+
 export default function* storeStockSaga() {
   yield takeLatest(initializeStoreStockStart, initializeStoreStockSaga);
   yield takeLatest(getStoreStockStart, getAllStoreStockSaga);
+  yield takeLatest(updateQuantityStoreStockStart, updateQuantityStoreStockSaga);
 }

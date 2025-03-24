@@ -61,6 +61,7 @@ const Vourcher = sequelize.define(
   {
     tableName: "vourchers",
     timestamps: true,
+    paranoid: true,
     createdAt: "createdAt",
     updatedAt: "updatedAt",
   }

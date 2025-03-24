@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import dayjs from "dayjs";
 import { MdDeleteOutline } from "react-icons/md";
-import { fetchVourchersStart } from "../../../redux/slices/vourcherSlice";
+import { deleteVourcherStart, fetchVourchersStart } from "../../../redux/slices/vourcherSlice";
 const AllVourcher = () => {
   const dispatch = useDispatch();
 
@@ -34,6 +34,11 @@ const AllVourcher = () => {
           className="ml-[10px] text-[20px] cursor-pointer hover:text-red-400"
           type="primary"
           danger
+          onClick={() => {
+            if (window.confirm("Bạn thật sự muốn xóa mã giảm giá này ?")) {
+              dispatch(deleteVourcherStart(voucher.id));
+            }
+          }}
         />
       </div>
     ),

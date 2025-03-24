@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { Button, Checkbox, Input, InputNumber, Modal, Table } from "antd";
+import { Button, Card, Checkbox, InputNumber, Table } from "antd";
 import { IoClose } from "react-icons/io5";
 import { NumericFormat } from "react-number-format";
 import * as S from "./style";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   deleteCartStart,
   fetchCartByAccountidStart,
@@ -15,6 +16,41 @@ import { addOrderStart } from "../../../redux/slices/orderSlice";
 import { addOrderDetailStart } from "../../../redux/slices/orderDetailSlice";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { fetchVourchersStart } from "../../../redux/slices/vourcherSlice";
+
+const DiscountWrapper = styled.div`
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+`;
+
+const DiscountCard = styled(Card)`
+  margin-bottom: 8px;
+  .ant-card-body {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 50px;
+  }
+`;
+
+const DiscountText = styled.span`
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+`;
+
+const ApplyButton = styled(Button)`
+  flex-shrink: 0;
+`;
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -23,6 +59,7 @@ const Cart = () => {
   const token = getToken();
 
   const cartList = Array.isArray(carts.carts) ? carts.carts : [];
+
 
   const Price = ({ value }) => (
     <NumericFormat
@@ -42,21 +79,54 @@ const Cart = () => {
     dispatch(fetchCartByAccountidStart(token.id));
   }, [dispatch, token.id]);
 
+  const productIdsInCart = cartList.map(cartItem => cartItem.ProductColor?.productid);
+
+  const { vourchers } = useSelector((state) => state.vourchers);
+const userId = getToken().id;
+console.log(userId);
+
+const vourcherList = Array.isArray(vourchers?.vourchers)
+  ? vourchers.vourchers.filter((voucher) => {
+      const hasAccounts = voucher.VoucherAccounts?.length > 0;
+      const hasMatchingAccount = (hasAccounts && voucher.VoucherAccounts.some((account) => account.account_id === userId))
+        ? true
+        : false;
+
+      const hasProducts = voucher.VoucherProducts?.length > 0;
+      const hasMatchingProduct = hasProducts
+        ? voucher.VoucherProducts.some((product) => productIdsInCart.includes(product.product_id))
+        : true;
+
+      return hasMatchingAccount || hasMatchingProduct;
+    })
+  : [];
+
+useEffect(() => {
+  dispatch(fetchVourchersStart());
+}, [dispatch]);
+
+
+
+
   const [cartIdArr, setCartIdArr] = useState([]);
+  const [productIdArr, setProductIdArr] = useState([]);
   const [totalArr, setTotalArr] = useState([]);
   const [productColoridArr, setProductColoridArr] = useState([]);
   const [quantityArr, setQuantityArr] = useState([]);
   const [priceArr, setPriceArr] = useState([]);
+  console.log(productIdArr)
 
-  const handleChecked = (e, cartid, total, productColorid, quantity, price) => {
+  const handleChecked = (e, cartid, productid, total, productColorid, quantity, price) => {
     if (e.target.checked) {
       setCartIdArr((prev) => [...prev, cartid]);
+      setProductIdArr((prev) => [...prev, productid]);
       setTotalArr((prev) => [...prev, total]);
       setProductColoridArr((prev) => [...prev, productColorid]);
       setQuantityArr((prev) => [...prev, quantity]);
       setPriceArr((prev) => [...prev, price]);
     } else {
       setCartIdArr((prev) => prev.filter((item) => item !== cartid));
+      setProductIdArr((prev) => prev.filter((item) => item !== productid));
       setTotalArr((prev) => prev.filter((item) => item !== total));
       setProductColoridArr((prev) =>
         prev.filter((item) => item !== productColorid)
@@ -65,6 +135,32 @@ const Cart = () => {
       setPriceArr((prev) => prev.filter((item) => item !== price));
     }
   };
+
+  const DiscountList = useMemo(() => 
+    vourcherList.map((discount) => {
+      const hasValidProduct = discount.VoucherProducts?.some(product => 
+        productIdArr.includes(product.product_id)
+      );
+  
+      const totalPriceValid = totalArr.reduce((acc, curr) => acc + curr, 0) >= discount.minimum_order_value;
+  
+      const hasVoucherAccount = (discount.VoucherAccounts.length > 0 && totalArr.reduce((acc, curr) => acc + curr, 0) > 0);
+  
+      const canApply = hasValidProduct || (totalPriceValid && discount.minimum_order_value !== null ) || hasVoucherAccount;
+  
+      return (
+        <DiscountCard key={discount.id} title={discount.code} bordered={false}>
+          <DiscountText>{discount.description}</DiscountText>
+          {canApply && (
+            <ApplyButton type="primary" size="small">
+              Áp dụng
+            </ApplyButton>
+          )}
+        </DiscountCard>
+      );
+    }), [vourcherList, productIdArr, totalArr]
+  );
+
 
   const dataSource = cartList.map((cart) => ({
     key: cart.id,
@@ -77,6 +173,7 @@ const Cart = () => {
             handleChecked(
               e,
               cart.id,
+              cart.ProductColor?.productid,
               cart.ProductColor.Product.price * cart.quantity,
               cart.ProductColor.id,
               cart.quantity,
@@ -129,23 +226,6 @@ const Cart = () => {
     ),
   }));
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [changeAdress, setChangerAdress] = useState();
-  const [changeCity, setChangeCity] = useState();
-  const [address, setAddress] = useState(token.address);
-  const [city, setCity] = useState(token.city);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setAddress(changeAdress);
-    setCity(changeCity);
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
   const handleConfirm = () => {
     const total = totalArr.reduce((acc, curr) => acc + curr, 0);
     const status = "Đơn nháp";
@@ -171,6 +251,8 @@ const Cart = () => {
     });
     navigate("/pay");
   };
+
+
 
   const columns = [
     {
@@ -214,7 +296,7 @@ const Cart = () => {
   const payDataSource = [
     {
       key: "1",
-      title: "Tổng phụ",
+      title: "Giảm giá",
       value: (
         <S.PriceText>
           <Price value={totalArr.reduce((acc, curr) => acc + curr, 0)} /> đ
@@ -223,37 +305,6 @@ const Cart = () => {
     },
     {
       key: "2",
-      title: "Giao hàng",
-      value: (
-        <>
-          <S.PriceText>Giao hàng miễn phí</S.PriceText>
-          <S.PriceText>{address}</S.PriceText>
-          <S.PriceText>{city}</S.PriceText>
-          <span className="cursor-pointer underline" onClick={showModal}>
-            Thay đổi địa chỉ
-          </span>
-          <Modal
-            title="Thay đổi địa chỉ"
-            open={isModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-          >
-            <Input
-              onChange={(e) => setChangerAdress(e.target.value)}
-              className="mt-2"
-              placeholder="Tên đường(Số nhà, thôn, xóm)"
-            />
-            <Input
-              onChange={(e) => setChangeCity(e.target.value)}
-              className="mt-2"
-              placeholder="Tỉnh/thành phố"
-            />
-          </Modal>
-        </>
-      ),
-    },
-    {
-      key: "3",
       title: "Tổng",
       value: (
         <S.PriceText>
@@ -288,6 +339,15 @@ const Cart = () => {
           dataSource={payDataSource}
           pagination={false}
         />
+      
+      {vourcherList.length > 0 && (
+  <DiscountWrapper>
+      {DiscountList}
+
+  </DiscountWrapper>
+)}
+
+   
         <Button
           onClick={handleConfirm}
           type="default"

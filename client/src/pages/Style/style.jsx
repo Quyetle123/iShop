@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { createGlobalStyle } from 'styled-components';
-import { SidebarContext } from '../../context/SidebarContext';
+import styled from "styled-components";
+import { createGlobalStyle } from "styled-components";
 import { useContext } from "react";
+import { SidebarContext } from "../../context/SidebarContext";
 
 export const GlobalStyle = createGlobalStyle`
   body {
@@ -12,12 +12,13 @@ export const GlobalStyle = createGlobalStyle`
 `;
 
 export const MenuContainer = styled.div`
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 `;
 
 export const MainContainer = styled.div`
-  width: ${({ collapsed }) => (collapsed ? "calc(100% - 80px)" : "calc(100% - 250px)")};
+  width: ${({ collapsed }) =>
+    collapsed ? "calc(100% - 80px)" : "calc(100% - 250px)"};
   margin-left: ${({ collapsed }) => (collapsed ? "80px" : "250px")};
   transition: all 0.3s ease;
 `;

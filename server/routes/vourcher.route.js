@@ -7,5 +7,6 @@ router.post('/addVourcher', VourcherController.addVourcher);
 router.get('/', VourcherController.allVourchers);
 router.get('/:id', VourcherController.vourcherById);
 router.put('/updateVourcher/:id', VourcherController.updateVourcher);
+router.delete('/:id', VourcherController.deleteVourcher);
 
 export default router;
