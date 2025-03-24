@@ -82,12 +82,16 @@ app.use('/api/province', ProvinceRouter);
 app.use('/api/district', DistrictRouter);
 app.use('/api/ward', WardRouter);
 
-app.use('/api/payments', paymentsRoutes);
+app.use('/api/payment', paymentsRoutes);
 
 app.post('/chat', async (req, res, next) => {
     const { question } = req.body;
     const data = await askQuestion(question);
     return res.status(200).json(data);
+});
+
+app.get('/', (req, res) => {
+    return res.status(200).json({ message: 'ok' });
 });
 
 app.use('/api/administratorStatistical', administratorStatiscalRouter);

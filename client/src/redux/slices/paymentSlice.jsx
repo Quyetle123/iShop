@@ -1,69 +1,49 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const postSilce = createSlice({
-    name: 'posts',
+const paymentSlice = createSlice({
+    name: 'payments',
     initialState: {
-        posts: [],
-        selectedPost: null,
+        payments: [],
+        vnPay: null,
+        momoPay: null,
         loading: false,
         error: null,
     },
     reducers: {
-        addPostStart(state) {
+        addPaymentStart(state) {
             state.loading = true;
             state.error = null;
         },
-        addPostSuccess(state, action) {
+        addPaymentSuccess(state, action) {
             state.loading = false;
-            state.posts.push(action.payload);
+            state.payments.push(action.payload);
             state.error = null;
         },
-        addPostError(state, action) {
+        addPaymentError(state, action) {
             state.loading = false;
             state.error = action.payload;
         },
-        fetchPostsStart(state) {
+        fetchVNPayStart(state) {
             state.loading = true;
             state.error = null;
         },
-        fetchPostsSuccess(state, action) {
+        fetchVNPaysSuccess(state, action) {
             state.loading = false;
-            state.posts = action.payload;
+            state.vnPay = action.payload;
         },
-        fetchPostsError(state, action) {
+        fetchVNPaysError(state, action) {
             state.loading = false;
             state.error = action.payload;
         },
-        fetchPostByIdStart(state) {
+        fetchMomoPayStart(state) {
             state.loading = true;
             state.error = null;
         },
-        fetchPostByIdSuccess(state, action) {
+        fetchMomoPaySuccess(state, action) {
             state.loading = false;
-            state.selectedPost = action.payload;
+            state.momoPay = action.payload;
         },
-        fetchPostByIdError(state, action) {
-            state.loading = false;
-            state.error = action.payload;
-        },
-        updatePostStart(state) {
-            state.loading = true;
-            state.error = null;
-        },
-        updatePostSuccess(state) {
-            state.loading = false;
-        },
-        updatePostError(state, action) {
-            state.loading = false;
-            state.error = action.payload;
-        },
-        deletePostStart(state) {
-            state.loading = true;
-        },
-        deletePostSuccess(state) {
-            state.loading = false;
-        },
-        deletePostError(state, action) {
+        fetchMomoPayError(state, action) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -71,21 +51,15 @@ const postSilce = createSlice({
 });
 
 export const {
-    addPostStart,
-    addPostSuccess,
-    addPostError,
-    fetchPostsStart,
-    fetchPostsSuccess,
-    fetchPostsError,
-    fetchPostByIdStart,
-    fetchPostByIdSuccess,
-    fetchPostByIdError,
-    updatePostStart,
-    updatePostSuccess,
-    updatePostError,
-    deletePostStart,
-    deletePostSuccess,
-    deletePostError,
-} = postSilce.actions;
+    addPaymentStart,
+    addPaymentSuccess,
+    addPaymentError,
+    fetchVNPayStart,
+    fetchVNPaysSuccess,
+    fetchVNPaysError,
+    fetchMomoPayStart,
+    fetchMomoPaySuccess,
+    fetchMomoPayError,
+} = paymentSlice.actions;
 
-export default postSilce.reducer;
+export default paymentSlice.reducer;

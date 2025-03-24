@@ -1,151 +1,147 @@
-import Account from "./Account.js";
-import Cart from "./Cart.js";
-import Category from "./Category.js";
-import Comment from "./Comment.js";
-import Order from "./Order.js";
-import OrderDetail from "./OrderDetail.js";
-import Product from "./Product.js";
-import Store from "./Store.js";
-import StoreAccount from "./StoreAccount.js";
-import Branch from "./Branch.js";
-import Color from "./Color.js";
-import ProductColor from "./ProductColor.js";
-import ProductImage from "./ProductImage.js";
-import Wishlist from "./Wishlist.js";
-import Post from "./Post.js";
-import Vourcher from "./Vourcher.js";
-import VoucherAccount from "./VoucherAccount.js";
-import VoucherProduct from "./VoucherProduct.js";
-import VoucherUsage from "./VoucherUsage.js";
-import Address from "./Address.js";
-import StoreStock from "./StoreStock.js";
-import Province from "./Province.js";
-import District from "./District.js";
-import Wards from "./Ward.js";
-import InventoryHistory from "./InventoryHistory.js";
+import Account from './Account.js';
+import Cart from './Cart.js';
+import Category from './Category.js';
+import Comment from './Comment.js';
+import Order from './Order.js';
+import OrderDetail from './OrderDetail.js';
+import Product from './Product.js';
+import Store from './Store.js';
+import StoreAccount from './StoreAccount.js';
+import Branch from './Branch.js';
+import Color from './Color.js';
+import ProductColor from './ProductColor.js';
+import ProductImage from './ProductImage.js';
+import Wishlist from './Wishlist.js';
+import Post from './Post.js';
+import Vourcher from './Vourcher.js';
+import VoucherAccount from './VoucherAccount.js';
+import VoucherProduct from './VoucherProduct.js';
+import VoucherUsage from './VoucherUsage.js';
+import Address from './Address.js';
+import StoreStock from './StoreStock.js';
+import Province from './Province.js';
+import District from './District.js';
+import Wards from './Ward.js';
+import Otp from './Otp.js';
+import InventoryHistory from './InventoryHistory.js';
 
-Account.hasMany(Cart, { foreignKey: "accountid" });
-Cart.belongsTo(Account, { foreignKey: "accountid" });
+Account.hasMany(Cart, { foreignKey: 'accountid' });
+Cart.belongsTo(Account, { foreignKey: 'accountid' });
 
-Category.hasMany(Product, { foreignKey: "categoryid" });
-Product.belongsTo(Category, { foreignKey: "categoryid" });
+Category.hasMany(Product, { foreignKey: 'categoryid' });
+Product.belongsTo(Category, { foreignKey: 'categoryid' });
 
-ProductColor.hasMany(Cart, { foreignKey: "productColorid" });
-Cart.belongsTo(ProductColor, { foreignKey: "productColorid" });
+ProductColor.hasMany(Cart, { foreignKey: 'productColorid' });
+Cart.belongsTo(ProductColor, { foreignKey: 'productColorid' });
 
-Account.hasMany(Order, { foreignKey: "accountid" });
-Order.belongsTo(Account, { foreignKey: "accountid" });
+Account.hasMany(Order, { foreignKey: 'accountid' });
+Order.belongsTo(Account, { foreignKey: 'accountid' });
 
-Order.hasMany(OrderDetail, { foreignKey: "orderid" });
-OrderDetail.belongsTo(Order, { foreignKey: "orderid" });
+Order.hasMany(OrderDetail, { foreignKey: 'orderid' });
+OrderDetail.belongsTo(Order, { foreignKey: 'orderid' });
 
-ProductColor.hasMany(OrderDetail, { foreignKey: "productColorid" });
-OrderDetail.belongsTo(ProductColor, { foreignKey: "productColorid" });
+ProductColor.hasMany(OrderDetail, { foreignKey: 'productColorid' });
+OrderDetail.belongsTo(ProductColor, { foreignKey: 'productColorid' });
 
-Product.hasMany(Comment, { foreignKey: "productid" });
-Comment.belongsTo(Product, { foreignKey: "productid" });
+Product.hasMany(Comment, { foreignKey: 'productid' });
+Comment.belongsTo(Product, { foreignKey: 'productid' });
 
-Account.hasMany(Comment, { foreignKey: "accountid" });
-Comment.belongsTo(Account, { foreignKey: "accountid" });
+Account.hasMany(Comment, { foreignKey: 'accountid' });
+Comment.belongsTo(Account, { foreignKey: 'accountid' });
 
-Store.hasMany(StoreAccount, { foreignKey: "storeid" });
-StoreAccount.belongsTo(Store, { foreignKey: "storeid" });
+Store.hasMany(StoreAccount, { foreignKey: 'storeid' });
+StoreAccount.belongsTo(Store, { foreignKey: 'storeid' });
 
-Account.hasMany(StoreAccount, { foreignKey: "accountid" });
-StoreAccount.belongsTo(Account, { foreignKey: "accountid" });
+Account.hasMany(StoreAccount, { foreignKey: 'accountid' });
+StoreAccount.belongsTo(Account, { foreignKey: 'accountid' });
 
-Account.hasMany(VoucherAccount, { foreignKey: "account_id" });
-VoucherAccount.belongsTo(Account, { foreignKey: "account_id" });
+Account.hasMany(VoucherAccount, { foreignKey: 'account_id' });
+VoucherAccount.belongsTo(Account, { foreignKey: 'account_id' });
 
-Account.hasMany(VoucherUsage, { foreignKey: "accountid" });
-VoucherUsage.belongsTo(Account, { foreignKey: "accountid" });
+Account.hasMany(VoucherUsage, { foreignKey: 'accountid' });
+VoucherUsage.belongsTo(Account, { foreignKey: 'accountid' });
 
-Branch.hasMany(Store, { foreignKey: "branchid" });
-Store.belongsTo(Branch, { foreignKey: "branchid" });
+Branch.hasMany(Store, { foreignKey: 'branchid' });
+Store.belongsTo(Branch, { foreignKey: 'branchid' });
 
-Color.hasMany(ProductColor, { foreignKey: "colorid" });
-ProductColor.belongsTo(Color, { foreignKey: "colorid" });
+Color.hasMany(ProductColor, { foreignKey: 'colorid' });
+ProductColor.belongsTo(Color, { foreignKey: 'colorid' });
 
-Product.hasMany(ProductColor, { foreignKey: "productid" });
-ProductColor.belongsTo(Product, { foreignKey: "productid" });
+Product.hasMany(ProductColor, { foreignKey: 'productid' });
+ProductColor.belongsTo(Product, { foreignKey: 'productid' });
 
-Product.hasMany(VoucherProduct, { foreignKey: "product_id" });
-VoucherProduct.belongsTo(Product, { foreignKey: "product_id" });
+Product.hasMany(VoucherProduct, { foreignKey: 'product_id' });
+VoucherProduct.belongsTo(Product, { foreignKey: 'product_id' });
 
-ProductColor.hasMany(ProductImage, { foreignKey: "productColorid" });
-ProductImage.belongsTo(ProductColor, { foreignKey: "productColorid" });
+ProductColor.hasMany(ProductImage, { foreignKey: 'productColorid' });
+ProductImage.belongsTo(ProductColor, { foreignKey: 'productColorid' });
 
-Account.hasMany(Wishlist, { foreignKey: "accountid" });
-Wishlist.belongsTo(Account, { foreignKey: "accountid" });
+Account.hasMany(Wishlist, { foreignKey: 'accountid' });
+Wishlist.belongsTo(Account, { foreignKey: 'accountid' });
 
-ProductColor.hasMany(Wishlist, { foreignKey: "productColorid" });
-Wishlist.belongsTo(ProductColor, { foreignKey: "productColorid" });
-Vourcher.hasMany(VoucherAccount, { foreignKey: "voucher_id" });
-VoucherAccount.belongsTo(Vourcher, { foreignKey: "voucher_id" });
+ProductColor.hasMany(Wishlist, { foreignKey: 'productColorid' });
+Wishlist.belongsTo(ProductColor, { foreignKey: 'productColorid' });
+Vourcher.hasMany(VoucherAccount, { foreignKey: 'voucher_id' });
+VoucherAccount.belongsTo(Vourcher, { foreignKey: 'voucher_id' });
 
-Vourcher.hasMany(VoucherProduct, { foreignKey: "voucher_id" });
-VoucherProduct.belongsTo(Vourcher, { foreignKey: "voucher_id" });
+Vourcher.hasMany(VoucherProduct, { foreignKey: 'voucher_id' });
+VoucherProduct.belongsTo(Vourcher, { foreignKey: 'voucher_id' });
 
-Vourcher.hasMany(VoucherUsage, { foreignKey: "voucher_id" });
-VoucherUsage.belongsTo(Vourcher, { foreignKey: "voucher_id" });
+Vourcher.hasMany(VoucherUsage, { foreignKey: 'voucher_id' });
+VoucherUsage.belongsTo(Vourcher, { foreignKey: 'voucher_id' });
 
-Account.hasMany(Address, { foreignKey: "accountid" });
-Address.belongsTo(Account, { foreignKey: "accountid" });
+Account.hasMany(Address, { foreignKey: 'accountid' });
+Address.belongsTo(Account, { foreignKey: 'accountid' });
 
-Store.hasMany(StoreStock, { foreignKey: "storeid" });
-StoreStock.belongsTo(Store, { foreignKey: "storeid" });
+Store.hasMany(StoreStock, { foreignKey: 'storeid' });
+StoreStock.belongsTo(Store, { foreignKey: 'storeid' });
 
-ProductColor.hasMany(StoreStock, { foreignKey: "productColorid" });
-StoreStock.belongsTo(ProductColor, { foreignKey: "productColorid" });
+ProductColor.hasMany(StoreStock, { foreignKey: 'productColorid' });
+StoreStock.belongsTo(ProductColor, { foreignKey: 'productColorid' });
 
-Province.hasMany(District, { foreignKey: "province_id" });
-District.belongsTo(Province, { foreignKey: "province_id" });
+Province.hasMany(District, { foreignKey: 'province_id' });
+District.belongsTo(Province, { foreignKey: 'province_id' });
 
-Province.hasMany(Branch, { foreignKey: "province_id" });
-Branch.belongsTo(Province, { foreignKey: "province_id" });
+Province.hasMany(Branch, { foreignKey: 'province_id' });
+Branch.belongsTo(Province, { foreignKey: 'province_id' });
 
-District.hasMany(Wards, { foreignKey: "district_id" });
-Wards.belongsTo(District, { foreignKey: "district_id" });
+District.hasMany(Wards, { foreignKey: 'district_id' });
+Wards.belongsTo(District, { foreignKey: 'district_id' });
 
-Wards.hasMany(Address, { foreignKey: "wards_id" });
-Address.belongsTo(Wards, { foreignKey: "wards_id" });
+Wards.hasMany(Address, { foreignKey: 'wards_id' });
+Address.belongsTo(Wards, { foreignKey: 'wards_id' });
 
-District.hasMany(Address, { foreignKey: "district_id" });
-Address.belongsTo(District, { foreignKey: "district_id" });
+District.hasMany(Address, { foreignKey: 'district_id' });
+Address.belongsTo(District, { foreignKey: 'district_id' });
 
-Province.hasMany(Address, { foreignKey: "province_id" });
-Address.belongsTo(Province, { foreignKey: "province_id" });
-
-Store.hasMany(InventoryHistory, { foreignKey: "storeid" });
-InventoryHistory.belongsTo(Store, { foreignKey: "storeid" });
-
-ProductColor.hasMany(InventoryHistory, { foreignKey: "productColorid" });
-InventoryHistory.belongsTo(ProductColor, { foreignKey: "productColorid" });
+Province.hasMany(Address, { foreignKey: 'province_id' });
+Address.belongsTo(Province, { foreignKey: 'province_id' });
 
 export {
-  Account,
-  Cart,
-  Category,
-  Product,
-  Order,
-  OrderDetail,
-  Comment,
-  Store,
-  StoreAccount,
-  Branch,
-  Color,
-  ProductColor,
-  ProductImage,
-  Wishlist,
-  Post,
-  Vourcher,
-  VoucherAccount,
-  VoucherProduct,
-  VoucherUsage,
-  Address,
-  StoreStock,
-  Province,
-  District,
-  Wards,
-  InventoryHistory,
+    Account,
+    Cart,
+    Category,
+    Product,
+    Order,
+    OrderDetail,
+    Comment,
+    Store,
+    StoreAccount,
+    Branch,
+    Color,
+    ProductColor,
+    ProductImage,
+    Wishlist,
+    Post,
+    Vourcher,
+    VoucherAccount,
+    VoucherProduct,
+    VoucherUsage,
+    Address,
+    StoreStock,
+    Province,
+    District,
+    Wards,
+    Otp,
+    InventoryHistory,
 };
