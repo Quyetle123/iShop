@@ -1,4 +1,10 @@
-import { Branch, Province, Store } from "../models/index.js";
+import {
+  Account,
+  Branch,
+  Province,
+  Store,
+  StoreAccount,
+} from "../models/index.js";
 
 class branchController {
   static async addBranch(req, res) {
@@ -17,7 +23,13 @@ class branchController {
   static async getAllBranches(req, res) {
     try {
       const branches = await Branch.findAll({
-        include: [{ model: Store }, { model: Province }],
+        include: [
+          {
+            model: Store,
+            include: [{ model: StoreAccount, include: [{ model: Account }] }],
+          },
+          { model: Province },
+        ],
       });
       res.status(200).json({ branches });
     } catch (error) {

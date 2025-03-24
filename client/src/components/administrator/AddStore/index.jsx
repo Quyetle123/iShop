@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as S from "./style";
-import { Button, Card, Form, Input, message, Select, Steps } from "antd";
+import { Button, Card, Form, Input, message, Select, Spin, Steps } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { addStoreStart } from "../../../redux/slices/storeSlice";
 import { v4 as uuidv4 } from "uuid";
@@ -10,8 +10,10 @@ import { fetchAllBranchStart } from "../../../redux/slices/branchSlice";
 import { fetchProvincesStart } from "../../../redux/slices/provinceSlice";
 import { fetchDistrictByProvinceIdStart } from "../../../redux/slices/districtSlice";
 import { fetchWardsByDistrictIdStart } from "../../../redux/slices/wardSlice";
+import { useNavigate } from "react-router-dom";
 
 const AddStore = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
@@ -183,47 +185,54 @@ const AddStore = () => {
     setCurrent(current - 1);
   };
 
-  const onFinish = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        const storeid = uuidv4();
-        const adminid = uuidv4();
-        const allData = { ...formData, ...values };
-        dispatch(
-          addStoreStart({
-            id: storeid,
-            storename: allData.storename,
-            branchid: allData.branchid,
-            district: allData.district,
-            ward: allData.ward,
-            address: allData.address,
-            status: "Cần khởi tạo",
-          })
-        );
+  const [loading, setLoading] = useState(false);
 
-        dispatch(
-          registerStart({
-            id: adminid,
-            username: allData.username,
-            phoneNumber: allData.phoneNumber,
-            email: allData.email,
-            password: allData.password,
-            role: "admin",
-          })
-        );
+  const onFinish = async () => {
+    try {
+      const values = await form.validateFields();
+      const storeid = uuidv4();
+      const adminid = uuidv4();
+      const allData = { ...formData, ...values };
 
-        dispatch(
-          addStoreAccountStart({
-            storeid,
-            accountid: adminid,
-          })
-        );
-        message.success("Đã hoàn thành tạo cửa hàng!");
-      })
-      .catch(() => {
-        message.error("Vui lòng hoàn thành tất cả các trường bắt buộc.");
-      });
+      setLoading(true);
+
+      await dispatch(
+        addStoreStart({
+          id: storeid,
+          storename: allData.storename,
+          branchid: allData.branchid,
+          district: allData.district,
+          ward: allData.ward,
+          address: allData.address,
+          status: "Cần khởi tạo",
+        })
+      );
+
+      await dispatch(
+        registerStart({
+          id: adminid,
+          username: allData.username,
+          phoneNumber: allData.phoneNumber,
+          email: allData.email,
+          password: allData.password,
+          role: "admin",
+        })
+      );
+
+      await dispatch(
+        addStoreAccountStart({
+          storeid,
+          accountid: adminid,
+        })
+      );
+
+      message.success("Đã hoàn thành tạo cửa hàng!");
+    } catch (error) {
+      message.error("Có lỗi xảy ra, vui lòng thử lại!");
+    } finally {
+      setLoading(false);
+      navigate("/administrator/branch-store");
+    }
   };
 
   return (
@@ -244,8 +253,8 @@ const AddStore = () => {
             </Button>
           )}
           {current === steps.length - 1 && (
-            <Button type="primary" onClick={onFinish}>
-              Hoàn thành
+            <Button type="primary" onClick={onFinish} disabled={loading}>
+              {loading ? <Spin size="small" /> : "Hoàn thành"}
             </Button>
           )}
           {current > 0 && (

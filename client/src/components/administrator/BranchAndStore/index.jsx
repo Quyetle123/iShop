@@ -21,10 +21,10 @@ import { fetchProvincesStart } from "../../../redux/slices/provinceSlice";
 
 const BranchAndStore = () => {
   const dispatch = useDispatch();
-  const { provinces } = useSelector(
-    state => state.provinces
-  );
-  const provinceList = Array.isArray(provinces.province) ? provinces.province : [];
+  const { provinces } = useSelector((state) => state.provinces);
+  const provinceList = Array.isArray(provinces.province)
+    ? provinces.province
+    : [];
 
   useEffect(() => {
     dispatch(fetchProvincesStart());
@@ -45,7 +45,7 @@ const BranchAndStore = () => {
   };
 
   const onFinish = (values) => {
-    console.log(values)
+    console.log(values);
     dispatch(
       addBranchStart({
         province_id: values.province,
@@ -115,7 +115,10 @@ const BranchAndStore = () => {
               // onChange={handleProvinceChange}
             >
               {provinceList.map((province) => (
-                <Select.Option key={province.province_id} value={province.province_id}>
+                <Select.Option
+                  key={province.province_id}
+                  value={province.province_id}
+                >
                   {province.name}
                 </Select.Option>
               ))}
@@ -178,14 +181,14 @@ const BranchAndStore = () => {
       <Card className="mt-6">
         {branchList.map((branch) => (
           <div key={branch.id}>
-            <S.BranchName>Chi nhánh {branch.branchname}</S.BranchName>
+            <S.BranchName>Chi nhánh {branch.Province.name}</S.BranchName>
             <Table
               dataSource={branch.Stores.map((store, idx) => ({
                 key: store.id,
                 stt: idx + 1,
                 storename: store.storename,
                 address: store.address,
-                phoneNumber: store.phoneNumber,
+                phoneNumber: store?.StoreAccounts[0]?.Account?.phoneNumber,
               }))}
               columns={columns}
               pagination={false}
