@@ -133,8 +133,7 @@ class controllerPayments {
         if (vnp_ResponseCode === '00') {
             const idCart = vnp_OrderInfo;
             await Order.update({ status: 'Cần phê duyệt', payMethod: 'VNPAY' }, { where: { id: idCart } });
-            // return res.redirect(`${process.env.DOMAIN_URL}/checkout/${newPayment._id}`);
-            return res.status(200).json({ message: 'Thanh toán thanh cong' });
+            return res.redirect(`${process.env.DOMAIN_URL}/checkout/${newPayment._id}`);
         }
     }
 }

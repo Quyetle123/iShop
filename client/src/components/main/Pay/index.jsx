@@ -13,6 +13,7 @@ import { fetchProvincesStart } from '../../../redux/slices/provinceSlice';
 import { fetchDistrictByProvinceIdStart } from '../../../redux/slices/districtSlice';
 import { fetchWardsByDistrictIdStart } from '../../../redux/slices/wardSlice';
 import { addMainAddressStart, fetchMainAddressStart, updateMainAddressStart } from '../../../redux/slices/addressSlice';
+import { addPaymentStart } from '../../../redux/slices/paymentSlice';
 
 const CheckoutPage = () => {
     const [form] = Form.useForm();
@@ -126,19 +127,35 @@ const CheckoutPage = () => {
     };
 
     const handlePay = () => {
-        dispatch(
-            newOrderStart({
-                id: orderDraft?.id,
-                address: selectAddress?.address.address,
-                ward: selectAddress?.address.Ward.wards_id,
-                district: selectAddress?.address.Ward.District.district_id,
-                city: selectAddress?.address.Ward.District.Province.province_id,
-                payMethod: paymentMethod,
-                usename: getToken().username,
-                phoneNumber: getToken().phoneNumber,
-                status: 'Chờ phê duyệt',
-            }),
-        );
+        if (paymentMethod === 'momo') {
+            dispatch(
+                addPaymentStart({
+                    idOrder: orderDraft?.id,
+                    typePayment: 'MOMO',
+                }),
+            );
+        } else if (paymentMethod === 'vnpay') {
+            dispatch(
+                addPaymentStart({
+                    idOrder: orderDraft?.id,
+                    typePayment: 'VNPAY',
+                }),
+            );
+        } else {
+            dispatch(
+                newOrderStart({
+                    id: orderDraft?.id,
+                    address: selectAddress?.address.address,
+                    ward: selectAddress?.address.Ward.wards_id,
+                    district: selectAddress?.address.Ward.District.district_id,
+                    city: selectAddress?.address.Ward.District.Province.province_id,
+                    payMethod: paymentMethod,
+                    usename: getToken().username,
+                    phoneNumber: getToken().phoneNumber,
+                    status: 'Chờ phê duyệt',
+                }),
+            );
+        }
     };
 
     return orderDraft ? (
