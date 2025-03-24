@@ -12,7 +12,6 @@ import {
 } from "../../../redux/slices/notifySlice";
 import { socket } from "../../../utils/socket";
 
-
 const Header = () => {
   const dispatch = useDispatch();
   const [notifyList, setNotifyList] = useState([]);
@@ -26,19 +25,18 @@ const Header = () => {
 
   useEffect(() => {
     if (!token) return;
-  
+
     socket.on("connect", () => console.log("Socket connected: ", socket.id));
     socket.on("newMessage", (notify) => {
       setNotifyList((prev) => [...prev, notify]);
       setHasNewNotifications(true);
     });
-  
+
     return () => {
       socket.off("newMessage");
       socket.off("connect");
     };
   }, [token]);
-  
 
   const { notifies } = useSelector((state) => state.notifies) || { notify: [] };
   const arrList = Array.isArray(notifies.notify) ? notifies.notify : [];
@@ -141,6 +139,7 @@ const Header = () => {
       <Menu
         mode="horizontal"
         theme="dark"
+        selectedKeys={[]}
         style={{
           flex: 1,
           justifyContent: "center",
