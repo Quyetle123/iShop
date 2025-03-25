@@ -13,7 +13,7 @@ import { fetchProvincesStart } from '../../../redux/slices/provinceSlice';
 import { fetchDistrictByProvinceIdStart } from '../../../redux/slices/districtSlice';
 import { fetchWardsByDistrictIdStart } from '../../../redux/slices/wardSlice';
 import { addMainAddressStart, fetchMainAddressStart, updateMainAddressStart } from '../../../redux/slices/addressSlice';
-import { addPaymentStart } from '../../../redux/slices/paymentSlice';
+import { addPaymentStart, updateInfoPaymentSatrt } from '../../../redux/slices/paymentSlice';
 
 const CheckoutPage = () => {
     const [form] = Form.useForm();
@@ -126,8 +126,21 @@ const CheckoutPage = () => {
         setIsModalOpen(false);
     };
 
+    console.log(getToken());
+
     const handlePay = () => {
         if (paymentMethod === 'momo') {
+            dispatch(
+                updateInfoPaymentSatrt({
+                    idOrder: orderDraft?.id,
+                    username: getToken().username,
+                    phoneNumber: getToken().phoneNumber,
+                    address: selectAddress?.address.address,
+                    city: selectAddress?.address.Ward.District.Province.province_id,
+                    district: selectAddress?.address.Ward.District.district_id,
+                    ward: selectAddress?.address.Ward.wards_id,
+                }),
+            );
             dispatch(
                 addPaymentStart({
                     idOrder: orderDraft?.id,
@@ -135,6 +148,17 @@ const CheckoutPage = () => {
                 }),
             );
         } else if (paymentMethod === 'vnpay') {
+            dispatch(
+                updateInfoPaymentSatrt({
+                    idOrder: orderDraft?.id,
+                    username: getToken().username,
+                    phoneNumber: getToken().phoneNumber,
+                    address: selectAddress?.address.address,
+                    city: selectAddress?.address.Ward.District.Province.province_id,
+                    district: selectAddress?.address.Ward.District.district_id,
+                    ward: selectAddress?.address.Ward.wards_id,
+                }),
+            );
             dispatch(
                 addPaymentStart({
                     idOrder: orderDraft?.id,

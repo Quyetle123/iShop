@@ -4,6 +4,8 @@ import crypto from 'crypto';
 import axios from 'axios';
 
 import { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat } from 'vnpay';
+import Branch from '../models/Branch.js';
+import Store from '../models/Store.js';
 
 class controllerPayments {
     async payments(req, res) {
@@ -25,8 +27,8 @@ class controllerPayments {
                 var requestId = partnerCode + new Date().getTime();
                 var orderId = requestId;
                 var orderInfo = `thanh toan ${findOrder.id}`; // nội dung giao dịch thanh toán
-                var redirectUrl = 'http://localhost:5000/api/payments/get-info-payment-momo'; // 8080
-                var ipnUrl = 'http://localhost:5000/api/api/payments/get-info-payment-momo';
+                var redirectUrl = 'http://localhost:5001/api/payment/get-info-payment-momo'; // 8080
+                var ipnUrl = 'http://localhost:5001/api/api/payment/get-info-payment-momo';
                 var amount = findOrder.total / 1000;
                 var requestType = 'captureWallet';
                 var extraData = ''; //pass empty value if your merchant does not have stores
@@ -100,7 +102,7 @@ class controllerPayments {
                 vnp_TxnRef: findOrder.id,
                 vnp_OrderInfo: `${findOrder.id}`,
                 vnp_OrderType: ProductCode.Other,
-                vnp_ReturnUrl: `http://localhost:5000/api/payments/get-info-payment-vnpay`, //
+                vnp_ReturnUrl: `http://localhost:5000/api/payment/get-info-payment-vnpay`, //
                 vnp_Locale: VnpLocale.VN, // 'vn' hoặc 'en'
                 vnp_CreateDate: dateFormat(new Date()), // tùy chọn, mặc định là hiện tại
                 vnp_ExpireDate: dateFormat(tomorrow), // tùy chọn
@@ -110,12 +112,72 @@ class controllerPayments {
     }
 
     async updateInfoPayment(req, res) {
-        const { idOrder, username, phoneNumber, address, city, district, ward } = req.body;
-        if (!idOrder || !username || !phoneNumber || !address || !city || !district || !ward)
-            return res.status(400).json({ message: 'Vui lòng nhập đầy đủ thông tin' });
+        try {
+            const { idOrder, username, phoneNumber, address, city, district, ward } = req.body;
+            if (!idOrder || !username || !phoneNumber || !address || !city || !district || !ward) {
+                return res.status(400).json({ message: 'Vui lòng nhập đầy đủ thông tin' });
+            }
 
-        await Order.update({ username, phoneNumber, address, city, district, ward }, { where: { id: idOrder } });
-        res.status(200).json({ message: 'Cập nhật thành công' });
+            const id = idOrder;
+            const order = await Order.findByPk(id);
+            if (!order) {
+                return res.status(400).json({ message: 'Order not found' });
+            }
+
+            const branches = await Branch.findAll();
+            let selectedBranch;
+            let selectedStore;
+
+            const cityBranch = branches.find((branch) => branch.province_id === city);
+            if (cityBranch) {
+                const stores = await Store.findAll({ where: { branchid: cityBranch.id } });
+
+                selectedStore = stores.find((store) => store.district === district);
+
+                if (!selectedStore && stores.length > 0) {
+                    selectedStore = stores.reduce((prev, curr) => {
+                        return Math.abs(Number(curr.district) - Number(district)) <
+                            Math.abs(Number(prev.district) - Number(district))
+                            ? curr
+                            : prev;
+                    });
+                }
+
+                selectedBranch = cityBranch;
+            } else {
+                selectedBranch = branches.reduce((prev, curr) => {
+                    return Math.abs(Number(curr.province_id) - Number(city)) <
+                        Math.abs(Number(prev.province_id) - Number(city))
+                        ? curr
+                        : prev;
+                });
+
+                const storesInBranch = await Store.findAll({ where: { branchid: selectedBranch.id } });
+
+                if (storesInBranch.length > 0) {
+                    selectedStore = storesInBranch[Math.floor(Math.random() * storesInBranch.length)];
+                }
+            }
+
+            if (!selectedBranch || !selectedStore) {
+                return res.status(400).json({ message: 'No suitable store found' });
+            }
+
+            await order.update({
+                address,
+                ward,
+                district,
+                city,
+                username,
+                phoneNumber,
+                storeid: selectedStore.id,
+            });
+
+            res.status(200).json({ order, store: selectedStore });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
     }
 
     async checkPaymentMomo(req, res, next) {
@@ -133,7 +195,7 @@ class controllerPayments {
         if (vnp_ResponseCode === '00') {
             const idCart = vnp_OrderInfo;
             await Order.update({ status: 'Cần phê duyệt', payMethod: 'VNPAY' }, { where: { id: idCart } });
-            return res.redirect(`${process.env.DOMAIN_URL}/checkout/${newPayment._id}`);
+            return res.redirect(`http://localhost:5173/pay-success`);
         }
     }
 }

@@ -12,6 +12,7 @@ class AuthController {
             {
                 id: account.id,
                 username: account.username,
+                phoneNumber: account.phoneNumber,
                 email: account.email,
                 role: account.role,
             },
@@ -48,6 +49,7 @@ class AuthController {
                 account: {
                     id: account.id,
                     username: account.username,
+                    phoneNumber: account.phoneNumber,
                     email: account.email,
                     role: account.role,
                 },
