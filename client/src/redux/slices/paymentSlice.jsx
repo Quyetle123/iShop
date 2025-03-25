@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-
 const paymentSlice = createSlice({
     name: 'payments',
     initialState: {
@@ -23,27 +22,15 @@ const paymentSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
-        fetchVNPayStart(state) {
+        updateInfoPaymentSatrt(state) {
             state.loading = true;
             state.error = null;
         },
-        fetchVNPaysSuccess(state, action) {
+        updateInfoPaymentSuccess(state) {
             state.loading = false;
-            state.vnPay = action.payload;
-        },
-        fetchVNPaysError(state, action) {
-            state.loading = false;
-            state.error = action.payload;
-        },
-        fetchMomoPayStart(state) {
-            state.loading = true;
             state.error = null;
         },
-        fetchMomoPaySuccess(state, action) {
-            state.loading = false;
-            state.momoPay = action.payload;
-        },
-        fetchMomoPayError(state, action) {
+        updateInfoPaymentError(state, action) {
             state.loading = false;
             state.error = action.payload;
         },
@@ -54,12 +41,9 @@ export const {
     addPaymentStart,
     addPaymentSuccess,
     addPaymentError,
-    fetchVNPayStart,
-    fetchVNPaysSuccess,
-    fetchVNPaysError,
-    fetchMomoPayStart,
-    fetchMomoPaySuccess,
-    fetchMomoPayError,
+    updateInfoPaymentSatrt,
+    updateInfoPaymentSuccess,
+    updateInfoPaymentError,
 } = paymentSlice.actions;
 
 export default paymentSlice.reducer;
