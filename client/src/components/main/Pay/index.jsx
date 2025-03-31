@@ -14,8 +14,10 @@ import { fetchDistrictByProvinceIdStart } from '../../../redux/slices/districtSl
 import { fetchWardsByDistrictIdStart } from '../../../redux/slices/wardSlice';
 import { addMainAddressStart, fetchMainAddressStart, updateMainAddressStart } from '../../../redux/slices/addressSlice';
 import { addPaymentStart, updateInfoPaymentSatrt } from '../../../redux/slices/paymentSlice';
+import { useNavigate } from 'react-router-dom';
 
 const CheckoutPage = () => {
+    const navigate = useNavigate();
     const [form] = Form.useForm();
     const [paymentMethod, setPaymentMethod] = useState('momo');
 
@@ -177,6 +179,7 @@ const CheckoutPage = () => {
                     usename: getToken().username,
                     phoneNumber: getToken().phoneNumber,
                     status: 'Chờ phê duyệt',
+                    navigate,
                 }),
             );
         }
@@ -361,6 +364,7 @@ const CheckoutPage = () => {
                             type="primary"
                             icon={<WalletOutlined />}
                             className="bg-pink-500 hover:bg-pink-600 w-full"
+                            style={{ opacity: paymentMethod && paymentMethod !== 'momo' ? 0.5 : 1 }}
                             onClick={() => setPaymentMethod('momo')}
                         >
                             Momo
@@ -369,6 +373,7 @@ const CheckoutPage = () => {
                             type="primary"
                             icon={<BankOutlined />}
                             className="bg-blue-500 hover:bg-blue-600 w-full"
+                            style={{ opacity: paymentMethod && paymentMethod !== 'vnpay' ? 0.5 : 1 }}
                             onClick={() => setPaymentMethod('vnpay')}
                         >
                             VNPay
@@ -377,6 +382,7 @@ const CheckoutPage = () => {
                             type="primary"
                             icon={<DollarCircleOutlined />}
                             className="bg-green-500 hover:bg-green-600 w-full"
+                            style={{ opacity: paymentMethod && paymentMethod !== 'Thanh toán khi nhận hàng' ? 0.5 : 1 }}
                             onClick={() => setPaymentMethod('Thanh toán khi nhận hàng')}
                         >
                             Thanh toán khi nhận hàng

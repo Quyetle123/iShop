@@ -29,6 +29,7 @@ import administratorStatisticalSaga from './administratorStatisticalSaga.jsx';
 import inventoryHistorySaga from './inventoryHistorySaga.jsx';
 import locationStoreSaga from './locationStoreSaga.jsx';
 import paymentSaga from './paymentSaga.jsx';
+import aiSaga from './aiSaga.jsx';
 
 export default function* rootSaga() {
     yield all([
@@ -62,5 +63,6 @@ export default function* rootSaga() {
         inventoryHistorySaga(),
         locationStoreSaga(),
         paymentSaga(),
+        aiSaga(),
     ]);
 }

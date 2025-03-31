@@ -1,12 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { getToken, removeToken } from '../../../utils/token';
+import { removeToken } from '../../../utils/token';
 import { UserOutlined, LogoutOutlined, ShopOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import { Layout, Space, Typography, Dropdown, Menu } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { logoutStart } from '../../../redux/slices/authSlice';
-import { useEffect } from 'react';
-import { getAccountStorebyAccountIdStart } from '../../../redux/slices/storeAccountSlice';
-import { fetchStoreByIdStart } from '../../../redux/slices/storeSlice';
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -14,17 +11,6 @@ const { Text } = Typography;
 const HeaderTop = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const { storeAccount } = useSelector((state) => state.storeAccounts);
-
-    useEffect(() => {
-        dispatch(getAccountStorebyAccountIdStart(getToken().id));
-    }, [dispatch]);
-
-    const { store } = useSelector((state) => state.stores);
-    useEffect(() => {
-        dispatch(fetchStoreByIdStart(storeAccount?.accountStore?.Store?.id));
-    }, [dispatch, storeAccount?.accountStore?.Store?.id]);
 
     const handleLogOut = () => {
         dispatch(logoutStart());
@@ -50,15 +36,12 @@ const HeaderTop = () => {
                 <Space>
                     <ShopOutlined style={{ fontSize: 18, color: '#333' }} />
                     <Text strong style={{ color: '#333' }}>
-                        {store?.store?.storename}
+                        Apple Store Việt Nam
                     </Text>
                 </Space>
                 <Space>
                     <EnvironmentOutlined style={{ fontSize: 18, color: '#333' }} />
-                    <Text style={{ color: '#555' }}>
-                        {store?.store?.address}, {store?.store?.Ward?.name}, {store?.store?.District?.name},
-                        {store?.store?.Branch?.Province?.name}
-                    </Text>
+                    <Text style={{ color: '#555' }}>123 Đường ABC, P.1, Q.1, TP. HCM</Text>
                 </Space>
             </Space>
 
@@ -66,7 +49,7 @@ const HeaderTop = () => {
                 <Space className="admin-menu">
                     <UserOutlined style={{ fontSize: 18, color: '#333' }} />
                     <Text strong style={{ color: '#333' }}>
-                        {storeAccount?.accountStore?.Account?.username}
+                        Admin
                     </Text>
                 </Space>
             </Dropdown>
