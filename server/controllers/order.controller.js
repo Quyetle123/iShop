@@ -1,5 +1,16 @@
 import { where, Op } from 'sequelize';
-import { Branch, Order, OrderDetail, Product, ProductColor, ProductImage, Store } from '../models/index.js';
+import {
+    Branch,
+    District,
+    Order,
+    OrderDetail,
+    Product,
+    ProductColor,
+    ProductImage,
+    Province,
+    Store,
+    Wards,
+} from '../models/index.js';
 function getColorForStatus(status) {
     const colors = {
         'Đang đóng gói': '#ff7f50',
@@ -83,21 +94,32 @@ class orderController {
                 where: {
                     id,
                 },
-                include: {
-                    model: OrderDetail,
-                    include: {
-                        model: ProductColor,
-                        include: [
-                            {
-                                model: Product,
-                                paranoid: false,
-                            },
-                            {
-                                model: ProductImage,
-                            },
-                        ],
+                include: [
+                    {
+                        model: OrderDetail,
+                        include: {
+                            model: ProductColor,
+                            include: [
+                                {
+                                    model: Product,
+                                    paranoid: false,
+                                },
+                                {
+                                    model: ProductImage,
+                                },
+                            ],
+                        },
                     },
-                },
+                    {
+                        model: Province,
+                    },
+                    {
+                        model: District,
+                    },
+                    {
+                        model: Wards,
+                    },
+                ],
             });
             if (order) {
                 res.status(200).json({ order });
@@ -125,6 +147,17 @@ class orderController {
                 where: { status, storeid },
                 limit,
                 offset,
+                include: [
+                    {
+                        model: Province,
+                    },
+                    {
+                        model: District,
+                    },
+                    {
+                        model: Wards,
+                    },
+                ],
             });
 
             res.status(200).json({

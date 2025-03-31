@@ -28,14 +28,26 @@ const Order = sequelize.define(
         city: {
             type: DataTypes.STRING(255),
             allowNull: true,
+            references: {
+                model: 'province',
+                key: 'province_id',
+            },
         },
         district: {
             type: DataTypes.STRING(255),
             allowNull: true,
+            references: {
+                model: 'district',
+                key: 'district_id',
+            },
         },
         ward: {
             type: DataTypes.STRING(255),
             allowNull: true,
+            references: {
+                model: 'wards',
+                key: 'wards_id',
+            },
         },
         payMethod: {
             type: DataTypes.STRING(255),

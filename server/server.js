@@ -84,7 +84,7 @@ app.use('/api/ward', WardRouter);
 
 app.use('/api/payment', paymentsRoutes);
 
-app.post('/chat', async (req, res, next) => {
+app.post('/api/chat', async (req, res, next) => {
     const { question } = req.body;
     const data = await askQuestion(question);
     return res.status(200).json(data);

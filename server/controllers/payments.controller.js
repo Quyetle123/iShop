@@ -191,11 +191,27 @@ class controllerPayments {
     }
 
     async checkPaymentVnpay(req, res) {
-        const { vnp_ResponseCode, vnp_OrderInfo } = req.query;
-        if (vnp_ResponseCode === '00') {
-            const idCart = vnp_OrderInfo;
-            await Order.update({ status: 'Cần phê duyệt', payMethod: 'VNPAY' }, { where: { id: idCart } });
-            return res.redirect(`http://localhost:5173/pay-success`);
+        try {
+            const { vnp_ResponseCode, vnp_OrderInfo } = req.query;
+
+            if (vnp_ResponseCode === '00') {
+                const idCart = vnp_OrderInfo;
+
+                await Order.update({ status: 'Cần phê duyệt', payMethod: 'VNPAY' }, { where: { id: idCart } });
+
+                const order = await Order.findOne({ where: { id: idCart } });
+
+                if (!order) {
+                    return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+                }
+
+                return res.redirect(`http://localhost:5173/pay-success?si=${order.storeid}&oi=${order.id}`);
+            }
+
+            return res.status(400).json({ message: 'Thanh toán không thành công' });
+        } catch (error) {
+            console.error('Lỗi kiểm tra thanh toán:', error);
+            return res.status(500).json({ message: 'Lỗi máy chủ' });
         }
     }
 }

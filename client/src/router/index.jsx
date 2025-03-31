@@ -39,6 +39,7 @@ import StockStore from '../components/admin/StockStore/index.jsx';
 import AddCategory from '../components/administrator/AddCategory/index.jsx';
 import StockHistory from '../components/admin/StockHistory/index.jsx';
 import PaymentSuccess from '../components/main/PaymentSuccess/index.jsx';
+import PostPage from '../components/main/Post/index.jsx';
 
 const MainLayout = () => {
     return <Outlet />;
@@ -59,6 +60,10 @@ export default createBrowserRouter([
                     {
                         element: <Home />,
                         path: '/',
+                    },
+                    {
+                        element: <PostPage />,
+                        path: '/post/:id',
                     },
                     {
                         element: <Shop />,

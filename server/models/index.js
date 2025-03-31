@@ -64,6 +64,12 @@ VoucherUsage.belongsTo(Account, { foreignKey: 'accountid' });
 Branch.hasMany(Store, { foreignKey: 'branchid' });
 Store.belongsTo(Branch, { foreignKey: 'branchid' });
 
+District.hasMany(Store, { foreignKey: 'district' });
+Store.belongsTo(District, { foreignKey: 'district' });
+
+Wards.hasMany(Store, { foreignKey: 'ward' });
+Store.belongsTo(Wards, { foreignKey: 'ward' });
+
 Color.hasMany(ProductColor, { foreignKey: 'colorid' });
 ProductColor.belongsTo(Color, { foreignKey: 'colorid' });
 
@@ -116,6 +122,15 @@ Address.belongsTo(District, { foreignKey: 'district_id' });
 
 Province.hasMany(Address, { foreignKey: 'province_id' });
 Address.belongsTo(Province, { foreignKey: 'province_id' });
+
+Province.hasMany(Order, { foreignKey: 'city' });
+Order.belongsTo(Province, { foreignKey: 'city' });
+
+District.hasMany(Order, { foreignKey: 'district' });
+Order.belongsTo(District, { foreignKey: 'district' });
+
+Wards.hasMany(Order, { foreignKey: 'ward' });
+Order.belongsTo(Wards, { foreignKey: 'ward' });
 
 export {
     Account,

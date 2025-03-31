@@ -30,8 +30,7 @@ class AuthController {
             return res.status(400).json({ message: 'OTP không hợp lệ' });
         }
 
-        const otpDecode = await bcrypt.compare(otp, otpDB.otp);
-
+        const otpDecode = await bcrypt.compare(String(otp), otpDB.otp);
         if (!otpDecode) {
             return res.status(400).json({ message: 'OTP không hợp lệ' });
         }
