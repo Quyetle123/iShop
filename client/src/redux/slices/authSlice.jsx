@@ -24,6 +24,16 @@ const authSlice = createSlice({
         registerFailure(state, action) {
             (state.isLoading = false), (state.error = action.payload);
         },
+        registerAdminStart(state) {
+            state.isLoading = true;
+            state.error = null;
+        },
+        registerAdminSuccess(state, action) {
+            (state.isLoading = false), (state.account = action.payload.account), (state.error = null);
+        },
+        registerAdminFailure(state, action) {
+            (state.isLoading = false), (state.error = action.payload);
+        },
         loginStart(state) {
             state.isLoading = true;
         },
@@ -106,6 +116,9 @@ export const {
     sendmailStart,
     sendmailSuccess,
     sendmailFailure,
+    registerAdminStart,
+    registerAdminSuccess,
+    registerAdminFailure,
 } = authSlice.actions;
 
 export default authSlice.reducer;

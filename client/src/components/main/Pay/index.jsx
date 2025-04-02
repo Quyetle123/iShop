@@ -393,13 +393,13 @@ const CheckoutPage = () => {
 
             <Card title="Tóm tắt đơn hàng">
                 <p>
-                    Tạm tính: <b>{orderDraft?.total.toLocaleString()} đ</b>
+                    Tạm tính: <b>{(orderDraft?.discount + orderDraft?.total).toLocaleString()} đ</b>
                 </p>
                 <p>
                     Phí ship: <b>0 đ</b>
                 </p>
                 <p>
-                    Giảm giá: <b>0 đ</b>
+                    Giảm giá: <b>{orderDraft?.discount.toLocaleString()} đ</b>
                 </p>
                 <p>
                     <b>Tổng cộng: {orderDraft?.total.toLocaleString()} đ</b>

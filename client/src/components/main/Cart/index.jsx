@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { Button, Card, Checkbox, InputNumber, Table } from 'antd';
-import { IoClose } from 'react-icons/io5';
+import { IoCheckmarkCircleOutline, IoClose, IoGiftOutline, IoStar } from 'react-icons/io5';
 import { NumericFormat } from 'react-number-format';
 import * as S from './style';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,11 +28,15 @@ const DiscountWrapper = styled.div`
 const DiscountCard = styled(Card)`
     margin-bottom: 8px;
     .ant-card-body {
-        padding: 8px 12px;
+        padding: 12px 16px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 50px;
+        min-height: 60px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+        opacity: ${({ selected }) => (selected ? '0.6' : '1')};
     }
 `;
 
@@ -42,10 +46,23 @@ const DiscountText = styled.span`
     overflow: hidden;
     text-overflow: ellipsis;
     margin-right: 10px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 `;
 
 const ApplyButton = styled(Button)`
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: ${({ selected }) => (selected ? '#ff9800' : '#4caf50')};
+    color: white;
+    &:hover {
+        background: ${({ selected }) => (selected ? '#f57c00' : '#388e3c')};
+    }
 `;
 
 const Cart = () => {
@@ -151,12 +168,28 @@ const Cart = () => {
                 const canApply =
                     hasValidProduct || (totalPriceValid && discount.minimum_order_value !== null) || hasVoucherAccount;
 
+                const isSelected = selectVoucher?.id === discount.id;
                 return (
-                    <DiscountCard key={discount.id} title={discount.code} bordered={false}>
-                        <DiscountText>{discount.description}</DiscountText>
+                    <DiscountCard key={discount.id} bordered={false} selected={isSelected}>
+                        <DiscountText>
+                            <IoGiftOutline size={20} color="green" /> {discount.description}
+                        </DiscountText>
                         {canApply && (
-                            <ApplyButton onClick={() => handleApplyDiscount(discount)} type="primary" size="small">
-                                Áp dụng
+                            <ApplyButton
+                                onClick={() => handleApplyDiscount(discount)}
+                                type="primary"
+                                size="small"
+                                selected={isSelected}
+                            >
+                                {isSelected ? (
+                                    <div className="flex">
+                                        <IoStar size={16} /> Đã áp dụng
+                                    </div>
+                                ) : (
+                                    <div className="flex">
+                                        <IoCheckmarkCircleOutline size={16} /> Áp dụng
+                                    </div>
+                                )}
                             </ApplyButton>
                         )}
                     </DiscountCard>
@@ -232,7 +265,7 @@ const Cart = () => {
         const status = 'Đơn nháp';
         const accountid = token.id;
         const id = uuidv4();
-        dispatch(addOrderStart({ id, total, status, accountid, storeid: 'default' }));
+        dispatch(addOrderStart({ id, total, status, accountid, storeid: 'default', discount }));
         productColoridArr.forEach((item, index) => {
             const cartid = cartIdArr[index];
             const productColorid = productColoridArr[index];
@@ -293,7 +326,7 @@ const Cart = () => {
     const payDataSource = [
         {
             key: '1',
-            title: 'Giảm giá',
+            title: 'Đã giảm',
             value: (
                 <S.PriceText>
                     <Price value={discount} /> {discount > 100 || discount === 0 ? 'đ' : '%'}
