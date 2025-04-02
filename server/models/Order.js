@@ -17,6 +17,11 @@ const Order = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: true,
         },
+        discount: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+        },
         total: {
             type: DataTypes.INTEGER,
             allowNull: false,

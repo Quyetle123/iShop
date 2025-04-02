@@ -4,6 +4,7 @@ import AuthController from '../controllers/account.controller.js';
 const router = express.Router();
 
 router.post('/register', AuthController.register);
+router.post('/register-admin', AuthController.registerAdmin);
 router.post('/login', AuthController.login);
 router.post('/loginWithGoogle', AuthController.loginWithGoogle);
 router.get('/', AuthController.getAccounts);

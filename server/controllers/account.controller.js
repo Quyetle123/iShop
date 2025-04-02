@@ -58,6 +58,29 @@ class AuthController {
         }
     }
 
+    static async registerAdmin(req, res) {
+        const { password, ...rest } = req.body;
+        try {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const account = await Account.create({
+                password: hashedPassword,
+                ...rest,
+            });
+            const token = AuthController.generateToken(account);
+            res.status(201).json({
+                token,
+                account: {
+                    id: account.id,
+                    username: account.username,
+                    email: account.email,
+                    role: account.role,
+                },
+            });
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+
     static async login(req, res) {
         const { phoneNumber, password } = req.body;
         try {
