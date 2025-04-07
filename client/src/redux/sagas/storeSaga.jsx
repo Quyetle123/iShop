@@ -7,6 +7,8 @@ import {
     fetchStoreByIdFailure,
     fetchStoreByIdStart,
     fetchStoreByIdSuccess,
+    getStoreByBranchIdStart,
+    getStoreByBranchIdSuccess,
     updateStatusStoreFailure,
     updateStatusStoreStart,
     updateStatusStoreSuccess,
@@ -32,6 +34,15 @@ function* fetchStoreByIdSaga(action) {
     }
 }
 
+function* fetchStoreByBranchIdSaga(action) {
+    try {
+        const response = yield call(axios.get, `${import.meta.env.VITE_LOCALHOST}/store/branch/${action.payload}`);
+        yield put(getStoreByBranchIdSuccess(response.data));
+    } catch (error) {
+        yield put(getStoreByBranchIdSuccess(error.message));
+    }
+}
+
 function* updateStatusStoreSaga(action) {
     try {
         const response = yield call(
@@ -50,4 +61,5 @@ export default function* storeSaga() {
     yield takeLatest(addStoreStart, addStoreSaga);
     yield takeLatest(updateStatusStoreStart, updateStatusStoreSaga);
     yield takeLatest(fetchStoreByIdStart, fetchStoreByIdSaga);
+    yield takeLatest(getStoreByBranchIdStart, fetchStoreByBranchIdSaga);
 }

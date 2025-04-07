@@ -44,6 +44,22 @@ class storeController {
         }
     }
 
+    static async getStoreByBranchId(req, res) {
+        const { branch_id } = req.params;
+        try {
+            const store = await Store.findAll({
+                where: { branchid: branch_id },
+            });
+            if (store) {
+                res.status(200).json({ store });
+            } else {
+                res.status(404).json({ message: 'Store not found' });
+            }
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+
     static async updateStatusStore(req, res) {
         const { id } = req.params;
         const { status } = req.body;

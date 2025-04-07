@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { removeToken } from '../../../utils/token';
+import { getToken, removeToken } from '../../../utils/token';
 import { UserOutlined, LogoutOutlined, ShopOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import { Layout, Space, Typography, Dropdown, Menu } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutStart } from '../../../redux/slices/authSlice';
+import { useEffect } from 'react';
+import { fetchCompanyAccountStart } from '../../../redux/slices/companyAccountSlice';
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -11,6 +13,12 @@ const { Text } = Typography;
 const HeaderTop = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { companyAccount } = useSelector((state) => state.companyAccounts);
+
+    console.log(companyAccount?.companyAccount);
+    useEffect(() => {
+        dispatch(fetchCompanyAccountStart(getToken().id));
+    }, [dispatch]);
 
     const handleLogOut = () => {
         dispatch(logoutStart());
@@ -22,7 +30,7 @@ const HeaderTop = () => {
     const menu = (
         <Menu>
             <Menu.Item key="1" icon={<UserOutlined />}>
-                <Text strong>Admin</Text>
+                <Text strong>Administrator</Text>
             </Menu.Item>
             <Menu.Item key="2" icon={<LogoutOutlined />} onClick={handleLogOut} danger>
                 Đăng xuất
@@ -36,12 +44,17 @@ const HeaderTop = () => {
                 <Space>
                     <ShopOutlined style={{ fontSize: 18, color: '#333' }} />
                     <Text strong style={{ color: '#333' }}>
-                        Apple Store Việt Nam
+                        {companyAccount?.companyAccount?.Company?.companyname}
                     </Text>
                 </Space>
                 <Space>
                     <EnvironmentOutlined style={{ fontSize: 18, color: '#333' }} />
-                    <Text style={{ color: '#555' }}>123 Đường ABC, P.1, Q.1, TP. HCM</Text>
+                    <Text style={{ color: '#555' }}>
+                        {companyAccount?.companyAccount?.Company?.address},{' '}
+                        {companyAccount?.companyAccount?.Company?.Ward?.name},{' '}
+                        {companyAccount?.companyAccount?.Company?.District?.name},{' '}
+                        {companyAccount?.companyAccount?.Company?.Province?.name}
+                    </Text>
                 </Space>
             </Space>
 
@@ -49,7 +62,7 @@ const HeaderTop = () => {
                 <Space className="admin-menu">
                     <UserOutlined style={{ fontSize: 18, color: '#333' }} />
                     <Text strong style={{ color: '#333' }}>
-                        Admin
+                        {companyAccount?.companyAccount?.Account?.username}
                     </Text>
                 </Space>
             </Dropdown>

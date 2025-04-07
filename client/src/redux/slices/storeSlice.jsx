@@ -4,6 +4,7 @@ const storeSlice = createSlice({
     name: 'stores',
     initialState: {
         stores: [],
+        storeBranch: [],
         store: null,
         loading: false,
         error: null,
@@ -47,6 +48,19 @@ const storeSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+        getStoreByBranchIdStart(state) {
+            state.loading = true;
+            state.error = null;
+        },
+        getStoreByBranchIdSuccess(state, action) {
+            state.loading = false;
+            state.storeBranch = action.payload;
+            state.error = null;
+        },
+        getStoreByBranchIdFailure(state, action) {
+            state.loading = false;
+            state.error = action.payload;
+        },
     },
 });
 
@@ -60,6 +74,9 @@ export const {
     updateStatusStoreStart,
     updateStatusStoreSuccess,
     updateStatusStoreFailure,
+    getStoreByBranchIdStart,
+    getStoreByBranchIdSuccess,
+    getStoreByBranchIdFailure,
 } = storeSlice.actions;
 
 export default storeSlice.reducer;

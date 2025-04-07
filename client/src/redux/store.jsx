@@ -32,6 +32,7 @@ import inventoryHistorySlice from './slices/inventoryHistorySlice.jsx';
 import locationStoreSlice from './slices/locationStoreSlice.jsx';
 import paymentSlice from './slices/paymentSlice.jsx';
 import aiSlice from './slices/aiSlice.jsx';
+import companyAccountSlice from './slices/companyAccountSlice.jsx';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -68,6 +69,7 @@ export const store = configureStore({
         locationStores: locationStoreSlice,
         payments: paymentSlice,
         ais: aiSlice,
+        companyAccounts: companyAccountSlice,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
 });

@@ -40,6 +40,7 @@ import AddCategory from '../components/administrator/AddCategory/index.jsx';
 import StockHistory from '../components/admin/StockHistory/index.jsx';
 import PaymentSuccess from '../components/main/PaymentSuccess/index.jsx';
 import PostPage from '../components/main/Post/index.jsx';
+import CheckStock from '../components/administrator/CheckStock/index.jsx';
 
 const MainLayout = () => {
     return <Outlet />;
@@ -220,6 +221,10 @@ export default createBrowserRouter([
                     {
                         element: <AllVourcher />,
                         path: '/administrator/all-vourchers',
+                    },
+                    {
+                        element: <CheckStock />,
+                        path: '/administrator/check-stock',
                     },
                 ],
             },
