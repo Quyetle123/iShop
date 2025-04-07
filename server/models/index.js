@@ -24,6 +24,9 @@ import District from './District.js';
 import Wards from './Ward.js';
 import Otp from './Otp.js';
 import InventoryHistory from './InventoryHistory.js';
+import Company from './Company.js';
+import CompanyAccount from './CompanyAccount.js';
+import CompanyStock from './CompanyStock.js';
 
 Account.hasMany(Cart, { foreignKey: 'accountid' });
 Cart.belongsTo(Account, { foreignKey: 'accountid' });
@@ -132,6 +135,23 @@ Order.belongsTo(District, { foreignKey: 'district' });
 Wards.hasMany(Order, { foreignKey: 'ward' });
 Order.belongsTo(Wards, { foreignKey: 'ward' });
 
+Company.hasMany(CompanyAccount, { foreignKey: 'companyid' });
+CompanyAccount.belongsTo(Company, { foreignKey: 'companyid' });
+
+Company.hasMany(CompanyStock, { foreignKey: 'companyid' });
+CompanyStock.belongsTo(Company, { foreignKey: 'companyid' });
+
+Account.hasMany(CompanyAccount, { foreignKey: 'accountid' });
+CompanyAccount.belongsTo(Account, { foreignKey: 'accountid' });
+
+Province.hasMany(Company, { foreignKey: 'city' });
+Company.belongsTo(Province, { foreignKey: 'city' });
+
+District.hasMany(Company, { foreignKey: 'district' });
+Company.belongsTo(District, { foreignKey: 'district' });
+
+Wards.hasMany(Company, { foreignKey: 'ward' });
+Company.belongsTo(Wards, { foreignKey: 'ward' });
 export {
     Account,
     Cart,
@@ -159,4 +179,7 @@ export {
     Wards,
     Otp,
     InventoryHistory,
+    Company,
+    CompanyAccount,
+    CompanyStock,
 };

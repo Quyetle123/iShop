@@ -4,6 +4,7 @@ const aiSlice = createSlice({
     name: 'ais',
     initialState: {
         chatboxs: [],
+        checkStore: null,
         loading: false,
         error: null,
     },
@@ -35,6 +36,19 @@ const aiSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+        checkStoreAiStart(state) {
+            state.loading = true;
+            state.error = null;
+        },
+        checkStoreAiSuccess(state, action) {
+            state.loading = false;
+            state.checkStore = action.payload;
+            state.error = null;
+        },
+        checkStoreAiError(state, action) {
+            state.loading = false;
+            state.error = action.payload;
+        },
     },
 });
 
@@ -45,6 +59,9 @@ export const {
     fetchChatBoxStart,
     fetchChatBoxSuccess,
     fetchChatBoxError,
+    checkStoreAiStart,
+    checkStoreAiSuccess,
+    checkStoreAiError,
 } = aiSlice.actions;
 
 export default aiSlice.reducer;

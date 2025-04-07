@@ -40,6 +40,8 @@ import paymentsRoutes from './routes/payments.route.js';
 import administratorStatiscalRouter from './routes/administrator.statistical.route.js';
 import InventoryHistoryRouter from './routes/inventoryHistory.route.js';
 import LocationStoreRouter from './routes/locationStore.route.js';
+import CompanyAccountRouter from './routes/companyAccount.route.js';
+import assistant from './utils/assistant.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -90,6 +92,11 @@ app.post('/api/chat', async (req, res, next) => {
     return res.status(200).json(data);
 });
 
+app.get('/api/assistant', async (req, res, next) => {
+    const data = await assistant();
+    return res.status(200).json(data);
+});
+
 app.get('/', (req, res) => {
     return res.status(200).json({ message: 'ok' });
 });
@@ -97,6 +104,7 @@ app.get('/', (req, res) => {
 app.use('/api/administratorStatistical', administratorStatiscalRouter);
 app.use('/api/inventoryHistory', InventoryHistoryRouter);
 app.use('/api/locationStore', LocationStoreRouter);
+app.use('/api/companyAccount', CompanyAccountRouter);
 
 setupSocket(io);
 
