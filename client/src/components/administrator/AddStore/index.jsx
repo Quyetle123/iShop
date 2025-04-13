@@ -4,8 +4,6 @@ import { Button, Card, Form, Input, message, Select, Spin, Steps } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { addStoreStart } from '../../../redux/slices/storeSlice';
 import { v4 as uuidv4 } from 'uuid';
-import { registerAdminStart } from '../../../redux/slices/authSlice';
-import { addStoreAccountStart } from '../../../redux/slices/storeAccountSlice';
 import { fetchAllBranchStart } from '../../../redux/slices/branchSlice';
 import { fetchProvincesStart } from '../../../redux/slices/provinceSlice';
 import { fetchDistrictByProvinceIdStart } from '../../../redux/slices/districtSlice';
@@ -179,33 +177,19 @@ const AddStore = () => {
 
             setLoading(true);
 
-            await dispatch(
+            dispatch(
                 addStoreStart({
-                    id: storeid,
+                    storeid,
                     storename: allData.storename,
                     branchid: allData.branchid,
                     district: allData.district,
                     ward: allData.ward,
                     address: allData.address,
-                    status: 'Cần khởi tạo',
-                }),
-            );
-
-            await dispatch(
-                registerAdminStart({
-                    id: adminid,
+                    adminid,
                     username: allData.username,
                     phoneNumber: allData.phoneNumber,
                     email: allData.email,
                     password: allData.password,
-                    role: 'admin',
-                }),
-            );
-
-            await dispatch(
-                addStoreAccountStart({
-                    storeid,
-                    accountid: adminid,
                 }),
             );
 

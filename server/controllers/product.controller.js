@@ -9,10 +9,20 @@ import {
 
 class productController {
   static async addProduct(req, res) {
-    const data = req.body;
+    const {productid,
+      productname,
+      description,
+      price,
+      categoryid,
+      productColorid,
+      quantity,
+      colorid,
+      sortedUrls} = req.body;
     try {
-      const products = await Product.create(data);
-      res.status(200).json({ products });
+      const products = await Product.create({id: productid, productname, description, price, categoryid});
+      const productColor = await ProductColor.create({id: productColorid, productid, quantity, sold: 0, colorid});
+      const productImage = await ProductImage.bulkCreate(sortedUrls.map((image) => ({productColorid, image})));
+      res.status(200).json({ products, productColor, productImage });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }

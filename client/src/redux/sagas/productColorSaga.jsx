@@ -11,6 +11,8 @@ import {
   fetchProductColorsStart,
   fetchProductColorsSuccess,
 } from "../slices/productColorSlice";
+import { fetchProductByIdStart } from "../slices/productSlice";
+
 function* addProductColorSaga(action) {
   try {
     const response = yield call(
@@ -20,6 +22,7 @@ function* addProductColorSaga(action) {
     );
     yield put(addProductColorSuccess(response.data));
     yield put(fetchProductColorsStart());
+    yield put(fetchProductByIdStart(action.payload.productid));
   } catch (error) {
     yield put(addProductColorFailure(error.message));
   }

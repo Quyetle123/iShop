@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { registerStart, sendmailStart } from '../../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { addAdditionalAddressStart } from '../../redux/slices/additionalAddressSlice';
 import { fetchProvincesStart } from '../../redux/slices/provinceSlice';
 import { fetchDistrictByProvinceIdStart } from '../../redux/slices/districtSlice';
 import { fetchWardsByDistrictIdStart } from '../../redux/slices/wardSlice';
@@ -87,7 +86,7 @@ const Register = () => {
         }
     }, [isLoading, error, isSubmitted, navigate]);
 
-    const handleSubmit = async (values) => {
+    const handleSubmit = (values) => {
         try {
             setIsSubmitted(false);
             const checkOtp = otp.join('');
@@ -95,7 +94,7 @@ const Register = () => {
             const { username, phoneNumber, password, email, city, district, ward, address } = values;
             const id = uuidv4();
 
-            await dispatch(
+            dispatch(
                 registerStart({
                     id,
                     username,
@@ -104,21 +103,12 @@ const Register = () => {
                     email,
                     role: 'user',
                     otp: checkOtp,
+                    province_id: city,
+                    district_id: district,
+                    wards_id: ward,
+                    address,
                 }),
             );
-
-            setTimeout(() => {
-                dispatch(
-                    addAdditionalAddressStart({
-                        accountid: id,
-                        province_id: city,
-                        district_id: district,
-                        wards_id: ward,
-                        address,
-                        is_default: true,
-                    }),
-                );
-            }, 500);
         } catch (error) {
             message.error('Có lỗi xảy ra, vui lòng thử lại!');
         } finally {

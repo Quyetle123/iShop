@@ -21,7 +21,7 @@ const AllOrder = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [selectedStatus, setSelectedStatus] = useState('Đang đóng gói');
+    const [selectedStatus, setSelectedStatus] = useState('Chờ phê duyệt');
 
     useEffect(() => {
         dispatch(
@@ -135,7 +135,7 @@ const AllOrder = () => {
                                 transition: '0.3s',
                             }}
                         >
-                            {status}
+                            {status} ({3})
                         </Button>
                     ))}
                 </Space>
