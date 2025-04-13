@@ -2,10 +2,11 @@ import { Product, ProductColor, ProductImage } from "../models/index.js";
 
 class productColorController {
   static async addProductCollor(req, res) {
-    const data = req.body;
+    const {productColorid, productid, quantity, colorid, url} = req.body;
     try {
-      const productColor = await ProductColor.create(data);
-      res.status(200).json({ productColor });
+      const productColor = await ProductColor.create({id: productColorid, productid, quantity, sold: 0, colorid});
+      const productImage = await ProductImage.bulkCreate(url.map((image) => ({productColorid, image})));
+      res.status(200).json({ productColor, productImage });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

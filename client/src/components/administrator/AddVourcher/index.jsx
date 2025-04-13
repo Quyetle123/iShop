@@ -11,8 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addVourcherStart } from '../../../redux/slices/vourcherSlice';
 import { fetchProductesStart } from '../../../redux/slices/productSlice';
 import { fetchAccountsStart } from '../../../redux/slices/authSlice';
-import { addVoucherAccountStart } from '../../../redux/slices/voucherAccountSlice';
-import { addVoucherProductStart } from '../../../redux/slices/voucherProductSlice';
 import { useNavigate } from 'react-router-dom';
 const { RangePicker } = DatePicker;
 
@@ -302,9 +300,9 @@ const AddVourcher = () => {
                 valid_to: dayjs(allData.time[1].toDate()).format('YYYY-MM-DD HH:mm:ss'),
             };
 
-            await dispatch(
+            dispatch(
                 addVourcherStart({
-                    id: voucher_id,
+                    voucher_id,
                     code: allData.code,
                     description: allData.description,
                     image,
@@ -317,26 +315,10 @@ const AddVourcher = () => {
                     quantity: allData.quantity && Number(allData.quantity),
                     is_single_use: quantityUse === 'Không giới hạn số lượng' ? true : false,
                     status,
+                    selectedAccount,
+                    selectedProduct,
                 }),
             );
-
-            if (selectedAccount) {
-                await dispatch(
-                    addVoucherAccountStart({
-                        voucher_id,
-                        account_id: selectedAccount,
-                    }),
-                );
-            }
-
-            if (selectedProduct) {
-                await dispatch(
-                    addVoucherProductStart({
-                        voucher_id,
-                        product_id: selectedProduct,
-                    }),
-                );
-            }
 
             message.success('Đã tạo voucher thành công!');
         } catch (error) {

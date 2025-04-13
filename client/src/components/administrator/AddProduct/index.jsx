@@ -10,8 +10,6 @@ import { useNavigate } from "react-router-dom";
 import TextArea from "antd/es/input/TextArea";
 import { TiDelete } from "react-icons/ti";
 import { getAllColorStart } from "../../../redux/slices/colorSlice";
-import { addProductColorStart } from "../../../redux/slices/productColorSlice";
-import { addProductImageStart } from "../../../redux/slices/productImageSlice";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
@@ -59,32 +57,17 @@ const AddProduct = () => {
 
       dispatch(
         addProductStart({
-          id: productid,
+          productid,
           productname,
           description,
           price,
           categoryid,
-        })
-      );
-
-      dispatch(
-        addProductColorStart({
-          id: productColorid,
+          productColorid,
           quantity,
-          sold: 0,
-          productid,
           colorid,
+          sortedUrls
         })
       );
-
-      sortedUrls.forEach((image) => {
-        dispatch(
-          addProductImageStart({
-            image,
-            productColorid,
-          })
-        );
-      });
 
       navigate("/administrator/allProduct");
     } catch (error) {

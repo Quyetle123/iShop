@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { Account, Otp } from '../models/index.js';
+import { Account, Address, Otp } from '../models/index.js';
 import otpGenerator from 'otp-generator';
 
 import _ from 'lodash';
@@ -22,9 +22,10 @@ class AuthController {
     }
 
     static async register(req, res) {
-        const { otp, password, ...rest } = req.body;
+        const { id, otp, password, username, phoneNumber, email, role, province_id, district_id, wards_id, address } =
+            req.body;
 
-        const otpDB = await Otp.findOne({ where: { email: rest.email } });
+        const otpDB = await Otp.findOne({ where: { email: email } });
 
         if (!otpDB) {
             return res.status(400).json({ message: 'OTP không hợp lệ' });
@@ -34,13 +35,25 @@ class AuthController {
         if (!otpDecode) {
             return res.status(400).json({ message: 'OTP không hợp lệ' });
         }
-        await Otp.destroy({ where: { email: rest.email } });
+        await Otp.destroy({ where: { email: email } });
 
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
             const account = await Account.create({
+                id,
+                username,
+                phoneNumber,
+                email,
+                role,
                 password: hashedPassword,
-                ...rest,
+            });
+            const mainAddress = await Address.create({
+                address,
+                province_id,
+                district_id,
+                wards_id,
+                accountid: id,
+                is_default: true,
             });
             const token = AuthController.generateToken(account);
             res.status(201).json({
@@ -52,6 +65,7 @@ class AuthController {
                     email: account.email,
                     role: account.role,
                 },
+                mainAddress,
             });
         } catch (error) {
             res.status(400).json({ message: error.message });

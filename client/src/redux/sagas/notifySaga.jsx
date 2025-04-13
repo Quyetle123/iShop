@@ -1,9 +1,14 @@
-import axios from "axios";
-import { call, put, takeLatest } from "redux-saga/effects";
-import { deleteNotifyFailure, deleteNotifyStart, deleteNotifySuccess, fetchNotifyFailure, fetchNotifyStart, fetchNotifySuccess } from "../slices/notifySlice";
-import { getToken } from "../../utils/token";
-
-const token = getToken()
+import axios from 'axios';
+import { call, put, takeLatest } from 'redux-saga/effects';
+import {
+    deleteNotifyFailure,
+    deleteNotifyStart,
+    deleteNotifySuccess,
+    fetchNotifyFailure,
+    fetchNotifyStart,
+    fetchNotifySuccess,
+} from '../slices/notifySlice';
+import { getToken } from '../../utils/token';
 
 function* fetchNotifyByAcountidSaga(action) {
     try {
@@ -18,7 +23,7 @@ function* deleteNotifySaga(action) {
     try {
         yield call(axios.delete, `${import.meta.env.VITE_LOCALHOST}/notify/deleteNotify/${action.payload}`);
         yield put(deleteNotifySuccess());
-        yield put(fetchNotifyStart(token.id));
+        yield put(fetchNotifyStart(getToken().id));
     } catch (error) {
         yield put(deleteNotifyFailure(error.message));
     }

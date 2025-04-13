@@ -3,9 +3,16 @@ import { VoucherAccount, VoucherProduct, Vourcher } from "../models/index.js";
 
 class VourcherController {
   static async addVourcher(req, res) {
-    const data = req.body;
+    const {voucher_id, code, description, image, discount_amount, discount_percent, max_discount_amount, minimum_order_value, valid_from, valid_to, quantity, is_single_use, status, selectedAccount, selectedProduct} = req.body;
     try {
-      const vourcher = await Vourcher.create(data);
+      const vourcher = await Vourcher.create({id:voucher_id, code, description, image, discount_amount, discount_percent, max_discount_amount, minimum_order_value, valid_from, valid_to, quantity, is_single_use, status});
+      if(selectedAccount){
+        await VoucherAccount.create({account_id:selectedAccount, voucher_id});
+      }
+      
+      if(selectedProduct){
+        await VoucherProduct.create({product_id:selectedProduct, voucher_id});
+      }
       res.status(200).json({ vourcher });
     } catch (error) {
       res.status(400).json({ message: error.message });

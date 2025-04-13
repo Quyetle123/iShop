@@ -143,7 +143,7 @@ const Detail = () => {
                             />
                         ))}
                     </div>
-                    {/* <MapComponent /> */}
+                    <MapComponent />
                     <button>Đặt mua</button>
                     <button
                         style={{

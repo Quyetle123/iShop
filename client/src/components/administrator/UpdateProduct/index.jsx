@@ -14,7 +14,6 @@ import { TiDelete } from "react-icons/ti";
 import { getAllColorStart } from "../../../redux/slices/colorSlice";
 import { addProductColorStart } from "../../../redux/slices/productColorSlice";
 import { v4 as uuidv4 } from "uuid";
-import { addProductImageStart } from "../../../redux/slices/productImageSlice";
 
 const UpdateProduct = () => {
   const { id } = useParams();
@@ -193,22 +192,13 @@ const UpdateProduct = () => {
 
       dispatch(
         addProductColorStart({
-          id: productColorid,
+          productColorid,
           quantity,
-          sold: 0,
           productid: id,
           colorid,
+          url,
         })
       );
-
-      url.forEach((image) => {
-        dispatch(
-          addProductImageStart({
-            image,
-            productColorid,
-          })
-        );
-      });
     } catch (error) {
       console.error("Error:", error);
     }

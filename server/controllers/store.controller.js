@@ -1,11 +1,22 @@
-import { Branch, District, Province, Store, Wards } from '../models/index.js';
+import { Account, Branch, District, Province, Store, StoreAccount, Wards } from '../models/index.js';
+import bcrypt from 'bcryptjs';
 
 class storeController {
     static async addStore(req, res) {
-        const data = req.body;
+        const {storeid , storename, branchid, district, ward, address, adminid, username, phoneNumber, email, password} = req.body;
         try {
-            const store = await Store.create(data);
-            res.status(200).json({ store });
+            const store = await Store.create({id: storeid, storename, branchid, district, ward, address, status: 'Cần khởi tạo'});
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const account = await Account.create({
+                id: adminid,
+                password: hashedPassword,
+                username,
+                phoneNumber,
+                email,
+                role: 'admin',
+            }); 
+            const accountStore = await StoreAccount.create({storeid, accountid: adminid});
+            res.status(200).json({ store, account, accountStore });
         } catch (error) {
             res.status(400).json({ message: error.message });
         }
