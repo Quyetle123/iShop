@@ -11,7 +11,7 @@ const { Title, Text } = Typography;
 
 
 function Login() {
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { account } = useSelector((state) => state.auth);
@@ -19,7 +19,7 @@ function Login() {
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
-    dispatch(loginStart({ phoneNumber, password }));
+    dispatch(loginStart({ email, password }));
   };
 
   useEffect(() => {
@@ -73,18 +73,20 @@ function Login() {
           Đăng nhập
         </Title>
         <Form layout="vertical" onFinish={handleSubmit}>
-          <Form.Item
-            label="Số điện thoại"
-            name="phoneNumber"
-            rules={[
-              { required: true, message: "Vui lòng nhập số điện thoại!" },
-            ]}
-          >
-            <Input
-              placeholder="Số điện thoại"
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-          </Form.Item>
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            { required: true, message: "Vui lòng nhập email!" },
+            { type: "email", message: "Email không hợp lệ!" },
+          ]}
+        >
+        <Input
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </Form.Item>
+
           <Form.Item
             label="Mật khẩu"
             name="password"

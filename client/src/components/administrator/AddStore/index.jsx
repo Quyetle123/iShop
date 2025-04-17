@@ -194,11 +194,11 @@ const AddStore = () => {
             );
 
             message.success('Đã hoàn thành tạo cửa hàng!');
+            navigate('/administrator/branch-store');
         } catch (error) {
             message.error('Có lỗi xảy ra, vui lòng thử lại!');
         } finally {
             setLoading(false);
-            navigate('/administrator/branch-store');
         }
     };
 

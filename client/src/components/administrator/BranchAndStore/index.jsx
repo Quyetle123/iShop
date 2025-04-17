@@ -84,6 +84,11 @@ const BranchAndStore = () => {
       key: "address",
     },
     {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
       title: "Số điện thoại",
       dataIndex: "phoneNumber",
       key: "phoneNumber",
@@ -188,6 +193,7 @@ const BranchAndStore = () => {
                 stt: idx + 1,
                 storename: store.storename,
                 address: store.address,
+                email: store?.StoreAccounts[0]?.Account?.email,
                 phoneNumber: store?.StoreAccounts[0]?.Account?.phoneNumber,
               }))}
               columns={columns}

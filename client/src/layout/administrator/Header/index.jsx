@@ -5,6 +5,8 @@ import {
   HomeOutlined,
   ShopOutlined,
   FileTextOutlined,
+  TagOutlined,
+  SyncOutlined,
 } from "@ant-design/icons";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
@@ -89,7 +91,7 @@ const items = [
   {
     key: "sub7",
     label: "Mã giảm giá",
-    icon: <FileTextOutlined />,
+    icon: <TagOutlined />,
     children: [
       {
         key: "14",
@@ -103,6 +105,17 @@ const items = [
       },
     ],
   },
+  {
+    key: "sub8",
+    label: "Tồn Kho cửa hàng",
+    icon: <SyncOutlined />,
+    children: [
+      {
+        key: "16",
+        label: <Link to="/administrator/check-stock">Tra cứu tồn kho</Link>,
+      },
+    ],
+  }
 ];
 
 const Header = () => {
