@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { Account, Branch, Province, Store, StoreAccount } from '../models/index.js';
 
 class branchController {
@@ -20,7 +21,14 @@ class branchController {
                 include: [
                     {
                         model: Store,
-                        include: [{ model: StoreAccount, include: [{ model: Account }] }],
+                        where: { id: { [Op.ne]: "default" } },
+                        required: false,
+                        include: [
+                            {
+                                model: StoreAccount,
+                                include: [{ model: Account }],
+                            },
+                        ],
                     },
                     { model: Province },
                 ],
@@ -30,6 +38,7 @@ class branchController {
             res.status(400).json({ message: error.message });
         }
     }
+    
 }
 
 export default branchController;

@@ -15,7 +15,7 @@ class controllerPayments {
         const findOrder = await Order.findOne({ where: { id: idOrder } });
         if (typePayment === 'cod') {
             if (findOrder) {
-                await findOrder.update({ status: 'Cần phê duyệt', payMethod: 'COD' });
+                await findOrder.update({ status: 'Chờ phê duyệt', payMethod: 'COD' });
                 res.status(200).json({ message: 'Thanh toán thành công' });
             }
         }
@@ -184,7 +184,7 @@ class controllerPayments {
         const { orderInfo, resultCode } = req.query;
         if (resultCode === '0') {
             const result = orderInfo.split(' ')[2];
-            await Order.update({ status: 'Cần phê duyệt', payMethod: 'MOMO' }, { where: { id: result } });
+            await Order.update({ status: 'Chờ phê duyệt', payMethod: 'MOMO' }, { where: { id: result } });
             // return res.redirect(`http://localhost:5173/checkout/${newPayment._id}`); // redirect to success page
             return res.status(200).json({ message: 'Thanh toán thanh cong' });
         }
@@ -197,7 +197,7 @@ class controllerPayments {
             if (vnp_ResponseCode === '00') {
                 const idCart = vnp_OrderInfo;
 
-                await Order.update({ status: 'Cần phê duyệt', payMethod: 'VNPAY' }, { where: { id: idCart } });
+                await Order.update({ status: 'Chờ phê duyệt', payMethod: 'VNPAY' }, { where: { id: idCart } });
 
                 const order = await Order.findOne({ where: { id: idCart } });
 

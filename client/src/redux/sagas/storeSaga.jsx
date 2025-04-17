@@ -15,11 +15,13 @@ import {
 } from '../slices/storeSlice';
 import { getAccountStorebyAccountIdStart } from '../slices/storeAccountSlice';
 import { getToken } from '../../utils/token';
+import { fetchAllBranchStart } from '../slices/branchSlice';
 
 function* addStoreSaga(action) {
     try {
         const response = yield call(axios.post, `${import.meta.env.VITE_LOCALHOST}/store/addStore`, action.payload);
         yield put(addStoreSuccess(response.data));
+        yield put(fetchAllBranchStart());
     } catch (error) {
         yield put(addStoreFailure(error.message));
     }

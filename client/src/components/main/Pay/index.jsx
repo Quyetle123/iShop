@@ -128,7 +128,6 @@ const CheckoutPage = () => {
         setIsModalOpen(false);
     };
 
-    console.log(getToken());
 
     const handlePay = () => {
         if (paymentMethod === 'momo') {
@@ -168,6 +167,7 @@ const CheckoutPage = () => {
                 }),
             );
         } else {
+            console.log( getToken().username)
             dispatch(
                 newOrderStart({
                     id: orderDraft?.id,
@@ -176,7 +176,7 @@ const CheckoutPage = () => {
                     district: selectAddress?.address.Ward.District.district_id,
                     city: selectAddress?.address.Ward.District.Province.province_id,
                     payMethod: paymentMethod,
-                    usename: getToken().username,
+                    username: getToken().username,
                     phoneNumber: getToken().phoneNumber,
                     status: 'Chờ phê duyệt',
                     navigate,
@@ -346,7 +346,7 @@ const CheckoutPage = () => {
             <div className="flex gap-4">
                 <Card title="Thông tin người nhận" className="mb-4 flex-1">
                     <p className="mb-3">
-                        <strong>Họ và tên:</strong> {getToken().username}
+                        <strong>Họ và tên:</strong> {getToken()?.username}
                     </p>
                     <p className="mb-3">
                         <strong>Số điện thoại:</strong> {getToken().phoneNumber}

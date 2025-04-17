@@ -1,5 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Form, Input, Button, Typography, message, Select } from 'antd';
+import {
+    Form,
+    Input,
+    Button,
+    Typography,
+    Select,
+    Steps,
+    message,
+} from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerStart, sendmailStart } from '../../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
@@ -10,20 +18,42 @@ import { fetchWardsByDistrictIdStart } from '../../redux/slices/wardSlice';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
+const { Step } = Steps;
 
 const Register = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const { provinces } = useSelector((state) => state.provinces);
     const { districts } = useSelector((state) => state.districts);
     const { wards } = useSelector((state) => state.wards);
-    const provinceList = Array.isArray(provinces.province) ? provinces.province : [];
-    const districtList = Array.isArray(districts.district) ? districts.district : [];
-    const wardList = Array.isArray(wards.wards) ? wards.wards : [];
+    const { isLoading, error } = useSelector((state) => state.auth);
+
+    const provinceList = provinces?.province || [];
+    const districtList = districts?.district || [];
+    const wardList = wards?.wards || [];
+
+    const [currentStep, setCurrentStep] = useState(0);
+    const [otp, setOtp] = useState(new Array(6).fill(''));
+    const [formValues, setFormValues] = useState({});
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isNext, setIsNext] = useState(false);
 
     useEffect(() => {
         dispatch(fetchProvincesStart());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (isSubmitted && error) {
+            message.error(error);
+            setIsSubmitted(false);
+        }
+        if (isSubmitted && !isLoading && !error) {
+            message.success('Đăng ký thành công!');
+            navigate('/login');
+        }
+    }, [isLoading, error, isSubmitted, navigate]);
 
     const handleProvinceChange = (provinceCode) => {
         dispatch(fetchDistrictByProvinceIdStart(provinceCode));
@@ -35,13 +65,35 @@ const Register = () => {
         form.setFieldsValue({ ward: undefined });
     };
 
-    const { isLoading, error } = useSelector((state) => state.auth);
-    const navigate = useNavigate();
+    
 
-    const [otp, setOtp] = useState(new Array(6).fill(''));
-    const [otpEnabled, setOtpEnabled] = useState(false);
+    const handleNext = async () => {
+        try {
+            const values = await form.validateFields();
+            setFormValues(values);
+            dispatch(sendmailStart({ email: values.email }));
+            setIsNext(true);
+        } catch (err) {
+            console.error('Validation failed:', err);
+        }
+    };
 
-    const handleChange = (e, index) => {
+    useEffect(() => {
+        if (isNext && error) {
+            message.error(error);
+            setIsNext(false);
+        }
+    
+        if (isNext && !isLoading && !error) {
+            message.success('Mã OTP đã được gửi tới email!');
+            setCurrentStep(1);
+            setIsNext(false);
+        }
+    }, [isLoading, error, isNext]);
+    
+    
+
+    const handleOtpChange = (e, index) => {
         const value = e.target.value.replace(/[^0-9]/g, '');
         if (value.length > 1) return;
 
@@ -54,234 +106,139 @@ const Register = () => {
         }
     };
 
-    const handleKeyDown = (e, index) => {
+    const handleOtpKeyDown = (e, index) => {
         if (e.key === 'Backspace' && !otp[index] && index > 0) {
             document.getElementById(`otp-${index - 1}`).focus();
         }
     };
 
-    const handleSendOtp = () => {
-        const email = form.getFieldValue('email');
-        if (!email) {
-            message.warning('Vui lòng nhập email trước khi gửi OTP!');
+    const handleSubmit = () => {
+        const otpCode = otp.join('');
+        if (otpCode.length < 6) {
+            message.warning('Vui lòng nhập đầy đủ mã OTP!');
             return;
         }
-        dispatch(sendmailStart({ email }));
-        message.success('Gửi mã xác thực thành công!');
-        setOtpEnabled(true);
+
+        const id = uuidv4();
+        dispatch(
+            registerStart({
+                ...formValues,
+                id,
+                role: 'user',
+                otp: otpCode,
+                province_id: formValues.city,
+                district_id: formValues.district,
+                wards_id: formValues.ward,
+            }),
+        );
+        setIsSubmitted(true);
     };
 
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    useEffect(() => {
-        if (isSubmitted && error) {
-            message.error(error);
-            setIsSubmitted(false);
-        }
-    }, [error, isSubmitted]);
-
-    useEffect(() => {
-        if (isSubmitted && !isLoading && !error) {
-            message.success('Đăng ký thành công!');
-            navigate('/login');
-        }
-    }, [isLoading, error, isSubmitted, navigate]);
-
-    const handleSubmit = (values) => {
-        try {
-            setIsSubmitted(false);
-            const checkOtp = otp.join('');
-            console.log(checkOtp);
-            const { username, phoneNumber, password, email, city, district, ward, address } = values;
-            const id = uuidv4();
-
-            dispatch(
-                registerStart({
-                    id,
-                    username,
-                    phoneNumber,
-                    password,
-                    email,
-                    role: 'user',
-                    otp: checkOtp,
-                    province_id: city,
-                    district_id: district,
-                    wards_id: ward,
-                    address,
-                }),
-            );
-        } catch (error) {
-            message.error('Có lỗi xảy ra, vui lòng thử lại!');
-        } finally {
-            setIsSubmitted(true);
-        }
-    };
-
-    const onFinishFailed = () => {
-        message.error('Vui lòng điền đầy đủ thông tin!');
-    };
     return (
-        <div
-            style={{
-                minHeight: '100vh',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                background: 'linear-gradient(135deg, #1e1e2f, #2a2a47)',
-                padding: '20px',
-            }}
-        >
-            <div
-                style={{
-                    maxWidth: '500px',
-                    width: '100%',
-                    background: '#fff',
-                    padding: '40px',
-                    borderRadius: '10px',
-                    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
-                }}
-            >
-                <Title level={3} style={{ textAlign: 'center', color: '#2a2a47' }}>
-                    Đăng ký tài khoản
-                </Title>
-                <Form form={form} layout="vertical" onFinish={handleSubmit} onFinishFailed={onFinishFailed}>
-                    <Form.Item
-                        label="Họ và tên"
-                        name="username"
-                        rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
-                    >
-                        <Input placeholder="Họ và tên" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Số điện thoại"
-                        name="phoneNumber"
-                        rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
-                    >
-                        <Input placeholder="Số điện thoại" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Mật khẩu"
-                        name="password"
-                        rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
-                    >
-                        <Input.Password placeholder="Mật khẩu" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Nhập lại mật khẩu"
-                        name="confirmPassword"
-                        dependencies={['password']}
-                        rules={[
-                            { required: true, message: 'Vui lòng nhập lại mật khẩu!' },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error('Mật khẩu nhập lại không khớp!'));
-                                },
-                            }),
-                        ]}
-                    >
-                        <Input.Password placeholder="Nhập lại mật khẩu" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={[
-                            { required: true, message: 'Vui lòng nhập email!' },
-                            { type: 'email', message: 'Email không hợp lệ!' },
-                        ]}
-                    >
-                        <Input placeholder="Email" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Thành phố"
-                        name="city"
-                        rules={[{ required: true, message: 'Vui lòng chọn thành phố!' }]}
-                    >
-                        <Select placeholder="Chọn thành phố" onChange={handleProvinceChange}>
-                            {provinceList?.map((province) => (
-                                <Option key={province.province_id} value={province.province_id}>
-                                    {province.name}
-                                </Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label="Quận/Huyện"
-                        name="district"
-                        rules={[{ required: true, message: 'Vui lòng chọn quận/huyện!' }]}
-                    >
-                        <Select placeholder="Chọn quận/huyện" onChange={handleDistrictChange}>
-                            {districtList?.map((district) => (
-                                <Option key={district.district_id} value={district.district_id}>
-                                    {district.name}
-                                </Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label="Phường/Xã"
-                        name="ward"
-                        rules={[{ required: true, message: 'Vui lòng chọn phường/xã!' }]}
-                    >
-                        <Select placeholder="Chọn phường/xã">
-                            {wardList?.map((ward) => (
-                                <Option key={ward.wards_id} value={ward.wards_id}>
-                                    {ward.name}
-                                </Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label="Địa chỉ"
-                        name="address"
-                        rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
-                    >
-                        <Input placeholder="Địa chỉ" />
-                    </Form.Item>
-                    <Form.Item label="Xác thực email">
-                        {otp.map((digit, index) => (
-                            <Input
-                                key={index}
-                                id={`otp-${index}`}
-                                type="text"
-                                maxLength="1"
-                                className="w-8 h-8 ml-2 text-center border border-gray-300 rounded-md"
-                                value={digit}
-                                onChange={(e) => handleChange(e, index)}
-                                onKeyDown={(e) => handleKeyDown(e, index)}
-                                disabled={!otpEnabled}
-                                style={{
-                                    backgroundColor: otpEnabled ? 'white' : '#f5f5f5',
-                                    cursor: otpEnabled ? 'text' : 'not-allowed',
-                                }}
-                            />
-                        ))}
-                        <Button
-                            onClick={handleSendOtp}
-                            className="ml-4"
-                            loading={isLoading}
-                            style={{ backgroundColor: '#2a2a47', color: 'white' }}
+        <div style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px', background: 'linear-gradient(135deg, #1e1e2f, #2a2a47)' }}>
+            <div style={{ maxWidth: 600, width: '100%', background: '#fff', padding: 40, borderRadius: 10 }}>
+                <Title level={3} style={{ textAlign: 'center', color: '#2a2a47' }}>Đăng ký tài khoản</Title>
+                <Steps current={currentStep} style={{ marginBottom: 30 }}>
+                    <Step title="Thông tin" />
+                    <Step title="Xác thực OTP" />
+                </Steps>
+
+                {currentStep === 0 && (
+                    <Form form={form} layout="vertical">
+                        <Form.Item name="username" label="Họ và tên" rules={[{ required: true }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="password" label="Mật khẩu" rules={[{ required: true }]}>
+                            <Input.Password />
+                        </Form.Item>
+                        <Form.Item
+                            name="confirmPassword"
+                            label="Nhập lại mật khẩu"
+                            dependencies={['password']}
+                            rules={[
+                                { required: true },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Mật khẩu nhập lại không khớp!'));
+                                    },
+                                }),
+                            ]}
                         >
-                            {isLoading ? 'Đang gửi...' : otpEnabled ? 'Gửi lại' : 'Gửi OTP'}
+                            <Input.Password />
+                        </Form.Item>
+                        <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="city" label="Thành phố" rules={[{ required: true }]}>
+                            <Select onChange={handleProvinceChange}>
+                                {provinceList.map((province) => (
+                                    <Option key={province.province_id} value={province.province_id}>
+                                        {province.name}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item name="district" label="Quận/Huyện" rules={[{ required: true }]}>
+                            <Select onChange={handleDistrictChange}>
+                                {districtList.map((district) => (
+                                    <Option key={district.district_id} value={district.district_id}>
+                                        {district.name}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item name="ward" label="Phường/Xã" rules={[{ required: true }]}>
+                            <Select>
+                                {wardList.map((ward) => (
+                                    <Option key={ward.wards_id} value={ward.wards_id}>
+                                        {ward.name}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item name="address" label="Địa chỉ" rules={[{ required: true }]}>
+                            <Input />
+                        </Form.Item>
+                        <Button type="primary" onClick={handleNext} block>
+                            Tiếp tục
                         </Button>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            block
-                            style={{ backgroundColor: '#2a2a47', borderColor: '#2a2a47' }}
-                        >
-                            Đăng ký
+                    </Form>
+                )}
+
+                {currentStep === 1 && (
+                    <>
+                        <Text>Nhập mã OTP đã gửi đến email của bạn:</Text>
+                        <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+                            {otp.map((digit, index) => (
+                                <Input
+                                    key={index}
+                                    id={`otp-${index}`}
+                                    type="text"
+                                    maxLength={1}
+                                    style={{ width: 40, height: 40, textAlign: 'center', marginRight: 8 }}
+                                    value={digit}
+                                    onChange={(e) => handleOtpChange(e, index)}
+                                    onKeyDown={(e) => handleOtpKeyDown(e, index)}
+                                />
+                            ))}
+                        </div>
+                        <Button type="primary" onClick={handleSubmit} loading={isLoading} block>
+                            Xác nhận đăng ký
                         </Button>
-                    </Form.Item>
-                </Form>
+                        <Button type="link" onClick={() => setCurrentStep(0)} style={{ marginTop: 12 }}>
+                            Quay lại
+                        </Button>
+                    </>
+                )}
+
                 <Text style={{ display: 'block', textAlign: 'center', marginTop: '20px' }}>
-                    Đã có tài khoản?{' '}
-                    <a href="/login" style={{ color: '#2a2a47' }}>
-                        Đăng nhập ngay
-                    </a>
+                    Đã có tài khoản? <a href="/login" style={{ color: '#2a2a47' }}>Đăng nhập ngay</a>
                 </Text>
             </div>
         </div>

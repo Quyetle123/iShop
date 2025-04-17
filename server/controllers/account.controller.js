@@ -25,17 +25,21 @@ class AuthController {
         const { id, otp, password, username, phoneNumber, email, role, province_id, district_id, wards_id, address } =
             req.body;
 
-        const otpDB = await Otp.findOne({ where: { email: email } });
+            const otpDB = await Otp.findOne({ where: { email: email } });
 
-        if (!otpDB) {
-            return res.status(400).json({ message: 'OTP không hợp lệ' });
-        }
-
-        const otpDecode = await bcrypt.compare(String(otp), otpDB.otp);
-        if (!otpDecode) {
-            return res.status(400).json({ message: 'OTP không hợp lệ' });
-        }
-        await Otp.destroy({ where: { email: email } });
+            if (!otpDB) {
+                return res.status(400).json({ message: 'OTP không hợp lệ' });
+            }
+            
+            const otpDecode = await bcrypt.compare(String(otp), otpDB.otp);
+            
+            if (!otpDecode) {
+                return res.status(400).json({ message: 'OTP không hợp lệ' });
+            }
+            
+            
+            await Otp.destroy({ where: { email: email } });
+            
 
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -96,9 +100,9 @@ class AuthController {
     }
 
     static async login(req, res) {
-        const { phoneNumber, password } = req.body;
+        const { email, password } = req.body;
         try {
-            const account = await Account.findOne({ where: { phoneNumber } });
+            const account = await Account.findOne({ where: { email } });
             if (!account || !(await bcrypt.compare(password, account.password))) {
                 return res.status(401).json({ message: 'Invalid credentials' });
             }

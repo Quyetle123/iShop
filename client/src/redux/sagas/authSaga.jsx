@@ -33,7 +33,6 @@ function* handleRegister(action) {
                 }),
             );
         } else {
-            console.log(response);
             yield put(registerFailure('k có data'));
         }
     } catch (error) {
@@ -120,7 +119,7 @@ function* sendMailSaga(action) {
             `${import.meta.env.VITE_LOCALHOST}/auth/send-mail-account`,
             action.payload,
         );
-        yield put(sendmailSuccess(response.data));
+        yield put(sendmailSuccess(response.data.message));
     } catch (error) {
         yield put(sendmailFailure(error.response.data.message));
     }

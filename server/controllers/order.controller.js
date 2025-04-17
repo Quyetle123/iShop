@@ -213,7 +213,7 @@ class orderController {
 
     static async newOrder(req, res) {
         const { id } = req.params;
-        const { address, ward, district, city, payMethod, usename, phoneNumber, status } = req.body;
+        const { address, ward, district, city, payMethod, username, phoneNumber, status } = req.body;
 
         try {
             const order = await Order.findByPk(id);
@@ -264,7 +264,7 @@ class orderController {
                 district,
                 city,
                 payMethod,
-                usename,
+                username,
                 phoneNumber,
                 status,
                 storeid: selectedStore.id,
